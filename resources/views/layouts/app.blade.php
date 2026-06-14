@@ -5,32 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Розробка ігор | ФІОТ КПІ')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>
-        @keyframes scanline {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
-        }
-        .scanline {
-            width: 100%;
-            height: 100px;
-            background: linear-gradient(0deg, rgba(18, 230, 49, 0) 0%, rgba(18, 230, 49, 0.05) 50%, rgba(18, 230, 49, 0) 100%);
-            opacity: 0.15;
-            position: absolute;
-            bottom: 100%;
-            animation: scanline 4s linear infinite;
-        }
-        #console-output::-webkit-scrollbar {
-            display: none;
-        }
-    </style>
 </head>
 <body class="bg-[#0b0c0f] text-white antialiased font-body overflow-x-hidden selection:bg-fiot-accent selection:text-black flex flex-col min-h-screen">
 
     <div class="fixed inset-0 pointer-events-none z-0">
-        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-fiot-dark/40 via-transparent to-transparent"></div>
+        <!-- <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-fiot-dark/40 via-transparent to-transparent"></div> -->
         <div class="absolute top-[-10%] left-[-10%] w-[80%] h-[80%] bg-fiot-primary/15 rounded-full blur-[180px]"></div>
         <div class="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-fiot-accent/10 rounded-full blur-[150px]"></div>
-        <div class="absolute inset-0 bg-[linear-gradient(to_right,#14161C_1px,transparent_1px),linear-gradient(to_bottom,#14161C_1px,transparent_1px)] bg-[size:40px_40px] md:bg-[size:80px_80px] opacity-30"></div>
+        <!-- <div class="absolute inset-0 bg-[linear-gradient(to_right,#14161C_1px,transparent_1px),linear-gradient(to_bottom,#14161C_1px,transparent_1px)] bg-[size:40px_40px] md:bg-[size:80px_80px] opacity-30"></div> -->
     </div>
 
     @include('components.navbar')
