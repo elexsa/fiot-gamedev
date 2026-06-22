@@ -27,19 +27,20 @@
                     </a>
                 </div>
             </div>
-
-            <div class="relative w-full aspect-square lg:aspect-auto lg:h-[600px] bg-fiot-dark/30 border border-fiot-dark flex items-center justify-center overflow-hidden group">
-                <div class="absolute top-4 left-4 text-[10px] text-fiot-gray font-mono uppercase tracking-widest z-20">
-                    <span class="text-fiot-accent">SYS_</span> Render Mode: Wireframe<br>
-                    <span class="text-fiot-accent">OBJ_</span> FICE_Engine_Core
-                </div>
                 
-                <img src="{{ asset('images/wireframe-render.png') }}" alt="Engine Wireframe" class="w-4/5 h-4/5 object-contain opacity-80 mix-blend-screen transition-transform duration-[20s] group-hover:scale-110 relative z-10">
-                
-                <div class="absolute inset-0 bg-[linear-gradient(to_right,#14161C_1px,transparent_1px),linear-gradient(to_bottom,#14161C_1px,transparent_1px)] bg-[size:2rem_2rem] opacity-50 z-0"></div>
-            </div>
-
-        </div>
+            <model-viewer 
+                src="{{ asset('models/cool_fice_frog.glb') }}" 
+                alt="A 3D model of a cyber frog"
+                auto-rotate
+                rotation-per-second="30deg"
+                camera-controls
+                disable-zoom
+                shadow-intensity="1"
+                environment-image="neutral"
+                exposure="0.2"
+                class="w-full h-full relative z-10 outline-none cursor-grab active:cursor-grabbing">
+            </model-viewer>
+            
     </div>
 </section>
 

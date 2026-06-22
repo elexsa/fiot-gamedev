@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Розробка ігор | ФІОТ КПІ')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 </head>
 <body class="bg-fiot-black text-fiot-white antialiased overflow-x-hidden selection:bg-fiot-accent selection:text-fiot-black flex flex-col min-h-screen">
 
