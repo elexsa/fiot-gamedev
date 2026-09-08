@@ -51,7 +51,7 @@
 @layer components {
     /* Base class for all buttons (geometry, transitions, typography) */
     .btn {
-        @apply inline-flex items-center justify-center font-semibold tracking-wide transition-all duration-200 select-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-fiot-accent focus:ring-offset-2 focus:ring-offset-fiot-black disabled:opacity-50 disabled:cursor-not-allowed;
+        @apply rounded-md inline-flex items-center justify-center font-semibold tracking-wide transition-all duration-200 select-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-fiot-accent focus:ring-offset-2 focus:ring-offset-fiot-black disabled:opacity-50 disabled:cursor-not-allowed;
     }
 
     /* --- Color Variants --- */
@@ -68,7 +68,7 @@
 
     /* Secondary (Solid background, alternate action) */
     .btn-secondary {
-        @apply bg-fiot-dark border border-fiot-dark text-white hover:border-fiot-primary hover:text-fiot-primary active:bg-fiot-black;
+        @apply bg-fiot-dark border border-fiot-dark text-white hover:border-fiot-primary hover:text-fiot-gray active:bg-fiot-black;
     }
 
     /* --- Size Variants --- */

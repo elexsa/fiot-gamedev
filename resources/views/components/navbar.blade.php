@@ -7,10 +7,10 @@
             
             <div class="flex items-center gap-3 relative z-50">
                 <a href="{{ route('home') }}" class="flex items-center gap-2 group">
-                    <div class="text-2xl font-bold tracking-tighter text-white">GS<span class="text-fiot-accent">_</span></div>
+                    <div class="text-2xl font-bold tracking-tighter text-white">FICE</div>
                 </a>
                 <div class="hidden sm:block text-[9px] md:text-[10px] uppercase tracking-widest text-fiot-gray leading-tight border-l border-fiot-dark pl-3">
-                    Кафедра ігрових<br>систем · ФІОТ
+                    Кафедра<br> Комп'ютерних ігор
                 </div>
             </div>
             

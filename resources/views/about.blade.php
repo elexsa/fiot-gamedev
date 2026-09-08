@@ -24,10 +24,7 @@
             </div>
 
             <div class="reveal-on-scroll relative">
-                <div class="h-[300px] bg-fiot-dark/40 border border-white/10 rounded-2xl flex items-center justify-center relative overflow-hidden shadow-2xl">
-                    <div class="absolute inset-0 opacity-10 bg-[linear-gradient(45deg,#4D11CC_1px,transparent_1px)] bg-[length:20px_20px]"></div>
-                    <span class="text-sm text-fiot-gray z-10">Фото команди — буде додано</</span>
-                </div>
+                <x-ui.placeholder height="h-[300px]" label="Фото команди" icon="camera" />
             </div>
 
         </div>
@@ -53,13 +50,11 @@
                 @foreach ($faculty as $person)
                     <x-ui.card interactive class="group p-6">
                         <div class="flex items-start gap-4">
-                            <div class="w-14 h-14 shrink-0 rounded-xl border border-white/10 bg-gradient-to-br from-fiot-primary/20 to-fiot-accent/10 flex items-center justify-center font-bold text-lg text-white/70 group-hover:border-fiot-accent/40 transition-colors overflow-hidden">
-                                @if ($person->photo)
-                                    <img src="{{ asset($person->photo) }}" alt="{{ $person->name }}" class="w-full h-full object-cover">
-                                @else
-                                    {{ mb_substr($person->name, 0, 1) }}
-                                @endif
-                            </div>
+                            @if ($person->photo)
+                                <img src="{{ asset($person->photo) }}" alt="{{ $person->name }}" class="w-14 h-14 shrink-0 rounded-xl border border-white/10 object-cover overflow-hidden">
+                            @else
+                                <x-ui.placeholder type="avatar" size="md" :text="mb_substr($person->name, 0, 1)" class="group-hover:border-fiot-accent/40" />
+                            @endif
                             <div>
                                 <h3 class="text-white font-bold mb-1">{{ $person->name }}</h3>
                                 <p class="text-sm text-fiot-gray mb-2">{{ $person->role }}</p>
@@ -74,10 +69,7 @@
 
         {{-- Матеріальна база --}}
         <div class="reveal-on-scroll grid grid-cols-1 lg:grid-cols-2 gap-16 items-center border-t border-white/10 pt-16">
-            <div class="h-[350px] bg-fiot-dark/40 border border-white/10 rounded-2xl relative flex items-center justify-center overflow-hidden">
-                <div class="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#4D11CC_1px,transparent_1px),linear-gradient(to_bottom,#4D11CC_1px,transparent_1px)] bg-[length:30px_30px]"></div>
-                <span class="text-sm text-fiot-gray z-10">Фото класів — буде додано</</span>
-            </div>
+            <x-ui.placeholder height="h-[350px]" label="Фото класів" icon="camera" />
             <div class="order-1 lg:order-2">
                 <div class="border-l-2 border-fiot-accent pl-5">
                     <h2 class="text-xl font-bold text-white tracking-tight mb-2">Матеріально-технічна база</h2>

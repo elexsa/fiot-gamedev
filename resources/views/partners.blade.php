@@ -16,7 +16,7 @@
                     @if ($partner->logo)
                         <img src="{{ asset($partner->logo) }}" alt="{{ $partner->name }}" class="max-h-full max-w-full object-contain grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 relative z-10">
                     @else
-                        <span class="text-2xl font-bold tracking-tighter text-white/40">{{ mb_substr($partner->name, 0, 2) }}</span>
+                        <x-ui.placeholder type="logo" size="md" :text="mb_substr($partner->name, 0, 2)" />
                     @endif
                 </div>
                 <div class="p-6 flex-1 flex flex-col">
