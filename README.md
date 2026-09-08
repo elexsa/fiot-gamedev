@@ -1,58 +1,113 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# F2 GameDev — сайт освітньої програми ФІОТ КПІ
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Прототип офіційного сайту освітньої програми **«Програмування комп'ютерних ігор»** (спеціальність 121 «Інженерія програмного забезпечення», ФІОТ КПІ ім. Ігоря Сікорського).
 
-## About Laravel
+> **⚠️ Статус: прототип.** Увесь текстовий контент — тимчасовий (Lorem Ipsum). Реальний контент буде надано деканатом.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Стек технологій
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Laravel 13** (PHP 8.3+) — бекенд та шаблонізація (Blade)
+- **Vite 8** — збірка ассетів
+- **Tailwind CSS v4** — стилізація (кастомна тема `fiot-*` у `resources/css/app.css`)
+- **Alpine.js 3** — інтерактивність (мобільне меню, калькулятор НМТ, пасхалка з босом)
+- **`<model-viewer>`** — 3D-модель жаби на головній сторінці
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Сторінки
 
-## Learning Laravel
+| Маршрут | Сторінка | Опис |
+|---------|----------|------|
+| `/` | Головна | Hero з 3D-моделлю, статистика, останні новини |
+| `/about` | Про кафедру | Місія, цифри, викладацький склад, матеріальна база |
+| `/disciplines` | Дисципліни | Інтерактивне «Дерево навичок» (Skill Tree) |
+| `/admission` | Вступникам | Дорожня карта вступу + калькулятор НМТ |
+| `/news` | Новини | Стрічка новин («Patch Notes») |
+| `/news/{slug}` | Новина | Окрема стаття |
+| `/partners` | Партнери | Картки компаній-партнерів |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Швидкий старт
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### Варіант 1: локально (PHP + npm)
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
+cp .env.example .env
+php artisan key:generate
+touch database/database.sqlite   # якщо використовуєте sqlite
+php artisan migrate
+npm install
+npm run dev                      # dev-сервер (Vite + artisan serve)
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### Варіант 2: Laravel Sail (Docker)
 
-## Contributing
+```bash
+docker compose up -d
+sail composer install
+sail npm run dev
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## ✏️ Заміна контенту (для деканату)
 
-## Code of Conduct
+**Увесь текстовий контент зібрано в одному файлі: [`config/content.php`](config/content.php)**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Там знаходяться:
+- `contacts` — адреса, телефон, email, соцмережі (футер)
+- `stats` — цифри програми (головна + «Про кафедру»)
+- `faculty` — викладацький склад (сторінка «Про кафедру»)
+- `news` — новини (список, окремі сторінки, прев'ю на головній)
 
-## Security Vulnerabilities
+Щоб опублікувати реальний контент, достатньо відредагувати цей файл — **шаблони змінювати не потрібно**.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Додавання новини
 
-## License
+Додайте новий елемент на початок масиву `news` у `config/content.php`:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```php
+[
+    'slug'    => 'unique-url-slug',   // стане /news/unique-url-slug
+    'date'    => '2026-10-01',
+    'tag'     => 'Подія',
+    'title'   => 'Заголовок новини',
+    'excerpt' => 'Короткий опис для картки.',
+    'body'    => 'Повний текст статті.',
+],
+```
+
+### Заміна зображень-заглушок
+
+Секції з написами `[IMAGE: ...]` — місця під реальні фото (корпус 18, команда кафедри, комп'ютерні класи). Покладіть файли в `public/images/` та замініть блок-заглушку на `<img>`.
+
+## Структура проєкту
+
+```
+resources/
+├── css/app.css              # Дизайн-система (тема fiot-*, кнопки, анімації)
+├── js/app.js                # Alpine.js + пасхалка (бос у футері)
+└── views/
+    ├── layouts/app.blade.php  # Базовий шаблон (мета-теги, фон, футер)
+    ├── components/            # navbar, footer, іконки
+    ├── welcome.blade.php      # Головна
+    ├── about.blade.php        # Про кафедру
+    ├── disciplines.blade.php  # Дерево навичок
+    ├── admission.blade.php    # Вступникам
+    ├── news.blade.php         # Список новин
+    ├── news-article.blade.php # Окрема новина
+    └── partners.blade.php     # Партнери
+config/content.php             # 📌 ВЕСЬ КОНТЕНТ САЙТУ (замінити при отриманні)
+routes/web.php                 # Маршрути
+```
+
+## Дизайн-система
+
+Кольори та шрифти визначені в `resources/css/app.css` (Tailwind v4 `@theme`):
+
+| Клас | Значення | Використання |
+|------|----------|--------------|
+| `fiot-black` | `#080809` | Основний фон |
+| `fiot-dark` | `#14161C` | Картки, блоки |
+| `fiot-primary` | `#4D11CC` | Кнопки, акценти (фіолетовий) |
+| `fiot-accent` | `#12E631` | Неоново-зелений (акценти, активні стани) |
+| `fiot-gray` | `#9E9D9F` | Описовий текст |
+| `fiot-white` | `#F8F9FA` | Основний текст |
+
+Кнопки: `.btn .btn-primary|.btn-secondary|.btn-outline` + `.btn-lg|.btn-md|.btn-sm`.

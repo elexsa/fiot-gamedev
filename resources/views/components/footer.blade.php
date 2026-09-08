@@ -1,11 +1,38 @@
-<footer class="border-t border-fiot-dark py-8 mt-auto relative z-10 bg-fiot-black/80 backdrop-blur-md">
-    <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-        
-        <div class="text-fiot-gray text-sm">
-            &copy; {{ date('Y') }} FICE. All rights reserved.
+<footer class="border-t border-fiot-dark py-10 mt-auto relative z-10 bg-fiot-black/80 backdrop-blur-md">
+    <div class="container mx-auto px-6">
+
+        <div class="flex flex-col md:flex-row justify-between gap-8 mb-8 pb-8 border-b border-fiot-dark/60">
+
+            <div class="text-center md:text-left">
+                <div class="text-xl font-bold tracking-tighter text-white mb-2">FICE<span class="text-fiot-accent">_</span></div>
+                <p class="text-fiot-gray text-xs font-mono max-w-xs leading-relaxed">
+                    {{ config('content.contacts.address') }}
+                </p>
+            </div>
+
+            <div class="flex flex-col items-center md:items-start gap-1.5 text-sm">
+                <a href="tel:{{ preg_replace('/[^0-9+]/', '', config('content.contacts.phone')) }}" class="text-fiot-gray hover:text-white transition font-mono text-xs">
+                    {{ config('content.contacts.phone') }}
+                </a>
+                <a href="mailto:{{ config('content.contacts.email') }}" class="text-fiot-gray hover:text-white transition font-mono text-xs">
+                    {{ config('content.contacts.email') }}
+                </a>
+                <div class="flex gap-4 mt-2">
+                    <a href="{{ config('content.contacts.social.telegram') }}" class="text-[10px] font-mono uppercase tracking-widest text-gray-500 hover:text-fiot-accent transition">Telegram</a>
+                    <a href="{{ config('content.contacts.social.discord') }}" class="text-[10px] font-mono uppercase tracking-widest text-gray-500 hover:text-fiot-accent transition">Discord</a>
+                    <a href="{{ config('content.contacts.social.facebook') }}" class="text-[10px] font-mono uppercase tracking-widest text-gray-500 hover:text-fiot-accent transition">Facebook</a>
+                </div>
+            </div>
+
         </div>
 
-        <div class="flex flex-col items-center gap-2">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+
+                <div class="text-fiot-gray text-sm">
+                    &copy; {{ date('Y') }} FICE. All rights reserved.
+                </div>
+
+            <div class="flex flex-col items-center gap-2">
             
             <div x-data x-show="$store.game.hp > 0" x-transition.opacity
                  class="w-4 h-4 flex items-center justify-center transition-all duration-300"
@@ -37,5 +64,10 @@
             </div>
 
         </div>
+
+            </div>
+
+        </div>
+
     </div>
 </footer>

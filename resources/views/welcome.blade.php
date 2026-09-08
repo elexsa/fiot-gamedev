@@ -3,131 +3,124 @@
 @section('title', 'GameDev | ФІОТ')
 
 @section('content')
-<section class="relative pt-12 pb-16 lg:pt-24 lg:pb-32 overflow-hidden border-b border-fiot-dark">
-    <div class="container mx-auto px-4 md:px-6">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-            
-            <div class="flex flex-col z-10">
-                <header class="mb-8">
-                    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] leading-[1.1] md:leading-[0.9] font-bold uppercase tracking-tighter text-white mb-6 break-words">
-                        Програмування <br>
-                        <span class="text-fiot-gray">комп'ютерних <br> ігор</span>
-                    </h1>
-                    <p class="text-lg text-fiot-gray font-body max-w-lg leading-relaxed">
-                        Офіційна освітня програма за спеціальністю <strong class="text-white font-bold">121 «Інженерія програмного забезпечення»</strong>. Архітектура рушіїв, комп'ютерна графіка та системне програмування на базі найпотужнішого факультету країни.
-                    </p>
-                </header>
-
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="{{ route('admission') }}" class="inline-flex justify-center items-center px-8 py-4 bg-fiot-primary hover:bg-fiot-primary-hover text-white font-bold uppercase tracking-widest text-sm transition-colors">
-                        Вступнику
-                    </a>
-                    <a href="/disciplines" class="inline-flex justify-center items-center px-8 py-4 border border-fiot-dark hover:border-fiot-gray text-fiot-gray hover:text-white font-bold uppercase tracking-widest text-sm transition-colors">
-                        Студенту
-                    </a>
-                </div>
-            </div>
-                
-            <model-viewer 
-                src="{{ asset('models/cool_fice_frog.glb') }}" 
-                alt="A 3D model of a cyber frog"
-                auto-rotate
-                rotation-per-second="30deg"
-                camera-controls
-                disable-zoom
-                shadow-intensity="1"
-                environment-image="neutral"
-                exposure="0.2"
-                class="w-full h-full relative z-10 outline-none cursor-grab active:cursor-grabbing">
-            </model-viewer>
-            
-    </div>
-</section>
-
-<section class="py-16 lg:py-24 border-b border-fiot-dark">
-    <div class="container mx-auto px-4 md:px-6">
+<main class="flex flex-col relative overflow-hidden">
+    
+    <section class="min-h-[calc(100vh-80px)] flex items-center relative px-6 py-12 justify-center flex-col overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none opacity-[0.04] bg-[radial-gradient(circle,white_1px,transparent_1px)] bg-[length:40px_40px]"></div>
         
-        <header class="mb-12">
-            <h2 class="text-xs text-fiot-accent font-bold uppercase tracking-[0.2em] mb-2">Технічна база</h2>
-            <h3 class="text-2xl md:text-3xl font-bold uppercase tracking-tight text-white">Інженерний підхід</h3>
-        </header>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 auto-rows-fr">
-            
-            <article class="md:col-span-2 lg:col-span-2 bg-fiot-dark border border-fiot-dark p-8 flex flex-col justify-between hover:border-fiot-primary/50 transition-colors">
-                <div>
-                    <h4 class="text-[10px] text-fiot-gray font-bold uppercase tracking-widest mb-6 border-b border-fiot-black pb-2">Основний стек</h4>
-                    <ul class="space-y-3 font-body">
-                        <li class="flex items-center gap-3 text-white">
-                            <span class="w-1.5 h-1.5 bg-fiot-primary"></span>
-                            <span class="font-bold">C++ / C#</span> — Системна архітектура та логіка
-                        </li>
-                        <li class="flex items-center gap-3 text-white">
-                            <span class="w-1.5 h-1.5 bg-fiot-primary"></span>
-                            <span class="font-bold">Unreal Engine 5</span> — AAA-розробка
-                        </li>
-                        <li class="flex items-center gap-3 text-white">
-                            <span class="w-1.5 h-1.5 bg-fiot-primary"></span>
-                            <span class="font-bold">HLSL / GLSL</span> — Програмування шейдерів
-                        </li>
-                    </ul>
+        <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 z-10 my-auto">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center gap-8 text-center lg:text-left">
+                <h1 class="text-white text-5xl md:text-7xl font-bold uppercase tracking-tighter opacity-90 max-w-lg mx-auto lg:mx-0 leading-[0.9]">
+                    Програмування <br>
+                    <span class="text-fiot-gray">комп'ютерних ігор</span>
+                </h1>
+                <div class="flex flex-col sm:flex-row gap-6 mt-4 justify-center lg:justify-start w-full max-w-lg mx-auto lg:mx-0">
+                    <a href="{{ route('admission') }}" class="btn btn-primary btn-lg">Вступнику</a>
+                    <a href="/disciplines" class="btn btn-secondary btn-lg">Студенту</a>
                 </div>
-            </article>
+            </div>
 
-            <article class="bg-fiot-dark border border-fiot-dark p-8 flex flex-col justify-between hover:border-fiot-accent/50 transition-colors relative overflow-hidden">
-                <div class="relative z-10">
-                    <h4 class="text-[10px] text-fiot-gray font-bold uppercase tracking-widest mb-6 border-b border-fiot-black pb-2">Локація</h4>
-                    <div class="text-3xl font-bold text-white mb-1">18 Корпус</div>
-                    <div class="text-sm text-fiot-gray font-body">Лабораторії та спеціалізовані комп'ютерні класи ФІОТ.</div>
-                </div>
-                <div class="absolute -bottom-2 -right-2 text-[5rem] md:-bottom-4 md:-right-4 md:text-[8rem] font-black text-fiot-black select-none pointer-events-none leading-none">18</div>
-            </article>
-
-            <article class="bg-fiot-dark border border-fiot-dark p-8 flex flex-col justify-between hover:border-fiot-gray transition-colors">
-                <div>
-                    <h4 class="text-[10px] text-fiot-gray font-bold uppercase tracking-widest mb-6 border-b border-fiot-black pb-2">Фундамент</h4>
-                    <div class="text-lg font-bold text-white mb-2">Математика ігрових світів</div>
-                    <div class="text-sm text-fiot-gray font-body">Лінійна алгебра, дискретна математика та фізика як основа для написання власних рушіїв.</div>
-                </div>
-            </article>
-
+            <div class="w-full lg:w-1/2 h-[400px] lg:h-[500px] flex items-center justify-center relative z-10">
+                <model-viewer 
+                    src="{{ asset('models/cool_fice_frog.glb') }}" 
+                    alt="Cyber frog"
+                    auto-rotate
+                    rotation-per-second="15deg"
+                    camera-controls
+                    disable-zoom
+                    shadow-intensity="1.5"
+                    class="w-full h-full outline-none">
+                </model-viewer>
+            </div>
         </div>
-    </div>
-</section>
+        
+        <div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#080809] to-transparent pointer-events-none z-20"></div>
+    </section>
 
-<section class="py-16 lg:py-24">
-    <div class="container mx-auto px-4 md:px-6">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <section class="reveal-on-scroll py-24 px-6 border-fiot-dark bg-gradient-to-b from-[#080809] to-[#14161C]">
+        <div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             
-            <div class="border border-fiot-dark bg-fiot-black p-8 md:p-12 flex flex-col justify-between">
-                <div>
-                    <h2 class="text-2xl md:text-3xl font-bold uppercase tracking-tight text-white mb-6">Вступникам</h2>
-                    <ul class="space-y-4 mb-12">
-                        <li><a href="#" class="text-fiot-gray hover:text-fiot-primary font-body border-b border-transparent hover:border-fiot-primary transition-all">Правила прийому 2026</a></li>
-                        <li><a href="#" class="text-fiot-gray hover:text-fiot-primary font-body border-b border-transparent hover:border-fiot-primary transition-all">Конкурсні предмети та бали</a></li>
-                        <li><a href="#" class="text-fiot-gray hover:text-fiot-primary font-body border-b border-transparent hover:border-fiot-primary transition-all">Контакти відбіркової комісії</a></li>
-                    </ul>
+            <div class="max-w-none border-fiot-primary pl-8">
+                <h3 class="text-white text-3xl md:text-4xl font-bold uppercase tracking-tight mb-6">Інженерний підхід</h3>
+                <p class="text-fiot-gray text-lg leading-relaxed mb-6 font-body">
+                    Офіційна освітня програма за спеціальністю <strong>121 «Інженерія програмного забезпечення»</strong>. Ми готуємо архітекторів систем реального часу.
+                </p>
+                <p class="text-fiot-gray text-lg leading-relaxed font-body">
+                    Глибока математика, комп'ютерна графіка та системне програмування на базі ФІОТ.
+                </p>
+            </div>
+
+            <div class="h-[350px] bg-[#080809]/40 border border-fiot-dark rounded-xl flex items-center justify-center relative overflow-hidden shadow-2xl">
+                <div class="absolute inset-0 opacity-10 bg-[linear-gradient(45deg,#4D11CC_1px,transparent_1px)] bg-[length:20px_20px]"></div>
+                <span class="text-fiot-gray/50 text-xs font-mono uppercase tracking-widest z-10">[Render: Raytracing Engine]</span>
+            </div>
+            
+        </div>
+    </section>
+
+    <section class="reveal-on-scroll py-24 px-6 border-t border-fiot-dark">
+        <div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="h-[400px] bg-fiot-dark rounded-lg overflow-hidden border border-fiot-dark relative order-2 lg:order-1 flex items-center justify-center">
+                <div class="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#4D11CC_1px,transparent_1px),linear-gradient(to_bottom,#4D11CC_1px,transparent_1px)] bg-[length:30px_30px]"></div>
+                <span class="text-fiot-gray/50 text-xs font-mono uppercase tracking-widest z-10">[IMAGE: Корпус 18 ФІОТ]</span>
+                <div class="absolute bottom-6 left-6 font-bold tracking-widest text-sm z-10">КОРПУС 18</div>
+            </div>
+            <div class="max-w-none order-1 lg:order-2">
+                <h3 class="text-white text-3xl md:text-4xl font-bold uppercase tracking-tight mb-6">Фізична база кафедри</h3>
+                <p class="text-fiot-gray text-lg leading-relaxed">
+                    Ми знаходимося в серці технічного університету — легендарному 18-му корпусі ФІОТ.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    {{-- Статистика --}}
+    <section class="reveal-on-scroll py-16 px-6 border-t border-fiot-dark bg-[#0b0c0f]">
+        <div class="container mx-auto grid grid-cols-2 lg:grid-cols-4 gap-8">
+            @foreach (config('content.stats') as $stat)
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-bold text-white tracking-tighter mb-2">{{ $stat['value'] }}</div>
+                    <div class="text-[10px] md:text-xs text-fiot-gray font-mono uppercase tracking-widest">{{ $stat['label'] }}</div>
                 </div>
-                <a href="{{ route('admission') }}" class="w-full block text-center px-8 py-4 bg-fiot-primary hover:bg-fiot-primary-hover text-white font-bold uppercase tracking-widest text-sm transition-colors">
-                    Деталі вступу
+            @endforeach
+        </div>
+    </section>
+
+    {{-- Останні новини --}}
+    <section class="reveal-on-scroll py-24 px-6 border-t border-fiot-dark">
+        <div class="container mx-auto">
+
+            <div class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-12">
+                <div>
+                    <h3 class="text-white text-3xl md:text-4xl font-bold uppercase tracking-tight mb-2">Останні новини</h3>
+                    <p class="text-gray-400 text-xs font-mono">[LATEST_UPDATES] // Що нового у світі програми</p>
+                </div>
+                <a href="{{ route('news') }}" class="btn btn-outline btn-md self-start md:self-auto group">
+                    Усі новини
+                    <svg class="w-3 h-3 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                 </a>
             </div>
 
-            <div class="border border-fiot-dark bg-fiot-black p-8 md:p-12 flex flex-col justify-between">
-                <div>
-                    <h2 class="text-2xl md:text-3xl font-bold uppercase tracking-tight text-white mb-6">Студентам</h2>
-                    <ul class="space-y-4 mb-12">
-                        <li><a href="/disciplines" class="text-fiot-gray hover:text-white font-body border-b border-transparent hover:border-white transition-all">Силабуси (Дерево навичок)</a></li>
-                        <li><a href="#" class="text-fiot-gray hover:text-white font-body border-b border-transparent hover:border-white transition-all">Розклад занять</a></li>
-                        <li><a href="#" class="text-fiot-gray hover:text-white font-body border-b border-transparent hover:border-white transition-all">Викладацький склад</a></li>
-                    </ul>
-                </div>
-                <a href="/disciplines" class="w-full block text-center px-8 py-4 border border-fiot-dark hover:border-fiot-gray text-fiot-gray hover:text-white font-bold uppercase tracking-widest text-sm transition-colors">
-                    Освітній процес
-                </a>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                @foreach (array_slice(config('content.news'), 0, 3) as $item)
+                    <a href="{{ route('news.article', ['slug' => $item['slug']]) }}"
+                       class="group flex flex-col bg-[#0b0c0f] border border-[#2a2a35] rounded-xl overflow-hidden hover:border-fiot-accent/50 hover:-translate-y-1 transition-all duration-300">
+                        <div class="p-6 flex-1 flex flex-col">
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-[10px] font-mono uppercase tracking-widest text-fiot-accent">{{ $item['tag'] }}</span>
+                                <time class="text-[10px] text-gray-500 font-mono uppercase tracking-widest" datetime="{{ $item['date'] }}">
+                                    {{ \Carbon\Carbon::parse($item['date'])->translatedFormat('d.m.Y') }}
+                                </time>
+                            </div>
+                            <h4 class="text-white font-bold mb-3 group-hover:text-fiot-accent transition-colors">{{ $item['title'] }}</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed flex-1">{{ $item['excerpt'] }}</p>
+                        </div>
+                    </a>
+                @endforeach
             </div>
 
         </div>
-    </div>
-</section>
+    </section>
+
+</main>
 @endsection

@@ -1,8 +1,6 @@
-@import "tailwindcss";
-
 @import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Univers:wght@400;600;700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700;800&display=swap');
+@import "tailwindcss";
 
 @theme {
   --color-fiot-black: #080809;       /* Main background */
@@ -14,7 +12,9 @@
   --color-fiot-white: #F8F9FA;      /* White text */
 
   /* Typography */
-  --font-large-heading: "Univers", system-ui, sans-serif;
+  /* NOTE: Univers is a licensed font — replaced with Inter Tight until the
+     brand font is provided by the department. */
+  --font-large-heading: "Inter Tight", "Univers", system-ui, sans-serif;
   --font-heading: "Mulish", sans-serif;
   --font-body: "Mulish", sans-serif;
 }
@@ -33,5 +33,55 @@
 
     h3, h4, h5, h6 {
         font-family: var(--font-heading);
+    }
+    
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.reveal-on-scroll {
+    animation: fadeIn linear forwards;
+    animation-timeline: view();
+    animation-range: entry 0% cover 25%;
+}
+
+
+@layer components {
+    /* Base class for all buttons (geometry, transitions, typography) */
+    .btn {
+        @apply inline-flex items-center justify-center font-bold uppercase tracking-[0.1em] transition-all duration-200 select-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-fiot-accent focus:ring-offset-2 focus:ring-offset-fiot-black disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    /* --- Color Variants --- */
+    
+    /* Primary (Main action) */
+    .btn-primary {
+        @apply bg-fiot-primary text-white border border-transparent hover:bg-fiot-primary-hover active:bg-fiot-primary/90;
+    }
+
+    /* Outline (Secondary action) */
+    .btn-outline {
+        @apply bg-transparent border border-fiot-dark text-fiot-gray hover:text-white hover:border-fiot-gray active:bg-fiot-dark/50;
+    }
+
+    /* Secondary (Solid background, alternate action) */
+    .btn-secondary {
+        @apply bg-fiot-dark border border-fiot-dark text-white hover:border-fiot-primary hover:text-fiot-primary active:bg-fiot-black;
+    }
+
+    /* --- Size Variants --- */
+    
+    .btn-lg {
+        @apply px-8 py-4 text-sm;
+    }
+
+    .btn-md {
+        @apply px-6 py-3 text-xs;
+    }
+
+    .btn-sm {
+        @apply px-4 py-2 text-[10px];
     }
 }
