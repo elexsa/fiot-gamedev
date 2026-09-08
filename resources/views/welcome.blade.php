@@ -108,16 +108,16 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                @foreach (array_slice(config('content.news'), 0, 3) as $item)
-                    <x-ui.card :href="route('news.article', ['slug' => $item['slug']])" interactive class="group p-6">
+                @foreach ($latestNews as $item)
+                    <x-ui.card :href="route('news.article', $item)" interactive class="group p-6">
                         <div class="flex items-center justify-between mb-4">
-                            <span class="text-[10px] font-mono uppercase tracking-widest text-fiot-accent">{{ $item['tag'] }}</span>
-                            <time class="text-[10px] text-gray-500 font-mono uppercase tracking-widest" datetime="{{ $item['date'] }}">
-                                {{ \Carbon\Carbon::parse($item['date'])->translatedFormat('d.m.Y') }}
+                            <span class="text-[10px] font-mono uppercase tracking-widest text-fiot-accent">{{ $item->tag }}</span>
+                            <time class="text-[10px] text-gray-500 font-mono uppercase tracking-widest" datetime="{{ $item->published_at->toDateString() }}">
+                                {{ $item->published_at->translatedFormat('d.m.Y') }}
                             </time>
                         </div>
-                        <h4 class="text-white font-bold mb-3 group-hover:text-fiot-accent transition-colors">{{ $item['title'] }}</h4>
-                        <p class="text-gray-400 text-sm leading-relaxed flex-1">{{ $item['excerpt'] }}</p>
+                        <h4 class="text-white font-bold mb-3 group-hover:text-fiot-accent transition-colors">{{ $item->title }}</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed flex-1">{{ $item->excerpt }}</p>
                     </x-ui.card>
                 @endforeach
             </div>

@@ -1,21 +1,18 @@
 <?php
 
+use App\Http\Controllers\DisciplinesController;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 // Home page
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [PageController::class, 'home'])->name('home');
 
 // About the department page
-Route::get('/about', function () {
-    return view('about');
-})->name('about');
+Route::get('/about', [PageController::class, 'about'])->name('about');
 
 // Disciplines page (Skill Tree)
-Route::get('/disciplines', function () {
-    return view('disciplines');
-})->name('disciplines');
+Route::get('/disciplines', [DisciplinesController::class, 'index'])->name('disciplines');
 
 // Admission page
 Route::get('/admission', function () {
@@ -23,25 +20,13 @@ Route::get('/admission', function () {
 })->name('admission');
 
 // News list page
-Route::get('/news', function () {
-    return view('news', ['news' => config('content.news')]);
-})->name('news');
+Route::get('/news', [NewsController::class, 'index'])->name('news');
 
 // Single news article page
-Route::get('/news/{slug}', function (string $slug) {
-    $article = collect(config('content.news'))->firstWhere('slug', $slug);
-
-    abort_if($article === null, 404);
-
-    return view('news-article', ['article' => $article]);
-})->name('news.article');
+Route::get('/news/{article:slug}', [NewsController::class, 'show'])->name('news.article');
 
 // Partners page
-Route::get('/partners', function () {
-    return view('partners');
-})->name('partners');
+Route::get('/partners', [PageController::class, 'partners'])->name('partners');
 
 // Contacts page
-Route::get('/contacts', function () {
-    return view('contacts');
-})->name('contacts');
+Route::get('/contacts', [PageController::class, 'contacts'])->name('contacts');

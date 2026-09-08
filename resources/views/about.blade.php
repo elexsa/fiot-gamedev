@@ -52,16 +52,20 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                @foreach (config('content.faculty') as $person)
+                @foreach ($faculty as $person)
                     <x-ui.card interactive class="group p-6">
                         <div class="flex items-start gap-4">
-                            <div class="w-14 h-14 shrink-0 rounded-xl border border-white/10 bg-gradient-to-br from-fiot-primary/20 to-fiot-accent/10 flex items-center justify-center font-bold text-lg text-white/70 group-hover:border-fiot-accent/40 transition-colors">
-                                {{ mb_substr($person['name'], 0, 1) }}
+                            <div class="w-14 h-14 shrink-0 rounded-xl border border-white/10 bg-gradient-to-br from-fiot-primary/20 to-fiot-accent/10 flex items-center justify-center font-bold text-lg text-white/70 group-hover:border-fiot-accent/40 transition-colors overflow-hidden">
+                                @if ($person->photo)
+                                    <img src="{{ asset($person->photo) }}" alt="{{ $person->name }}" class="w-full h-full object-cover">
+                                @else
+                                    {{ mb_substr($person->name, 0, 1) }}
+                                @endif
                             </div>
                             <div>
-                                <h3 class="text-white font-bold mb-1">{{ $person['name'] }}</h3>
-                                <p class="text-[10px] text-fiot-accent font-mono uppercase tracking-widest mb-2">{{ $person['role'] }}</p>
-                                <p class="text-gray-400 text-xs leading-relaxed">{{ $person['focus'] }}</p>
+                                <h3 class="text-white font-bold mb-1">{{ $person->name }}</h3>
+                                <p class="text-[10px] text-fiot-accent font-mono uppercase tracking-widest mb-2">{{ $person->role }}</p>
+                                <p class="text-gray-400 text-xs leading-relaxed">{{ $person->focus }}</p>
                             </div>
                         </div>
                     </x-ui.card>

@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', $article['title'] . ' | Кафедра ігрових систем')
+@section('title', $article->title . ' | Кафедра ігрових систем')
 
-@section('meta_description', $article['excerpt'])
+@section('meta_description', Str::limit($article->excerpt ?? '', 150))
 
 @section('content')
 <x-ui.page class="!min-h-0">
@@ -18,23 +18,23 @@
 
         <div class="p-6 md:p-10">
             <div class="flex flex-wrap items-center gap-4 mb-6">
-                <x-ui.badge>{{ $article['tag'] }}</x-ui.badge>
-                <time class="text-[10px] text-gray-500 font-mono uppercase tracking-widest" datetime="{{ $article['date'] }}">
-                    {{ \Carbon\Carbon::parse($article['date'])->translatedFormat('d F Y') }}
+                <x-ui.badge>{{ $article->tag }}</x-ui.badge>
+                <time class="text-[10px] text-gray-500 font-mono uppercase tracking-widest" datetime="{{ $article->published_at->toDateString() }}">
+                    {{ $article->published_at->translatedFormat('d F Y') }}
                 </time>
             </div>
 
             <h1 class="text-2xl md:text-4xl font-bold tracking-tight text-white uppercase mb-8">
-                {{ $article['title'] }}
+                {{ $article->title }}
             </h1>
 
             <p class="text-fiot-gray text-lg leading-relaxed mb-6 border-l-2 border-fiot-primary pl-4">
-                {{ $article['excerpt'] }}
+                {{ $article->excerpt }}
             </p>
 
-            <p class="text-fiot-gray text-base leading-relaxed">
-                {{ $article['body'] }}
-            </p>
+            <div class="text-fiot-gray text-base leading-relaxed">
+                {!! nl2br(e($article->body)) !!}
+            </div>
 
             <div class="mt-12 pt-6 border-t border-white/10 text-[10px] text-gray-600 font-mono uppercase tracking-widest">
                 [PLACEHOLDER_CONTENT] // Текст буде надано деканатом

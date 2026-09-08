@@ -11,23 +11,23 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
         @foreach ($news as $item)
-            <x-ui.card :href="route('news.article', ['slug' => $item['slug']])" interactive class="group overflow-hidden">
+            <x-ui.card :href="route('news.article', $item)" interactive class="group overflow-hidden">
                 <div class="h-2 bg-gradient-to-r from-fiot-primary/60 to-fiot-accent/40 group-hover:from-fiot-primary group-hover:to-fiot-accent transition-all duration-300"></div>
 
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-center justify-between mb-4">
-                        <x-ui.badge>{{ $item['tag'] }}</x-ui.badge>
-                        <time class="text-[10px] text-gray-500 font-mono uppercase tracking-widest" datetime="{{ $item['date'] }}">
-                            {{ \Carbon\Carbon::parse($item['date'])->translatedFormat('d.m.Y') }}
+                        <x-ui.badge>{{ $item->tag }}</x-ui.badge>
+                        <time class="text-[10px] text-gray-500 font-mono uppercase tracking-widest" datetime="{{ $item->published_at->toDateString() }}">
+                            {{ $item->published_at->translatedFormat('d.m.Y') }}
                         </time>
                     </div>
 
                     <h2 class="text-white font-bold text-lg mb-3 group-hover:text-fiot-accent transition-colors">
-                        {{ $item['title'] }}
+                        {{ $item->title }}
                     </h2>
 
                     <p class="text-gray-400 text-sm leading-relaxed mb-6 flex-1">
-                        {{ $item['excerpt'] }}
+                        {{ $item->excerpt }}
                     </p>
 
                     <div class="text-[10px] text-gray-500 font-mono uppercase tracking-widest flex items-center gap-2 mt-auto group-hover:text-white transition-colors">
