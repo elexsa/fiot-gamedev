@@ -6,16 +6,15 @@
 
 @section('content')
 <x-ui.page>
-    <x-ui.page-header title="Про кафедру" kicker="[PLAYER_HANDBOOK]" subtitle="Хто ми, чому нас варто обрати та хто проведе вас по грі." />
+    <x-ui.page-header title="Про кафедру" kicker="Про кафедру" subtitle="Хто ми, чому нас варто обрати та хто проведе вас по грі." />
 
         {{-- Історія та місія --}}
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 mb-20">
 
             <div class="reveal-on-scroll">
-                <h2 class="text-xl font-bold text-white mb-6 uppercase tracking-widest flex items-center gap-3">
-                    <span class="w-2 h-2 bg-fiot-accent rounded-sm shadow-[0_0_8px_rgba(18,230,49,0.8)]"></span>
-                    Наша місія
-                </h2>
+                <div class="border-l-2 border-fiot-accent pl-5">
+                    <h2 class="text-xl font-bold text-white tracking-tight mb-2">Наша місія</h2>
+                </div>
                 <p class="text-fiot-gray text-lg leading-relaxed mb-6">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ми готуємо інженерів, здатних проєктувати та створювати ігри світового рівня — від низькорівневої графіки до цілісного геймдизайну.
                 </p>
@@ -27,7 +26,7 @@
             <div class="reveal-on-scroll relative">
                 <div class="h-[300px] bg-fiot-dark/40 border border-white/10 rounded-2xl flex items-center justify-center relative overflow-hidden shadow-2xl">
                     <div class="absolute inset-0 opacity-10 bg-[linear-gradient(45deg,#4D11CC_1px,transparent_1px)] bg-[length:20px_20px]"></div>
-                    <span class="text-fiot-gray/50 text-xs font-mono uppercase tracking-widest z-10">[IMAGE: Команда кафедри]</span>
+                    <span class="text-sm text-fiot-gray z-10">Фото команди — буде додано</</span>
                 </div>
             </div>
 
@@ -44,11 +43,10 @@
 
         {{-- Викладачі --}}
         <div class="reveal-on-scroll mb-12">
-            <h2 class="text-xl font-bold text-white mb-2 uppercase tracking-widest flex items-center gap-3">
-                <span class="w-2 h-2 bg-fiot-accent rounded-sm shadow-[0_0_8px_rgba(18,230,49,0.8)]"></span>
-                Викладацький склад
-            </h2>
-            <p class="text-gray-400 text-xs font-mono mb-8">// [PARTY_MEMBERS] — ментори, які ведуть вас до фінального боса</p>
+            <div class="border-l-2 border-fiot-accent pl-5">
+                <h2 class="text-xl font-bold text-white tracking-tight mb-2">Викладацький склад</h2>
+            </div>
+            <p class="text-fiot-gray text-sm mb-8">Ментори й викладачі, які ведуть студентів через програму.</p>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
@@ -64,7 +62,7 @@
                             </div>
                             <div>
                                 <h3 class="text-white font-bold mb-1">{{ $person->name }}</h3>
-                                <p class="text-[10px] text-fiot-accent font-mono uppercase tracking-widest mb-2">{{ $person->role }}</p>
+                                <p class="text-sm text-fiot-gray mb-2">{{ $person->role }}</p>
                                 <p class="text-gray-400 text-xs leading-relaxed">{{ $person->focus }}</p>
                             </div>
                         </div>
@@ -78,13 +76,12 @@
         <div class="reveal-on-scroll grid grid-cols-1 lg:grid-cols-2 gap-16 items-center border-t border-white/10 pt-16">
             <div class="h-[350px] bg-fiot-dark/40 border border-white/10 rounded-2xl relative flex items-center justify-center overflow-hidden">
                 <div class="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#4D11CC_1px,transparent_1px),linear-gradient(to_bottom,#4D11CC_1px,transparent_1px)] bg-[length:30px_30px]"></div>
-                <span class="text-fiot-gray/50 text-xs font-mono uppercase tracking-widest z-10">[IMAGE: Комп'ютерні класи]</span>
+                <span class="text-sm text-fiot-gray z-10">Фото класів — буде додано</</span>
             </div>
             <div class="order-1 lg:order-2">
-                <h2 class="text-xl font-bold text-white mb-6 uppercase tracking-widest flex items-center gap-3">
-                    <span class="w-2 h-2 bg-fiot-accent rounded-sm shadow-[0_0_8px_rgba(18,230,49,0.8)]"></span>
-                    Матеріально-технічна база
-                </h2>
+                <div class="border-l-2 border-fiot-accent pl-5">
+                    <h2 class="text-xl font-bold text-white tracking-tight mb-2">Матеріально-технічна база</h2>
+                </div>
                 <p class="text-fiot-gray text-lg leading-relaxed mb-6">
                     Lorem ipsum dolor sit amet: сучасні комп'ютерні класи з ліцензійним ПЗ, лабораторії розробки та тестування ігор, простір для командних проєктів.
                 </p>

@@ -6,7 +6,7 @@
 
 @section('content')
 <x-ui.page>
-    <x-ui.page-header title="Партнери" kicker="[INDUSTRY_NETWORK]" subtitle="Компанії, з якими ми співпрацюємо. Менторство, стажування та працевлаштування для студентів." />
+    <x-ui.page-header title="Партнери" kicker="Партнери кафедри" subtitle="Компанії, з якими ми співпрацюємо. Менторство, стажування та працевлаштування для студентів." />
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
 
@@ -22,7 +22,7 @@
                 <div class="p-6 flex-1 flex flex-col">
                     <h3 class="text-white font-bold text-xl mb-2">{{ $partner->name }}</h3>
                     <p class="text-gray-400 text-sm leading-relaxed mb-6 flex-1">{{ $partner->description }}</p>
-                    <div class="text-[10px] text-gray-500 font-mono uppercase tracking-widest flex items-center gap-2 mt-auto group-hover:text-white transition-colors">
+                    <div class="inline-flex items-center gap-2 text-sm text-fiot-gray mt-auto group-hover:text-fiot-primary transition-colors">
                         Відвідати сайт
                         <x-ui.icon name="arrow-right" class="w-3 h-3 transition-transform group-hover:translate-x-1" />
                     </div>

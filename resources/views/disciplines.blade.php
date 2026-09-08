@@ -8,7 +8,7 @@
 
 <section class="relative z-10 pt-16 md:pt-24 min-h-screen flex flex-col">
     <div class="container mx-auto max-w-screen-2xl px-4 md:px-8 relative z-10 flex-shrink-0">
-        <x-ui.page-header title="Дерево Навичок" kicker="[CURRICULUM]" subtitle="Етапи підготовки спеціаліста. Наведіть на вузол, щоб підсвітити зв'язки. Shift + Scroll для прокрутки." />
+        <x-ui.page-header title="Дерево Навичок" kicker="Освітня програма" subtitle="Етапи підготовки спеціаліста. Наведіть на вузол, щоб підсвітити зв'язки. Shift + Scroll для прокрутки." />
     </div>
 
     {{-- Мобільна версія: вертикальний таймлайн --}}
@@ -18,17 +18,17 @@
 
             @foreach ($levels as $level => $group)
                 <div class="relative flex items-start gap-6 md:gap-8 mb-12 group z-10">
-                    <div class="w-12 h-12 shrink-0 rounded-full border-2 {{ $loop->last ? 'border-fiot-accent bg-[#0b0c0f] text-fiot-accent shadow-[0_0_15px_rgba(18,230,49,0.3)]' : 'border-[#555] bg-[#0b0c0f] text-gray-400' }} flex items-center justify-center font-bold text-lg font-mono shadow-lg">
+                    <div class="w-12 h-12 shrink-0 rounded-full border-2 {{ $loop->last ? 'border-fiot-accent bg-[#0b0c0f] text-fiot-accent shadow-[0_0_15px_rgba(18,230,49,0.3)]' : 'border-[#555] bg-[#0b0c0f] text-gray-400' }} flex items-center justify-center font-bold text-lg">
                         {{ str_pad($level, 2, '0', STR_PAD_LEFT) }}
                     </div>
                     <div class="flex-1">
-                        <h2 class="text-xs {{ $loop->last ? 'text-fiot-accent' : 'text-gray-400' }} font-mono tracking-widest uppercase mb-4 mt-3">Рівень {{ $level }}: {{ [1 => 'Фундамент', 2 => 'Ядро логіки', 3 => 'Ігрові системи', 4 => 'Майстерність'][$level] ?? 'Спеціалізація' }}</h2>
+                        <h2 class="text-sm text-fiot-gray mb-4 mt-3">Рівень {{ $level }}: {{ [1 => 'Фундамент', 2 => 'Ядро логіки', 3 => 'Ігрові системи', 4 => 'Майстерність'][$level] ?? 'Спеціалізація' }}</h2>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             @foreach ($group as $disc)
                                 <div class="bg-[#111115] border {{ $disc->is_boss ? 'border-fiot-accent/40 shadow-[0_0_15px_rgba(18,230,49,0.05)]' : 'border-[#2a2a35]' }} p-5 rounded-xl shadow-lg">
                                     <h3 class="text-white font-bold text-sm mb-1 flex justify-between">
                                         {{ $disc->name }}
-                                        @if ($disc->is_boss)<span class="text-red-400 text-[10px] animate-pulse uppercase">Бос</span>@endif
+                                        @if ($disc->is_boss)<span class="text-red-400 text-xs">Бос</span>@endif
                                     </h3>
                                     <p class="text-gray-500 text-xs">{{ $disc->description }}</p>
                                 </div>
@@ -52,11 +52,11 @@
 
                 @foreach ($levels as $level => $group)
                     <div class="flex flex-col justify-center gap-10 relative w-64 {{ $level % 2 === 0 ? 'pt-6' : '' }}">
-                        <div class="absolute -top-6 text-[10px] text-gray-600 font-mono uppercase tracking-widest border-b border-gray-800 w-full pb-1">Рівень {{ $level }}: {{ [1 => 'Фундамент', 2 => 'Ядро логіки', 3 => 'Ігрові системи', 4 => 'Майстерність'][$level] ?? 'Спеціалізація' }}</div>
+                        <div class="absolute -top-6 text-sm text-fiot-gray border-b border-white/10 w-full pb-1">Рівень {{ $level }}: {{ [1 => 'Фундамент', 2 => 'Ядро логіки', 3 => 'Ігрові системи', 4 => 'Майстерність'][$level] ?? 'Спеціалізація' }}</div>
 
                         @foreach ($group as $disc)
                             <div id="disc-{{ $disc->id }}" class="skill-node bg-[#111115] {{ $disc->is_boss ? 'border border-[#555] shadow-[0_0_20px_rgba(255,255,255,0.05)] relative z-20' : 'border border-[#333] shadow-lg' }} rounded transition-transform hover:-translate-y-1">
-                                <div class="bg-[#1a1a24] px-3 py-1.5 text-[10px] font-mono {{ $disc->is_boss ? 'border-l-4 border-purple-500 text-white flex justify-between' : 'border-l-4 border-yellow-500 text-gray-300' }} uppercase tracking-wider">
+                                <div class="bg-[#1a1a24] px-3 py-1.5 {{ $disc->is_boss ? 'border-l-4 border-purple-500 text-white flex justify-between' : 'border-l-4 border-fiot-primary text-fiot-gray' }}">
                                     <span>{{ $disc->category }}</span>
                                     @if ($disc->is_boss)<span class="text-red-400 animate-pulse">Бос</span>@endif
                                 </div>
@@ -64,7 +64,7 @@
                                     <h3 class="{{ $disc->category === 'Ядро GameDev' ? 'text-fiot-accent' : 'text-white' }} font-bold text-sm mb-1">{{ $disc->name }}</h3>
                                     <p class="text-gray-500 text-[10px] leading-tight">{{ $disc->description }}</p>
                                     @if ($disc->syllabus_file || $disc->syllabus_url)
-                                        <a href="{{ $disc->syllabus_file ? asset($disc->syllabus_file) : $disc->syllabus_url }}" target="_blank" class="inline-flex items-center gap-1 mt-3 text-[10px] font-mono uppercase tracking-widest text-fiot-accent hover:text-white transition-colors">
+                                        <a href="{{ $disc->syllabus_file ? asset($disc->syllabus_file) : $disc->syllabus_url }}" target="_blank" class="inline-flex items-center gap-1 mt-3 text-sm text-fiot-accent hover:text-white transition-colors">
                                             Силабус
                                             <x-ui.icon name="arrow-right" class="w-3 h-3" />
                                         </a>

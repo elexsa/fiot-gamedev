@@ -27,6 +27,3 @@ Route::get('/news/{article:slug}', [NewsController::class, 'show'])->name('news.
 
 // Partners page
 Route::get('/partners', [PageController::class, 'partners'])->name('partners');
-
-// Contacts page
-Route::get('/contacts', [PageController::class, 'contacts'])->name('contacts');

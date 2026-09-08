@@ -8,12 +8,12 @@
 <section class="relative z-10 pt-16 md:pt-24 min-h-screen flex flex-col pb-20">
     <div class="container mx-auto max-w-screen-xl px-4 md:px-8 relative z-10">
 
-        <x-ui.page-header title="Етапи вступу" kicker="[MISSION_OBJECTIVE]" subtitle="Отримай статус студента. Розрахуй бали та дотримуйся дорожньої карти." />
+        <x-ui.page-header title="Етапи вступу" kicker="Вступникам" subtitle="Отримай статус студента. Розрахуй бали та дотримуйся дорожньої карти." />
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mb-20">
             
             <div class="lg:col-span-7">
-                <h2 class="text-xl font-bold text-white mb-8 flex items-center uppercase tracking-widest">
+                <h2 class="text-2xl font-bold text-white tracking-tight mb-8">
                     Дорожня карта
                 </h2>
 
@@ -22,7 +22,7 @@
                     <div class="relative pl-8 md:pl-10">
                         <div class="absolute -left-[17px] top-1 w-8 h-8 rounded-full border border-[#555] bg-[#0b0c0f] text-gray-400 flex items-center justify-center font-bold text-xs font-mono z-10">1</div>
                         <div class="bg-[#111115] border border-[#2a2a35] p-5 md:p-6 rounded-lg w-full">
-                            <div class="text-[10px] text-gray-500 font-mono mb-2 uppercase tracking-widest">Липень 2026</div>
+                            <div class="text-sm text-fiot-gray mb-2">Липень 2026</div>
                             <h3 class="font-bold text-white text-lg md:text-xl mb-2">Реєстрація кабінету</h3>
                             <p class="text-sm text-gray-400 leading-relaxed">Створення електронного кабінету вступника на сайті ЄДЕБО. Завантаження фотографії та необхідних документів.</p>
                         </div>
@@ -31,7 +31,7 @@
                     <div class="relative pl-8 md:pl-10">
                         <div class="absolute -left-[17px] top-1 w-8 h-8 rounded-full border border-[#555] bg-[#0b0c0f] text-gray-400 flex items-center justify-center font-bold text-xs font-mono z-10">2</div>
                         <div class="bg-[#111115] border border-[#2a2a35] p-5 md:p-6 rounded-lg w-full">
-                            <div class="text-[10px] text-gray-500 font-mono mb-2 uppercase tracking-widest">Кінець Липня</div>
+                            <div class="text-sm text-fiot-gray mb-2">Кінець Липня</div>
                             <h3 class="font-bold text-white text-lg md:text-xl mb-2">Подання заявки</h3>
                             <p class="text-sm text-gray-400 leading-relaxed">
                                 Обирай КПІ ім. Ігоря Сікорського, ФІОТ, спеціальність F2 ІПЗ (ОПП: Програмування комп'ютерних ігор). Обов'язково став 
@@ -43,7 +43,7 @@
                     <div class="relative pl-8 md:pl-10">
                         <div class="absolute -left-[17px] top-1 w-8 h-8 rounded-full border border-[#555] bg-[#0b0c0f] text-gray-400 flex items-center justify-center font-bold text-xs font-mono z-10">3</div>
                         <div class="bg-[#111115] border border-[#2a2a35] p-5 md:p-6 rounded-lg w-full">
-                            <div class="text-[10px] text-gray-500 font-mono mb-2 uppercase tracking-widest">Серпень 2026</div>
+                            <div class="text-sm text-fiot-gray mb-2">Серпень 2026</div>
                             <h3 class="font-bold text-white text-lg md:text-xl mb-2">Мотиваційний лист</h3>
                             <p class="text-sm text-gray-400 leading-relaxed">Написання та додавання мотиваційного листа. Розкажи, чому ти хочеш пов'язати життя з GameDev та чому обрав саме наш факультет.</p>
                         </div>
@@ -64,7 +64,7 @@
             </div>
 
             <div class="lg:col-span-5 w-full mt-8 lg:mt-0">
-                <h2 class="text-xl font-bold text-white mb-8 flex items-center uppercase tracking-widest">
+                <h2 class="text-2xl font-bold text-white tracking-tight mb-8">
                     Калькулятор НМТ
                 </h2>
 

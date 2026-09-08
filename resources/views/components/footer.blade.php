@@ -5,23 +5,23 @@
 
             <div class="text-center md:text-left">
                 <div class="text-xl font-bold tracking-tighter text-white mb-1">GS<span class="text-fiot-accent">_</span></div>
-                <p class="text-fiot-gray text-xs mb-2 uppercase tracking-widest">Кафедра ігрових систем · ФІОТ КПІ</p>
-                <p class="text-fiot-gray text-xs font-mono max-w-xs leading-relaxed">
+                <p class="text-fiot-gray text-sm mb-2">Кафедра ігрових систем · ФІОТ КПІ</p>
+                <p class="text-fiot-gray text-sm max-w-xs leading-relaxed">
                     {{ config('content.contacts.address') }}
                 </p>
             </div>
 
             <div class="flex flex-col items-center md:items-start gap-1.5 text-sm">
-                <a href="tel:{{ preg_replace('/[^0-9+]/', '', config('content.contacts.phone')) }}" class="text-fiot-gray hover:text-white transition font-mono text-xs">
+                <a href="tel:{{ preg_replace('/[^0-9+]/', '', config('content.contacts.phone')) }}" class="text-fiot-gray hover:text-white transition text-sm">
                     {{ config('content.contacts.phone') }}
                 </a>
-                <a href="mailto:{{ config('content.contacts.email') }}" class="text-fiot-gray hover:text-white transition font-mono text-xs">
+                <a href="mailto:{{ config('content.contacts.email') }}" class="text-fiot-gray hover:text-white transition text-sm">
                     {{ config('content.contacts.email') }}
                 </a>
                 <div class="flex gap-4 mt-2">
-                    <a href="{{ config('content.contacts.social.telegram') }}" class="text-[10px] font-mono uppercase tracking-widest text-gray-500 hover:text-fiot-accent transition">Telegram</a>
-                    <a href="{{ config('content.contacts.social.discord') }}" class="text-[10px] font-mono uppercase tracking-widest text-gray-500 hover:text-fiot-accent transition">Discord</a>
-                    <a href="{{ config('content.contacts.social.facebook') }}" class="text-[10px] font-mono uppercase tracking-widest text-gray-500 hover:text-fiot-accent transition">Facebook</a>
+                    <a href="{{ config('content.contacts.social.telegram') }}" class="text-sm text-fiot-gray hover:text-white transition">Telegram</a>
+                    <a href="{{ config('content.contacts.social.discord') }}" class="text-sm text-fiot-gray hover:text-white transition">Discord</a>
+                    <a href="{{ config('content.contacts.social.facebook') }}" class="text-sm text-fiot-gray hover:text-white transition">Facebook</a>
                 </div>
             </div>
 

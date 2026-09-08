@@ -6,18 +6,20 @@
     'centered' => false,
 ])
 
-<section {{ $attributes->merge(['class' => 'relative z-10 py-20 md:py-28 px-6 border-t border-fiot-dark ' . ($tone === 'raised' ? 'bg-[#0b0c0f]' : '')]) }}>
+<section {{ $attributes->merge(['class' => 'relative z-10 py-20 md:py-28 px-6 border-t border-white/5 ' . ($tone === 'raised' ? 'bg-[#0b0c0f]' : '')]) }}>
     <div class="container mx-auto max-w-screen-xl">
         @if ($title || $kicker || $subtitle)
-            <div class="{{ $centered ? 'mb-12 md:mb-16 max-w-3xl mx-auto' : 'mb-12 md:mb-16 max-w-3xl' }}">
+            <div class="{{ $centered ? 'mb-12 md:mb-16 max-w-prose mx-auto' : 'mb-12 md:mb-16 max-w-prose' }}">
                 @if ($kicker)
-                    <p class="text-[11px] font-mono uppercase tracking-[0.25em] text-fiot-accent mb-4">{{ $kicker }}</p>
+                    <p class="text-sm font-semibold text-fiot-gray mb-4">{{ $kicker }}</p>
                 @endif
                 @if ($title)
-                    <h2 class="text-3xl md:text-5xl font-bold tracking-tighter text-white uppercase mb-4">{{ $title }}</h2>
+                    <div class="border-l-2 border-fiot-accent pl-5 {{ $centered ? 'mx-auto' : '' }}">
+                        <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white mb-4 {{ $centered ? 'text-center' : '' }}">{{ $title }}</h2>
+                    </div>
                 @endif
                 @if ($subtitle)
-                    <p class="text-fiot-gray text-base md:text-lg leading-relaxed max-w-2xl {{ $centered ? 'mx-auto text-center' : '' }}">{{ $subtitle }}</p>
+                    <p class="text-fiot-gray mt-4 text-base md:text-lg leading-relaxed {{ $centered ? 'text-center mx-auto' : '' }}">{{ $subtitle }}</p>
                 @endif
             </div>
         @endif

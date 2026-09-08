@@ -6,7 +6,7 @@
 
 @section('content')
 <x-ui.page>
-    <x-ui.page-header title="Новини" kicker="[PATCH_NOTES]" subtitle="Останні події, оновлення та досягнення кафедри й освітньої програми." />
+    <x-ui.page-header title="Новини" kicker="Новини кафедри" subtitle="Останні події, оновлення та досягнення кафедри й освітньої програми." />
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
@@ -17,7 +17,7 @@
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-center justify-between mb-4">
                         <x-ui.badge>{{ $item->tag }}</x-ui.badge>
-                        <time class="text-[10px] text-gray-500 font-mono uppercase tracking-widest" datetime="{{ $item->published_at->toDateString() }}">
+                        <time class="text-sm text-fiot-gray" datetime="{{ $item->published_at->toDateString() }}">
                             {{ $item->published_at->translatedFormat('d.m.Y') }}
                         </time>
                     </div>
@@ -30,7 +30,7 @@
                         {{ $item->excerpt }}
                     </p>
 
-                    <div class="text-[10px] text-gray-500 font-mono uppercase tracking-widest flex items-center gap-2 mt-auto group-hover:text-white transition-colors">
+                    <div class="inline-flex items-center gap-2 text-sm text-fiot-gray mt-auto group-hover:text-fiot-primary transition-colors">
                         Читати далі
                         <x-ui.icon name="arrow-right" class="w-3 h-3 transition-transform group-hover:translate-x-1" />
                     </div>

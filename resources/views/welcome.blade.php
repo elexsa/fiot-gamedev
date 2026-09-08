@@ -12,10 +12,9 @@
         
         <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 z-10 my-auto">
             <div class="w-full lg:w-1/2 flex flex-col justify-center gap-8 text-center lg:text-left">
-                <x-ui.badge color="primary" class="mx-auto lg:mx-0 w-max">Освітня програма «Розробка комп’ютерних ігор»</x-ui.badge>
-                <h1 class="text-white text-5xl md:text-7xl font-bold uppercase tracking-tighter opacity-90 max-w-lg mx-auto lg:mx-0 leading-[0.9]">
-                    Ігрові <br>
-                    <span class="text-fiot-gray">системи</span>
+                <x-ui.badge color="neutral" class="mx-auto lg:mx-0 w-max">Освітня програма «Розробка комп’ютерних ігор»</x-ui.badge>
+                <h1 class="text-white text-5xl md:text-7xl font-bold tracking-tight leading-[1.05] max-w-lg mx-auto lg:mx-0">
+                    Ігрові<br>системи
                 </h1>
                 <p class="text-fiot-gray text-lg leading-relaxed max-w-lg mx-auto lg:mx-0">
                     Кафедра ФІОТ КПІ. Готуємо інженерів, які створюють комп'ютерні ігри — від рушія до релізу.
@@ -47,9 +46,11 @@
         <div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
             <div>
-                <p class="text-[11px] font-mono uppercase tracking-[0.25em] text-fiot-accent mb-4">[WHO_WE_ARE]</p>
-                <h3 class="text-white text-3xl md:text-4xl font-bold uppercase tracking-tight mb-6">Хто ми</h3>
-                <p class="text-fiot-gray text-lg leading-relaxed mb-6">
+                <div class="border-l-2 border-fiot-accent pl-5">
+                    <p class="text-sm text-fiot-gray mb-3">Про кафедру</p>
+                    <h3 class="text-white text-3xl md:text-4xl font-bold tracking-tight mb-2">Хто ми</h3>
+                </div>
+                <p class="text-fiot-gray text-lg leading-relaxed mb-6 mt-6">
                     Кафедра готує фахівців за спеціальністю <strong class="text-white">121 «Інженерія програмного забезпечення»</strong> в межах освітньої програми «Розробка комп'ютерних ігор».
                 </p>
                 <p class="text-fiot-gray text-lg leading-relaxed">
@@ -59,22 +60,24 @@
 
             <div class="h-[350px] bg-[#080809]/40 border border-white/10 rounded-2xl flex items-center justify-center relative overflow-hidden shadow-2xl">
                 <div class="absolute inset-0 opacity-10 bg-[linear-gradient(45deg,#4D11CC_1px,transparent_1px)] bg-[length:20px_20px]"></div>
-                <span class="text-fiot-gray/50 text-xs font-mono uppercase tracking-widest z-10">[Render: Raytracing Engine]</span>
+                <span class="text-sm text-fiot-gray z-10">[Render: Raytracing Engine]</span>
             </div>
 
         </div>
     </section>
 
-    <section class="relative z-10 py-20 md:py-28 px-6 border-t border-fiot-dark">
+    <section class="relative z-10 py-20 md:py-28 px-6 border-t border-white/5">
         <div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div class="h-[400px] bg-fiot-dark/40 border border-white/10 rounded-2xl relative flex items-center justify-center overflow-hidden">
                 <div class="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#4D11CC_1px,transparent_1px),linear-gradient(to_bottom,#4D11CC_1px,transparent_1px)] bg-[length:30px_30px]"></div>
-                <span class="text-fiot-gray/50 text-xs font-mono uppercase tracking-widest z-10">[IMAGE: Корпус 18 ФІОТ]</span>
+                <span class="text-sm text-fiot-gray z-10">Корпус 18 — буде додано фото</</span>
                 <div class="absolute bottom-6 left-6 font-bold tracking-widest text-sm z-10">КОРПУС 18</div>
             </div>
             <div>
-                <p class="text-[11px] font-mono uppercase tracking-[0.25em] text-fiot-accent mb-4">[CAMPUS]</p>
-                <h3 class="text-white text-3xl md:text-4xl font-bold uppercase tracking-tight mb-6">Фізична база кафедри</h3>
+                <div class="border-l-2 border-fiot-accent pl-5">
+                    <p class="text-sm text-fiot-gray mb-3">Кампус</p>
+                    <h3 class="text-white text-3xl md:text-4xl font-bold tracking-tight mb-2">Фізична база кафедри</h3>
+                </div>
                 <p class="text-fiot-gray text-lg leading-relaxed">
                     Ми знаходимося в серці технічного університету — легендарному 18-му корпусі ФІОТ.
                 </p>
@@ -83,7 +86,7 @@
     </section>
 
     {{-- Статистика --}}
-    <section class="relative z-10 py-16 px-6 border-t border-fiot-dark bg-[#0b0c0f]">
+    <section class="relative z-10 py-16 px-6 border-t border-white/5 bg-[#0b0c0f]">
         <div class="container mx-auto grid grid-cols-2 lg:grid-cols-4 gap-8">
             @foreach (config('content.stats') as $stat)
                 <x-ui.stat :value="$stat['value']" :label="$stat['label']" />
@@ -92,13 +95,15 @@
     </section>
 
     {{-- Останні новини --}}
-    <section class="relative z-10 py-20 md:py-28 px-6 border-t border-fiot-dark">
+    <section class="relative z-10 py-20 md:py-28 px-6 border-t border-white/5">
         <div class="container mx-auto max-w-screen-xl">
 
             <div class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-12">
                 <div class="max-w-2xl">
-                    <p class="text-[11px] font-mono uppercase tracking-[0.25em] text-fiot-accent mb-4">[LATEST_UPDATES]</p>
-                    <h3 class="text-white text-3xl md:text-4xl font-bold uppercase tracking-tight mb-2">Останні новини</h3>
+                    <div class="border-l-2 border-fiot-accent pl-5">
+                        <p class="text-sm text-fiot-gray mb-3">Новини кафедри</p>
+                        <h3 class="text-white text-3xl md:text-4xl font-bold tracking-tight mb-2">Останні новини</h3>
+                    </div>
                     <p class="text-fiot-gray">Події, оновлення та досягнення кафедри й освітньої програми.</p>
                 </div>
                 <x-ui.button href="{{ route('news') }}" variant="outline" size="md" class="group">
@@ -111,8 +116,8 @@
                 @foreach ($latestNews as $item)
                     <x-ui.card :href="route('news.article', $item)" interactive class="group p-6">
                         <div class="flex items-center justify-between mb-4">
-                            <span class="text-[10px] font-mono uppercase tracking-widest text-fiot-accent">{{ $item->tag }}</span>
-                            <time class="text-[10px] text-gray-500 font-mono uppercase tracking-widest" datetime="{{ $item->published_at->toDateString() }}">
+                            <x-ui.badge>{{ $item->tag }}</x-ui.badge>
+                            <time class="text-sm text-fiot-gray" datetime="{{ $item->published_at->toDateString() }}">
                                 {{ $item->published_at->translatedFormat('d.m.Y') }}
                             </time>
                         </div>

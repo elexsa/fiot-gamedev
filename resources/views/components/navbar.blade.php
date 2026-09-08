@@ -21,7 +21,6 @@
                 <a href="{{ route('admission') }}" class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('admission') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Вступникам</a>
                 <a href="{{ route('news') }}" class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('news*') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Новини</a>
                 <a href="{{ route('partners') }}" class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('partners') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Партнери</a>
-                <a href="{{ route('contacts') }}" class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('contacts') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Контакти</a>
             </nav>
 
             <button @click="open = !open" 
@@ -45,6 +44,5 @@
         <a href="{{ route('admission') }}" @click="open = false" class="text-xl uppercase tracking-widest font-bold {{ request()->routeIs('admission') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Вступникам</a>
         <a href="{{ route('news') }}" @click="open = false" class="text-xl uppercase tracking-widest font-bold {{ request()->routeIs('news*') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Новини</a>
         <a href="{{ route('partners') }}" @click="open = false" class="text-xl uppercase tracking-widest font-bold {{ request()->routeIs('partners') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Партнери</a>
-        <a href="{{ route('contacts') }}" @click="open = false" class="text-xl uppercase tracking-widest font-bold {{ request()->routeIs('contacts') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Контакти</a>
     </div>
 </div>

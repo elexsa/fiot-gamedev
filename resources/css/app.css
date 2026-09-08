@@ -51,19 +51,19 @@
 @layer components {
     /* Base class for all buttons (geometry, transitions, typography) */
     .btn {
-        @apply inline-flex items-center justify-center font-bold uppercase tracking-[0.1em] transition-all duration-200 select-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-fiot-accent focus:ring-offset-2 focus:ring-offset-fiot-black disabled:opacity-50 disabled:cursor-not-allowed;
+        @apply inline-flex items-center justify-center font-semibold tracking-wide transition-all duration-200 select-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-fiot-accent focus:ring-offset-2 focus:ring-offset-fiot-black disabled:opacity-50 disabled:cursor-not-allowed;
     }
 
     /* --- Color Variants --- */
     
-    /* Primary (Main action) */
+    /* Primary (Main action) — the only global brand accent */
     .btn-primary {
         @apply bg-fiot-primary text-white border border-transparent hover:bg-fiot-primary-hover active:bg-fiot-primary/90;
     }
 
     /* Outline (Secondary action) */
     .btn-outline {
-        @apply bg-transparent border border-fiot-dark text-fiot-gray hover:text-white hover:border-fiot-gray active:bg-fiot-dark/50;
+        @apply bg-transparent border border-white/15 text-fiot-gray hover:text-white hover:border-fiot-primary active:bg-fiot-dark/50;
     }
 
     /* Secondary (Solid background, alternate action) */
