@@ -1,19 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Квест Вступника | F2 GameDev')
+@section('title', 'Квест Вступника | Кафедра ігрових систем')
+
+@section('meta_description', 'Етапи вступу на освітню програму «Розробка комп’ютерних ігор» ФІОТ КПІ: дорожня карта, калькулятор НМТ та контакти менторів.')
 
 @section('content')
 <section class="relative z-10 pt-16 md:pt-24 min-h-screen flex flex-col pb-20">
     <div class="container mx-auto max-w-screen-xl px-4 md:px-8 relative z-10">
-        
-        <div class="mb-12 md:mb-16 border-l-4 border-white pl-4 md:pl-6">
-            <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-2 text-white uppercase">
-                Етапи вступу
-            </h1>
-            <p class="text-gray-400 max-w-2xl text-[10px] md:text-xs lg:text-sm font-mono">
-                [MISSION_OBJECTIVE] // Отримай статус студента F2. Розрахуй бали та дотримуйся дорожньої карти.
-            </p>
-        </div>
+
+        <x-ui.page-header title="Етапи вступу" kicker="[MISSION_OBJECTIVE]" subtitle="Отримай статус студента. Розрахуй бали та дотримуйся дорожньої карти." />
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mb-20">
             

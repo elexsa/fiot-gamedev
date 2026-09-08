@@ -1,4 +1,4 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700;800&display=swap');
 @import "tailwindcss";
 
@@ -84,4 +84,4 @@
     .btn-sm {
         @apply px-4 py-2 text-[10px];
     }
-} */
+}

@@ -6,21 +6,22 @@
         <div class="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
             
             <div class="flex items-center gap-3 relative z-50">
-                <a href="/" class="flex items-center gap-2 group">
-                    <div class="text-2xl font-bold tracking-tighter text-white">FICE<span class="text-fiot-accent">_</span></div>
+                <a href="{{ route('home') }}" class="flex items-center gap-2 group">
+                    <div class="text-2xl font-bold tracking-tighter text-white">GS<span class="text-fiot-accent">_</span></div>
                 </a>
                 <div class="hidden sm:block text-[9px] md:text-[10px] uppercase tracking-widest text-fiot-gray leading-tight border-l border-fiot-dark pl-3">
-                    Game<br>Development
+                    Кафедра ігрових<br>систем · ФІОТ
                 </div>
             </div>
             
-            <nav class="hidden lg:flex items-center gap-6 xl:gap-8">
-                <a href="{{ route('home') }}" class="text-xs uppercase tracking-widest font-bold {{ request()->routeIs('home') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Головна</a>
-                <a href="{{ route('about') }}" class="text-xs uppercase tracking-widest font-bold {{ request()->routeIs('about') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Про кафедру</a>
-                <a href="{{ route('disciplines') }}" class="text-xs uppercase tracking-widest font-bold {{ request()->routeIs('disciplines') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Дисципліни</a>
-                <a href="{{ route('admission') }}" class="text-xs uppercase tracking-widest font-bold {{ request()->routeIs('admission') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Вступникам</a>
-                <a href="{{ route('news') }}" class="text-xs uppercase tracking-widest font-bold {{ request()->routeIs('news*') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Новини</a>
-                <a href="{{ route('partners') }}" class="text-xs uppercase tracking-widest font-bold {{ request()->routeIs('partners') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Партнери</a>
+            <nav class="hidden lg:flex items-center gap-5 xl:gap-7">
+                <a href="{{ route('home') }}" class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('home') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Головна</a>
+                <a href="{{ route('about') }}" class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('about') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Про кафедру</a>
+                <a href="{{ route('disciplines') }}" class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('disciplines') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Дисципліни</a>
+                <a href="{{ route('admission') }}" class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('admission') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Вступникам</a>
+                <a href="{{ route('news') }}" class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('news*') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Новини</a>
+                <a href="{{ route('partners') }}" class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('partners') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Партнери</a>
+                <a href="{{ route('contacts') }}" class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('contacts') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Контакти</a>
             </nav>
 
             <button @click="open = !open" 
@@ -44,5 +45,6 @@
         <a href="{{ route('admission') }}" @click="open = false" class="text-xl uppercase tracking-widest font-bold {{ request()->routeIs('admission') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Вступникам</a>
         <a href="{{ route('news') }}" @click="open = false" class="text-xl uppercase tracking-widest font-bold {{ request()->routeIs('news*') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Новини</a>
         <a href="{{ route('partners') }}" @click="open = false" class="text-xl uppercase tracking-widest font-bold {{ request()->routeIs('partners') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Партнери</a>
+        <a href="{{ route('contacts') }}" @click="open = false" class="text-xl uppercase tracking-widest font-bold {{ request()->routeIs('contacts') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Контакти</a>
     </div>
 </div>

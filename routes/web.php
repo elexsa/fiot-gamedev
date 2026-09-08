@@ -40,3 +40,8 @@ Route::get('/news/{slug}', function (string $slug) {
 Route::get('/partners', function () {
     return view('partners');
 })->name('partners');
+
+// Contacts page
+Route::get('/contacts', function () {
+    return view('contacts');
+})->name('contacts');

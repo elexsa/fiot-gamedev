@@ -1,23 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Партнери | F2 GameDev')
+@section('title', 'Партнери | Кафедра ігрових систем')
+
+@section('meta_description', 'Індустріальні партнери кафедри ігрових систем ФІОТ КПІ: менторство, стажування та працевлаштування для студентів.')
 
 @section('content')
-<section class="relative z-10 pt-16 md:pt-24 min-h-screen flex flex-col pb-20">
-    <div class="container mx-auto max-w-screen-xl px-4 md:px-8 relative z-10">
-        
-        <div class="mb-12 md:mb-16 border-l-4 border-white pl-4 md:pl-6">
-            <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-2 text-white uppercase">
-                Партнери
-            </h1>
-            <p class="text-gray-400 max-w-2xl text-[10px] md:text-xs lg:text-sm font-mono">
-                [INDUSTRY_NETWORK] // Компанії, з якими ми співпрацюємо. Менторство, стажування та працевлаштування для студентів.
-            </p>
-        </div>
+<x-ui.page>
+    <x-ui.page-header title="Партнери" kicker="[INDUSTRY_NETWORK]" subtitle="Компанії, з якими ми співпрацюємо. Менторство, стажування та працевлаштування для студентів." />
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
             
-            <a href="https://kyiv.ubisoft.com/" target="_blank" class="group flex flex-col bg-[#0b0c0f] border border-[#2a2a35] rounded-xl overflow-hidden hover:border-[#555] hover:shadow-[0_10px_30px_rgba(255,255,255,0.05)] hover:-translate-y-1 transition-all duration-500">
+            <a href="https://kyiv.ubisoft.com/" target="_blank" class="group flex flex-col bg-fiot-dark/40 border border-white/10 rounded-2xl overflow-hidden hover:border-fiot-accent/40 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.45)] transition-all duration-300">
                 <div class="h-32 flex items-center justify-center bg-[#111115] border-b border-[#2a2a35] group-hover:bg-[#16161a] transition-colors p-8 relative overflow-hidden">
                     <img src="{{ asset('images/logos/ubisoft.png') }}" alt="Ubisoft" class="max-h-full max-w-full object-contain grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 relative z-10">
                 </div>
@@ -31,7 +24,7 @@
                 </div>
             </a>
 
-            <a href="https://gen.tech/" target="_blank" class="group flex flex-col bg-[#0b0c0f] border border-[#2a2a35] rounded-xl overflow-hidden hover:border-[#555] hover:shadow-[0_10px_30px_rgba(255,255,255,0.05)] hover:-translate-y-1 transition-all duration-500">
+            <a href="https://gen.tech/" target="_blank" class="group flex flex-col bg-fiot-dark/40 border border-white/10 rounded-2xl overflow-hidden hover:border-fiot-accent/40 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.45)] transition-all duration-300">
                 <div class="h-32 flex items-center justify-center bg-[#111115] border-b border-[#2a2a35] group-hover:bg-[#16161a] transition-colors p-8 relative overflow-hidden">
                     <img src="{{ asset('images/logos/genesis.png') }}" alt="Genesis" class="max-h-full max-w-full object-contain grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 relative z-10">
                 </div>
@@ -45,7 +38,7 @@
                 </div>
             </a>
 
-            <a href="https://sigma.software/" target="_blank" class="group flex flex-col bg-[#0b0c0f] border border-[#2a2a35] rounded-xl overflow-hidden hover:border-[#555] hover:shadow-[0_10px_30px_rgba(255,255,255,0.05)] hover:-translate-y-1 transition-all duration-500">
+            <a href="https://sigma.software/" target="_blank" class="group flex flex-col bg-fiot-dark/40 border border-white/10 rounded-2xl overflow-hidden hover:border-fiot-accent/40 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.45)] transition-all duration-300">
                 <div class="h-32 flex items-center justify-center bg-[#111115] border-b border-[#2a2a35] group-hover:bg-[#16161a] transition-colors p-8 relative overflow-hidden">
                     <img src="{{ asset('images/logos/sigma-software.png') }}" alt="Sigma Software" class="max-h-full max-w-full object-contain grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 relative z-10">
                 </div>
@@ -59,7 +52,7 @@
                 </div>
             </a>
 
-            <a href="https://macpaw.com/uk" target="_blank" class="group flex flex-col bg-[#0b0c0f] border border-[#2a2a35] rounded-xl overflow-hidden hover:border-[#555] hover:shadow-[0_10px_30px_rgba(255,255,255,0.05)] hover:-translate-y-1 transition-all duration-500">
+            <a href="https://macpaw.com/uk" target="_blank" class="group flex flex-col bg-fiot-dark/40 border border-white/10 rounded-2xl overflow-hidden hover:border-fiot-accent/40 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.45)] transition-all duration-300">
                 <div class="h-32 flex items-center justify-center bg-[#111115] border-b border-[#2a2a35] group-hover:bg-[#16161a] transition-colors p-8 relative overflow-hidden">
                     <img src="{{ asset('images/logos/macpaw.png') }}" alt="MacPaw" class="max-h-full max-w-full object-contain grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 relative z-10">
                 </div>
@@ -73,7 +66,7 @@
                 </div>
             </a>
 
-            <a href="https://careers.epam.ua/" target="_blank" class="group flex flex-col bg-[#0b0c0f] border border-[#2a2a35] rounded-xl overflow-hidden hover:border-[#555] hover:shadow-[0_10px_30px_rgba(255,255,255,0.05)] hover:-translate-y-1 transition-all duration-500">
+            <a href="https://careers.epam.ua/" target="_blank" class="group flex flex-col bg-fiot-dark/40 border border-white/10 rounded-2xl overflow-hidden hover:border-fiot-accent/40 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.45)] transition-all duration-300">
                 <div class="h-32 flex items-center justify-center bg-[#111115] border-b border-[#2a2a35] group-hover:bg-[#16161a] transition-colors p-8 relative overflow-hidden">
                     <img src="{{ asset('images/logos/epam.png') }}" alt="EPAM" class="max-h-full max-w-full object-contain grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 relative z-10">
                 </div>
@@ -87,7 +80,7 @@
                 </div>
             </a>
 
-            <a href="https://fraglab.com/" target="_blank" class="group flex flex-col bg-[#0b0c0f] border border-[#2a2a35] rounded-xl overflow-hidden hover:border-[#555] hover:shadow-[0_10px_30px_rgba(255,255,255,0.05)] hover:-translate-y-1 transition-all duration-500">
+            <a href="https://fraglab.com/" target="_blank" class="group flex flex-col bg-fiot-dark/40 border border-white/10 rounded-2xl overflow-hidden hover:border-fiot-accent/40 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.45)] transition-all duration-300">
                 <div class="h-32 flex items-center justify-center bg-[#111115] border-b border-[#2a2a35] group-hover:bg-[#16161a] transition-colors p-8 relative overflow-hidden">
                     <img src="{{ asset('images/logos/fraglab.png') }}" alt="Frag Lab" class="max-h-full max-w-full object-contain grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 relative z-10">
                 </div>
@@ -102,6 +95,5 @@
             </a>
 
         </div>
-    </div>
-</section>
+    </x-ui.page>
 @endsection

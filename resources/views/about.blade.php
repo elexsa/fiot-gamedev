@@ -1,21 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Про кафедру | F2 GameDev')
+@section('title', 'Про кафедру | Кафедра ігрових систем')
 
-@section('meta_description', 'Про кафедру розробки комп’ютерних ігор ФІОТ КПІ: історія, місія, викладацький склад та матеріально-технічна база.')
+@section('meta_description', 'Про кафедру ігрових систем ФІОТ КПІ: місія, викладацький склад та матеріально-технічна база.')
 
 @section('content')
-<section class="relative z-10 pt-16 md:pt-24 min-h-screen flex flex-col pb-20">
-    <div class="container mx-auto max-w-screen-xl px-4 md:px-8 relative z-10">
-
-        <div class="mb-12 md:mb-16 border-l-4 border-white pl-4 md:pl-6">
-            <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-2 text-white uppercase">
-                Про кафедру
-            </h1>
-            <p class="text-gray-400 max-w-2xl text-[10px] md:text-xs lg:text-sm font-mono">
-                [PLAYER_HANDBOOK] // Хто ми, чому нас варто обрати та хто проведе вас по грі.
-            </p>
-        </div>
+<x-ui.page>
+    <x-ui.page-header title="Про кафедру" kicker="[PLAYER_HANDBOOK]" subtitle="Хто ми, чому нас варто обрати та хто проведе вас по грі." />
 
         {{-- Історія та місія --}}
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 mb-20">
@@ -34,7 +25,7 @@
             </div>
 
             <div class="reveal-on-scroll relative">
-                <div class="h-[300px] bg-[#080809]/40 border border-fiot-dark rounded-xl flex items-center justify-center relative overflow-hidden shadow-2xl">
+                <div class="h-[300px] bg-fiot-dark/40 border border-white/10 rounded-2xl flex items-center justify-center relative overflow-hidden shadow-2xl">
                     <div class="absolute inset-0 opacity-10 bg-[linear-gradient(45deg,#4D11CC_1px,transparent_1px)] bg-[length:20px_20px]"></div>
                     <span class="text-fiot-gray/50 text-xs font-mono uppercase tracking-widest z-10">[IMAGE: Команда кафедри]</span>
                 </div>
@@ -45,10 +36,9 @@
         {{-- Цифри --}}
         <div class="reveal-on-scroll grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-20">
             @foreach (config('content.stats') as $stat)
-                <div class="bg-[#0b0c0f] border border-[#2a2a35] rounded-xl p-6 md:p-8 text-center hover:border-fiot-primary/50 transition-colors">
-                    <div class="text-3xl md:text-4xl font-bold text-white tracking-tighter mb-2">{{ $stat['value'] }}</div>
-                    <div class="text-[10px] md:text-xs text-gray-500 font-mono uppercase tracking-widest">{{ $stat['label'] }}</div>
-                </div>
+                <x-ui.card class="text-center py-6 hover:border-fiot-primary/50">
+                    <x-ui.stat :value="$stat['value']" :label="$stat['label']" class="!py-0" />
+                </x-ui.card>
             @endforeach
         </div>
 
@@ -63,9 +53,9 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
                 @foreach (config('content.faculty') as $person)
-                    <div class="group bg-[#0b0c0f] border border-[#2a2a35] rounded-xl p-6 hover:border-fiot-accent/40 hover:shadow-[0_0_20px_rgba(18,230,49,0.06)] transition-all duration-300">
+                    <x-ui.card interactive class="group p-6">
                         <div class="flex items-start gap-4">
-                            <div class="w-14 h-14 shrink-0 rounded-lg border border-[#2a2a35] bg-gradient-to-br from-fiot-primary/20 to-fiot-accent/10 flex items-center justify-center font-bold text-lg text-white/70 group-hover:border-fiot-accent/40 transition-colors">
+                            <div class="w-14 h-14 shrink-0 rounded-xl border border-white/10 bg-gradient-to-br from-fiot-primary/20 to-fiot-accent/10 flex items-center justify-center font-bold text-lg text-white/70 group-hover:border-fiot-accent/40 transition-colors">
                                 {{ mb_substr($person['name'], 0, 1) }}
                             </div>
                             <div>
@@ -74,15 +64,15 @@
                                 <p class="text-gray-400 text-xs leading-relaxed">{{ $person['focus'] }}</p>
                             </div>
                         </div>
-                    </div>
+                    </x-ui.card>
                 @endforeach
 
             </div>
         </div>
 
         {{-- Матеріальна база --}}
-        <div class="reveal-on-scroll grid grid-cols-1 lg:grid-cols-2 gap-16 items-center border-t border-[#2a2a35] pt-16">
-            <div class="h-[350px] bg-fiot-dark rounded-xl overflow-hidden border border-fiot-dark relative order-2 lg:order-1 flex items-center justify-center">
+        <div class="reveal-on-scroll grid grid-cols-1 lg:grid-cols-2 gap-16 items-center border-t border-white/10 pt-16">
+            <div class="h-[350px] bg-fiot-dark/40 border border-white/10 rounded-2xl relative flex items-center justify-center overflow-hidden">
                 <div class="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#4D11CC_1px,transparent_1px),linear-gradient(to_bottom,#4D11CC_1px,transparent_1px)] bg-[length:30px_30px]"></div>
                 <span class="text-fiot-gray/50 text-xs font-mono uppercase tracking-widest z-10">[IMAGE: Комп'ютерні класи]</span>
             </div>
@@ -100,6 +90,5 @@
             </div>
         </div>
 
-    </div>
-</section>
+    </x-ui.page>
 @endsection

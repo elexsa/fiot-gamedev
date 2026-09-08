@@ -1,22 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Дерево Навичок | F2 GameDev')
+@section('title', 'Дерево Навичок | Кафедра ігрових систем')
+
+@section('meta_description', 'Дисципліни освітньої програми «Розробка комп’ютерних ігор» кафедри ігрових систем ФІОТ КПІ — інтерактивне дерево навичок.')
 
 @section('content')
 
 <section class="relative z-10 pt-16 md:pt-24 min-h-screen flex flex-col">
     <div class="container mx-auto max-w-screen-2xl px-4 md:px-8 relative z-10 flex-shrink-0">
-        <div class="mb-8 md:mb-10 border-l-4 border-white pl-4 md:pl-6 w-max">
-            <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-2 text-white uppercase">
-                Дерево Навичок
-            </h1>
-            <p class="text-gray-400 max-w-2xl text-[10px] md:text-xs lg:text-sm font-mono hidden lg:block">
-                [F2_ОПП_2026] // Наведіть на вузол, щоб підсвітити зв'язки. Shift + Scroll для прокрутки.
-            </p>
-            <p class="text-gray-400 max-w-2xl text-[10px] md:text-xs font-mono lg:hidden">
-                [F2_ОПП_2026] // Етапи підготовки спеціаліста
-            </p>
-        </div>
+        <x-ui.page-header title="Дерево Навичок" kicker="[F2_ОПП_2026]" subtitle="Наведіть на вузол, щоб підсвітити зв'язки. Shift + Scroll для прокрутки." />
     </div>
 
     <div class="block lg:hidden container mx-auto px-4 pb-20 mt-4">
