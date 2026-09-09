@@ -62,6 +62,7 @@ class NewsResource extends Resource
                     ->image()
                     ->directory('news')
                     ->disk('public')
+                    ->visibility('public')
                     ->maxSize(4096)
                     ->columnSpanFull(),
                 Toggle::make('is_published')

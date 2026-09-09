@@ -44,7 +44,8 @@ class PartnerResource extends Resource
                     ->label('Логотип')
                     ->image()
                     ->directory('partners')
-                    ->disk('public'),
+                    ->disk('public')
+                    ->visibility('public'),
                 Toggle::make('is_published')
                     ->label('Опубліковано')
                     ->default(true),

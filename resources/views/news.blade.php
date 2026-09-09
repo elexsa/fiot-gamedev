@@ -12,7 +12,13 @@
 
         @foreach ($news as $item)
             <x-ui.card :href="route('news.article', $item)" interactive class="group overflow-hidden">
-                <div class="h-2 bg-gradient-to-r from-fiot-primary/60 to-fiot-accent/40 group-hover:from-fiot-primary group-hover:to-fiot-accent transition-all duration-300"></div>
+                @if ($item->cover_image)
+                    <div class="h-48 overflow-hidden border-b border-white/10">
+                        <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($item->cover_image) }}" alt="{{ $item->title }}" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                @else
+                    <div class="h-2 bg-gradient-to-r from-fiot-primary/60 to-fiot-accent/40 group-hover:from-fiot-primary group-hover:to-fiot-accent transition-all duration-300"></div>
+                @endif
 
                 <div class="p-6 flex-1 flex flex-col">
                     <div class="flex items-center justify-between mb-4">

@@ -28,6 +28,12 @@
                 {{ $article->title }}
             </h1>
 
+            @if ($article->cover_image)
+                <div class="mb-8 overflow-hidden rounded-xl border border-white/10">
+                    <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($article->cover_image) }}" alt="{{ $article->title }}" class="w-full max-h-[420px] object-cover">
+                </div>
+            @endif
+
             <p class="text-fiot-gray text-lg leading-relaxed mb-6 border-l-2 border-fiot-accent pl-4">
                 {{ $article->excerpt }}
             </p>

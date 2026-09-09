@@ -4,8 +4,8 @@
         <div class="flex flex-col md:flex-row justify-between gap-8 mb-8 pb-8 border-b border-fiot-dark/60">
 
             <div class="text-center md:text-left">
-                <div class="text-xl font-bold tracking-tighter text-white mb-1">GS<span class="text-fiot-accent">_</span></div>
-                <p class="text-fiot-gray text-sm mb-2">Кафедра ігрових систем · ФІОТ КПІ</p>
+                <div class="text-xl font-bold tracking-tighter text-white mb-1">FICE<span class="text-fiot-accent"></span></div>
+                <p class="text-fiot-gray text-sm mb-2">Кафедра комп'ютерних ігор</p>
                 <p class="text-fiot-gray text-sm max-w-xs leading-relaxed">
                     {{ \App\Models\SiteSetting::get('contacts.address', '') }}
                 </p>
@@ -31,7 +31,7 @@
             <div class="flex flex-col md:flex-row justify-between items-center gap-4">
 
                 <div class="text-fiot-gray text-sm">
-                    &copy; {{ date('Y') }} Кафедра ігрових систем, ФІОТ КПІ
+                    &copy; {{ date('Y') }} Кафедра комп'ютерних ігор, ФІОТ
                 </div>
 
             <div class="flex flex-col items-center gap-2">

@@ -43,7 +43,8 @@ class FacultyResource extends Resource
                     ->label('Фото')
                     ->image()
                     ->directory('faculty')
-                    ->disk('public'),
+                    ->disk('public')
+                    ->visibility('public'),
                 TextInput::make('email')
                     ->label('Email')
                     ->email(),
