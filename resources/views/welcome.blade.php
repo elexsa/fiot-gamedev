@@ -49,41 +49,43 @@
                     <h3 class="text-white text-3xl md:text-4xl font-bold tracking-tight mb-2">Про кафедру</h3>
                 </div>
                 <p class="text-fiot-gray text-lg leading-relaxed mb-6 mt-6">
-                    Кафедра готує фахівців за спеціальністю <strong class="text-white">F2 «Інженерія програмного забезпечення»</strong> в межах освітньої програми «Розробка комп'ютерних ігор».
+                    Кафедра готує фахівців за спеціальністю <strong class="text-white">F2 Інженерія програмного забезпечення</strong> в межах освітньої програми «Розробка комп'ютерних ігор».
                 </p>
                 <p class="text-fiot-gray text-lg leading-relaxed">
-                    Глибока математика, комп'ютерна графіка та системне програмування ФІОТ.
+                    Математика, комп'ютерна графіка та програмування, блабабла.
                 </p>
             </div>
 
-            <x-ui.placeholder height="h-[350px]" label="[Render: Raytracing Engine]" />
+            <x-ui.placeholder height="h-[350px]" label="[якесь фото]" />
 
         </div>
     </section>
 
     <section class="relative z-10 py-20 md:py-28 px-6 border-t border-white/5">
         <div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <x-ui.placeholder height="h-[400px]" label="Корпус 18" />
+            <x-ui.placeholder height="h-[400px]" label="18 Корпус" />
             <div>
-                <div class="border-l-2 border-fiot-accent pl-5">
-                    <p class="text-sm text-fiot-gray mb-3">Кампус</p>
-                    <h3 class="text-white text-3xl md:text-4xl font-bold tracking-tight mb-2">Фізична база кафедри</h3>
+                <div class="border-r-2 border-fiot-accent pr-5">
+                    <h3 class="text-white text-right text-3xl md:text-4xl font-bold tracking-tight mb-2">Розсташування</h3>
                 </div>
-                <p class="text-fiot-gray text-lg leading-relaxed">
-                    Ми знаходимося в серці технічного університету — легендарному 18-му корпусі ФІОТ.
+                <p class="text-fiot-gray text-lg leading-relaxed text-right">
+                    Ми знаходимося в легендарному 18-му корпусі ФІОТ, з дуже гарним вітражем.
                 </p>
             </div>
         </div>
     </section>
 
     {{-- Статистика --}}
+    @php $stats = \App\Models\SiteSetting::get('stats', []); @endphp
+    @if (!empty($stats))
     <section class="relative z-10 py-16 px-6 border-t border-white/5 bg-[#0b0c0f]">
         <div class="container mx-auto grid grid-cols-2 lg:grid-cols-4 gap-8">
-            @foreach (config('content.stats') as $stat)
+            @foreach ($stats as $stat)
                 <x-ui.stat :value="$stat['value']" :label="$stat['label']" />
             @endforeach
         </div>
     </section>
+    @endif
 
     {{-- Останні новини --}}
     <section class="relative z-10 py-20 md:py-28 px-6 border-t border-white/5">
@@ -92,10 +94,8 @@
             <div class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-12">
                 <div class="max-w-2xl">
                     <div class="border-l-2 border-fiot-accent pl-5">
-                        <p class="text-sm text-fiot-gray mb-3">Новини кафедри</p>
                         <h3 class="text-white text-3xl md:text-4xl font-bold tracking-tight mb-2">Останні новини</h3>
                     </div>
-                    <p class="text-fiot-gray">Події, оновлення та досягнення кафедри й освітньої програми.</p>
                 </div>
                 <x-ui.button href="{{ route('news') }}" variant="outline" size="md" class="group">
                     Усі новини
@@ -106,14 +106,15 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 @foreach ($latestNews as $item)
                     <x-ui.card :href="route('news.article', $item)" interactive class="group p-6">
-                        <div class="flex items-center justify-between mb-4">
+                        <h4 class="text-white font-bold mb-3 group-hover:text-fiot-accent transition-colors">{{ $item->title }}</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed flex-1">{{ $item->excerpt }}</p>
+
+                        <div class="flex items-center justify-between mt-2">
                             <x-ui.badge>{{ $item->tag }}</x-ui.badge>
                             <time class="text-sm text-fiot-gray" datetime="{{ $item->published_at->toDateString() }}">
                                 {{ $item->published_at->translatedFormat('d.m.Y') }}
                             </time>
                         </div>
-                        <h4 class="text-white font-bold mb-3 group-hover:text-fiot-accent transition-colors">{{ $item->title }}</h4>
-                        <p class="text-gray-400 text-sm leading-relaxed flex-1">{{ $item->excerpt }}</p>
                     </x-ui.card>
                 @endforeach
             </div>

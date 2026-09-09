@@ -7,6 +7,7 @@ use App\Models\Faculty;
 use App\Models\News;
 use App\Models\Partner;
 use App\Models\Program;
+use App\Models\SiteSetting;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Hash;
 class ContentSeeder extends Seeder
 {
     /**
-     * Наповнює БД плейсхолдер-контентом із config/content.php.
+     * Наповнює БД плейсхолдер-контентом.
      * Коли деканат дасть реальний контент — редагується через /admin.
      */
     public function run(): void
@@ -41,41 +42,42 @@ class ContentSeeder extends Seeder
             ]
         );
 
+        $this->seedSiteSettings();
         $this->seedNews();
         $this->seedFaculty();
         $this->seedDisciplines($program);
         $this->seedPartners();
     }
 
+    private function seedSiteSettings(): void
+    {
+        // --- Контакти ---
+        SiteSetting::set('contacts.address', 'м. Київ, просп. Політехнічний 41, КПІ ім. Ігоря Сікорського, корп. 18, кімн. XXX', 'text', 'contacts', 'Адреса');
+        SiteSetting::set('contacts.phone', '+380 (44) 204 XX XX', 'text', 'contacts', 'Телефон');
+        SiteSetting::set('contacts.email', 'gamedev@kpi.ua', 'email', 'contacts', 'Email');
+        SiteSetting::set('contacts.social.telegram', '#', 'url', 'contacts', 'Telegram');
+        SiteSetting::set('contacts.social.discord', '#', 'url', 'contacts', 'Discord');
+        SiteSetting::set('contacts.social.facebook', '#', 'url', 'contacts', 'Facebook');
+
+        // --- Статистика ---
+        SiteSetting::set('stats', [
+            ['value' => '120+', 'label' => 'студентів на програмі'],
+            ['value' => '25', 'label' => 'профільних дисциплін'],
+            ['value' => '6', 'label' => 'індустріальних партнерів'],
+            ['value' => '15', 'label' => 'років досвіду викладання'],
+        ], 'json', 'stats', 'Статистика');
+    }
+
     private function seedNews(): void
     {
-        foreach (config('content.news', []) as $i => $item) {
-            News::updateOrCreate(
-                ['slug' => $item['slug']],
-                [
-                    'title' => $item['title'],
-                    'tag' => $item['tag'] ?? 'Новина',
-                    'excerpt' => $item['excerpt'] ?? null,
-                    'body' => $item['body'] ?? '',
-                    'is_published' => true,
-                    'published_at' => $item['date'] ?? now(),
-                    'sort_order' => $i,
-                ]
-            );
-        }
+        // News is now managed through Filament admin panel
+        // Add initial news items here if needed for fresh installations
     }
 
     private function seedFaculty(): void
     {
-        foreach (config('content.faculty', []) as $i => $person) {
-            Faculty::updateOrCreate(
-                ['name' => $person['name'], 'role' => $person['role']],
-                [
-                    'focus' => $person['focus'] ?? null,
-                    'sort_order' => $i,
-                ]
-            );
-        }
+        // Faculty is now managed through Filament admin panel
+        // Add initial faculty members here if needed for fresh installations
     }
 
     private function seedPartners(): void

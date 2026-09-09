@@ -30,13 +30,16 @@
         </div>
 
         {{-- Цифри --}}
+        @php $stats = \App\Models\SiteSetting::get('stats', []); @endphp
+        @if (!empty($stats))
         <div class="reveal-on-scroll grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-20">
-            @foreach (config('content.stats') as $stat)
+            @foreach ($stats as $stat)
                 <x-ui.card class="text-center py-6 hover:border-fiot-primary/50">
                     <x-ui.stat :value="$stat['value']" :label="$stat['label']" class="!py-0" />
                 </x-ui.card>
             @endforeach
         </div>
+        @endif
 
         {{-- Викладачі --}}
         <div class="reveal-on-scroll mb-12">

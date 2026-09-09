@@ -7,21 +7,22 @@
                 <div class="text-xl font-bold tracking-tighter text-white mb-1">GS<span class="text-fiot-accent">_</span></div>
                 <p class="text-fiot-gray text-sm mb-2">Кафедра ігрових систем · ФІОТ КПІ</p>
                 <p class="text-fiot-gray text-sm max-w-xs leading-relaxed">
-                    {{ config('content.contacts.address') }}
+                    {{ \App\Models\SiteSetting::get('contacts.address', '') }}
                 </p>
             </div>
 
             <div class="flex flex-col items-center md:items-start gap-1.5 text-sm">
-                <a href="tel:{{ preg_replace('/[^0-9+]/', '', config('content.contacts.phone')) }}" class="text-fiot-gray hover:text-white transition text-sm">
-                    {{ config('content.contacts.phone') }}
+                @php $phone = \App\Models\SiteSetting::get('contacts.phone', ''); @endphp
+                <a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone) }}" class="text-fiot-gray hover:text-white transition text-sm">
+                    {{ $phone }}
                 </a>
-                <a href="mailto:{{ config('content.contacts.email') }}" class="text-fiot-gray hover:text-white transition text-sm">
-                    {{ config('content.contacts.email') }}
+                <a href="mailto:{{ \App\Models\SiteSetting::get('contacts.email', '') }}" class="text-fiot-gray hover:text-white transition text-sm">
+                    {{ \App\Models\SiteSetting::get('contacts.email', '') }}
                 </a>
                 <div class="flex gap-4 mt-2">
-                    <a href="{{ config('content.contacts.social.telegram') }}" class="text-sm text-fiot-gray hover:text-white transition">Telegram</a>
-                    <a href="{{ config('content.contacts.social.discord') }}" class="text-sm text-fiot-gray hover:text-white transition">Discord</a>
-                    <a href="{{ config('content.contacts.social.facebook') }}" class="text-sm text-fiot-gray hover:text-white transition">Facebook</a>
+                    <a href="{{ \App\Models\SiteSetting::get('contacts.social.telegram', '#') }}" class="text-sm text-fiot-gray hover:text-white transition">Telegram</a>
+                    <a href="{{ \App\Models\SiteSetting::get('contacts.social.discord', '#') }}" class="text-sm text-fiot-gray hover:text-white transition">Discord</a>
+                    <a href="{{ \App\Models\SiteSetting::get('contacts.social.facebook', '#') }}" class="text-sm text-fiot-gray hover:text-white transition">Facebook</a>
                 </div>
             </div>
 
