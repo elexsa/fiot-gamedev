@@ -6,6 +6,7 @@ use App\Models\Discipline;
 use App\Models\Faculty;
 use App\Models\News;
 use App\Models\Partner;
+use App\Models\Program;
 use Illuminate\Contracts\View\View;
 
 class PageController extends Controller
@@ -31,6 +32,13 @@ class PageController extends Controller
     {
         return view('partners', [
             'partners' => Partner::published()->orderBy('sort_order')->get(),
+        ]);
+    }
+
+    public function programs(): View
+    {
+        return view('programs', [
+            'programs' => Program::published()->orderBy('sort_order')->get(),
         ]);
     }
 

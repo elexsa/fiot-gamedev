@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Fillable([
-    'program_id', 'name', 'description', 'category', 'level', 'is_boss',
+    'program_id', 'name', 'description', 'category', 'cycle', 'credits', 'hours',
+    'level', 'semester', 'course', 'study_form', 'teacher', 'academic_year',
+    'education_level', 'is_elective', 'is_boss',
     'prerequisites', 'syllabus_file', 'syllabus_url', 'image',
     'is_published', 'sort_order',
 ])]

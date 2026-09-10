@@ -19,7 +19,7 @@
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
                 </p>
                 <div class="flex flex-col sm:flex-row gap-6 mt-4 justify-center lg:justify-start w-full max-w-lg mx-auto lg:mx-0">
-                    <x-ui.button href="{{ route('admission') }}" variant="primary" size="lg">Вступнику</x-ui.button>
+                    <x-ui.button href="{{ route('about') }}" variant="primary" size="lg">Вступнику</x-ui.button>
                     <x-ui.button href="{{ route('disciplines') }}" variant="secondary" size="lg">Студенту</x-ui.button>
                 </div>
             </div>

@@ -11,6 +11,12 @@ Route::get('/', [PageController::class, 'home'])->name('home');
 // About the department page
 Route::get('/about', [PageController::class, 'about'])->name('about');
 
+// Students: syllabuses (analog of syllabuses.ist.kpi.ua Index)
+Route::get('/syllabuses', [DisciplinesController::class, 'syllabuses'])->name('syllabuses');
+
+// Students: disciplines diagram (analog of syllabuses.ist.kpi.ua Diagram)
+Route::get('/syllabuses/diagram', [DisciplinesController::class, 'diagram'])->name('syllabuses.diagram');
+
 // Disciplines page (Skill Tree)
 Route::get('/disciplines', [DisciplinesController::class, 'index'])->name('disciplines');
 
@@ -18,6 +24,9 @@ Route::get('/disciplines', [DisciplinesController::class, 'index'])->name('disci
 Route::get('/admission', function () {
     return view('admission');
 })->name('admission');
+
+// Educational programs page
+Route::get('/programs', [PageController::class, 'programs'])->name('programs');
 
 // News list page
 Route::get('/news', [NewsController::class, 'index'])->name('news');

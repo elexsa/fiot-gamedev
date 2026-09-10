@@ -53,7 +53,8 @@ class ProgramResource extends Resource
                     ->label('Зображення')
                     ->image()
                     ->directory('programs')
-                    ->disk('public'),
+                    ->disk('public')
+                    ->visibility('public'),
                 Toggle::make('is_published')
                     ->label('Опубліковано')
                     ->default(true),
