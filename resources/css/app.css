@@ -2,6 +2,26 @@
 @import "@fontsource-variable/mulish";
 @import "tailwindcss";
 
+/* Metric-compatible fallbacks: text/buttons keep identical size before the
+   real fonts load (no layout shift on swap). Metrics from the woff2 files. */
+@font-face {
+    font-family: "Mulish Fallback";
+    src: local("Arial"), local("Liberation Sans"), local("Helvetica Neue");
+    ascent-override: 100.5%;
+    descent-override: 25%;
+    line-gap-override: 0%;
+    size-adjust: 111.5%;
+}
+
+@font-face {
+    font-family: "Inter Tight Fallback";
+    src: local("Arial"), local("Liberation Sans"), local("Helvetica Neue");
+    ascent-override: 96.9%;
+    descent-override: 24.1%;
+    line-gap-override: 0%;
+    size-adjust: 116%;
+}
+
 @theme {
   --color-fiot-black: #080809;       /* Main background */
   --color-fiot-dark: #14161C;        /* Card/block background */
@@ -14,9 +34,9 @@
   /* Typography */
   /* NOTE: Univers is a licensed font — replaced with Inter Tight until the
      brand font is provided by the department. */
-    --font-large-heading: "Inter Tight Variable", "Univers", system-ui, sans-serif;
-    --font-heading: "Mulish Variable", sans-serif;
-    --font-body: "Mulish Variable", sans-serif;
+    --font-large-heading: "Inter Tight Variable", "Inter Tight Fallback", "Univers", system-ui, sans-serif;
+    --font-heading: "Mulish Variable", "Mulish Fallback", sans-serif;
+    --font-body: "Mulish Variable", "Mulish Fallback", sans-serif;
 }
 
 @layer base {
