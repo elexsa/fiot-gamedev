@@ -1,4 +1,5 @@
 import './bootstrap';
+import './admission-calculator';
 import Alpine from 'alpinejs';
 
 window.Alpine = Alpine;

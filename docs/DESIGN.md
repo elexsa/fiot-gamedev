@@ -61,6 +61,12 @@
 ### Stat
 - Число - `text-4xl/5xl`, `font-bold`, `white`; лейбл - `text-sm`, `fiot-gray`, sentence case (без tiny mono uppercase.
 
+### Steps / timeline
+- Вертикальна лінія `border-white/10`, номери кроків — кола `border-white/15`, `text-sm`, нейтральний `fiot-gray`. Картка кроку — звичайний `x-ui.card`. Дата — `text-sm text-fiot-gray`, заголовок — `text-lg/xl`, опис — `text-sm text-fiot-gray max-w-prose`. Без mono, без uppercase, без glow.
+
+### Calculator / form
+- Форма всередині `x-ui.card p-6/md:p-8`. Лейбли полів — `text-sm font-semibold text-white`, коефіцієнти — `text-xs text-fiot-gray`. Інпути — `bg-fiot-black border-white/10 rounded-md`, фокус `focus:border-fiot-accent`. Результат — число `text-4xl font-bold`, прогрес-бар `bg-white/10` із заливкою `bg-fiot-primary` (стан «бюджет» — `bg-fiot-accent`), вердикт — звичайне речення `text-sm`, без `[TAG]`-міток і glow.
+
 ### Icons
 - Єдиний набір `x-ui.icon`; stroke-icons `(arrows, chevron, check), fill-icons `(telegram, discord, facebook)`. Одномірна `w-4 h-4`; колір - `currentColor`/`fiot-gray`.
 

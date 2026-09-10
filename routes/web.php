@@ -21,9 +21,7 @@ Route::get('/syllabuses/diagram', [DisciplinesController::class, 'diagram'])->na
 Route::get('/disciplines', [DisciplinesController::class, 'index'])->name('disciplines');
 
 // Admission page
-Route::get('/admission', function () {
-    return view('admission');
-})->name('admission');
+Route::get('/admission', [PageController::class, 'admission'])->name('admission');
 
 // Educational programs page
 Route::get('/programs', [PageController::class, 'programs'])->name('programs');

@@ -7,6 +7,7 @@ use App\Models\Faculty;
 use App\Models\News;
 use App\Models\Partner;
 use App\Models\Program;
+use App\Models\SiteSetting;
 use Illuminate\Contracts\View\View;
 
 class PageController extends Controller
@@ -38,6 +39,15 @@ class PageController extends Controller
     public function programs(): View
     {
         return view('programs', [
+            'programs' => Program::published()->orderBy('sort_order')->get(),
+        ]);
+    }
+
+    public function admission(): View
+    {
+        return view('admission', [
+            'steps' => SiteSetting::get('admission.steps', []),
+            'calculator' => SiteSetting::get('admission.calculator', []),
             'programs' => Program::published()->orderBy('sort_order')->get(),
         ]);
     }
