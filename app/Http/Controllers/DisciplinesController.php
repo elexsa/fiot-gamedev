@@ -10,9 +10,29 @@ use Illuminate\Http\Request;
 
 class DisciplinesController extends Controller
 {
-    public function index(): RedirectResponse
+    /**
+     * Пасхалка: ігрове дерево навичок (/disciplines). У навбарі немає —
+     * доступ через 5 кліків по лого або прямим посиланням.
+     */
+    public function index(): View
     {
-        return redirect()->route('syllabuses.diagram', ['mode' => 'skill']);
+        $disciplines = Discipline::published()->with('program')
+            ->orderBy('level')->orderBy('semester')->orderBy('sort_order')->orderBy('name')->get();
+
+        $connections = [];
+        $existingIds = $disciplines->pluck('id')->flip();
+        foreach ($disciplines as $discipline) {
+            foreach ($discipline->prerequisites ?? [] as $prerequisiteId) {
+                if (isset($existingIds[$prerequisiteId])) {
+                    $connections[] = ["disc-{$prerequisiteId}", "disc-{$discipline->id}"];
+                }
+            }
+        }
+
+        return view('disciplines', [
+            'levels' => $disciplines->groupBy('level')->sortKeys(),
+            'connections' => $connections,
+        ]);
     }
 
     /**
@@ -75,7 +95,7 @@ class DisciplinesController extends Controller
             'mode' => $request->query('mode', 'courses'),
         ];
 
-        if (! in_array($filters['mode'], ['courses', 'cycles', 'skill'])) {
+        if (! in_array($filters['mode'], ['courses', 'cycles'])) {
             $filters['mode'] = 'courses';
         }
 

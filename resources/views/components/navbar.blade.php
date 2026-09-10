@@ -5,7 +5,8 @@
     <header class="relative z-50 border-b border-fiot-dark bg-fiot-black/70 backdrop-blur-md w-full shadow-lg shadow-fiot-black/50">
         <div class="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
             
-            <div class="flex items-center gap-3 relative z-50">
+            <div class="flex items-center gap-3 relative z-50 select-none" x-data="{ clicks: 0, timer: null }"
+                 @click="clicks++; clearTimeout(timer); timer = setTimeout(() => clicks = 0, 1500); if (clicks >= 5) { window.location.href = '{{ route('disciplines') }}'; }">
                 <a href="{{ route('home') }}" class="flex items-center gap-2 group">
                     <div class="text-2xl font-bold tracking-tighter text-white">FICE</div>
                 </a>
@@ -34,7 +35,6 @@
                     </a>
                     <div class="absolute left-0 top-full pt-3 hidden group-hover:block">
                         <div class="bg-[#0b0c0f] border border-white/10 rounded-xl py-2 min-w-52 shadow-xl">
-                            <a href="{{ route('syllabuses.diagram', ['mode' => 'skill']) }}" class="block px-4 py-2 text-xs uppercase tracking-widest font-bold {{ request()->routeIs('disciplines') ? 'text-fiot-accent' : 'text-fiot-gray hover:text-white' }} transition">Дерево навичок</a>
                             <a href="{{ route('syllabuses') }}" class="block px-4 py-2 text-xs uppercase tracking-widest font-bold {{ request()->routeIs('syllabuses') && ! request()->routeIs('syllabuses.diagram') ? 'text-fiot-accent' : 'text-fiot-gray hover:text-white' }} transition">Силабуси</a>
                             <a href="{{ route('syllabuses.diagram') }}" class="block px-4 py-2 text-xs uppercase tracking-widest font-bold {{ request()->routeIs('syllabuses.diagram') ? 'text-fiot-accent' : 'text-fiot-gray hover:text-white' }} transition">Діаграма дисциплін</a>
                         </div>
@@ -65,7 +65,7 @@
             <a href="{{ route('about') }}" @click="open = false" class="text-sm uppercase tracking-widest text-fiot-gray {{ request()->routeIs('about') ? '!text-fiot-accent' : 'hover:text-white transition' }}">Про кафедру</a>
             <a href="{{ route('programs') }}" @click="open = false" class="text-sm uppercase tracking-widest text-fiot-gray {{ request()->routeIs('programs') ? '!text-fiot-accent' : 'hover:text-white transition' }}">Освітні програми</a>
         </div>
-        <a href="{{ route('disciplines') }}" @click="open = false" class="text-xl uppercase tracking-widest font-bold {{ request()->routeIs('disciplines', 'syllabuses', 'syllabuses.diagram') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Студентам</a>
+        <a href="{{ route('syllabuses') }}" @click="open = false" class="text-xl uppercase tracking-widest font-bold {{ request()->routeIs('syllabuses') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Студентам</a>
         <div class="flex flex-col items-center gap-3">
             <a href="{{ route('syllabuses') }}" @click="open = false" class="text-sm uppercase tracking-widest text-fiot-gray {{ request()->routeIs('syllabuses') ? '!text-fiot-accent' : 'hover:text-white transition' }}">Силабуси</a>
             <a href="{{ route('syllabuses.diagram') }}" @click="open = false" class="text-sm uppercase tracking-widest text-fiot-gray {{ request()->routeIs('syllabuses.diagram') ? '!text-fiot-accent' : 'hover:text-white transition' }}">Діаграма</a>

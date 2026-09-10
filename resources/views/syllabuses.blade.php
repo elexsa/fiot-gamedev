@@ -8,12 +8,6 @@
 <x-ui.page>
     <x-ui.page-header title="Силабуси" subtitle="Каталог дисциплін: фільтруй за програмою, курсом, семестром або викладачем." />
 
-    <div class="flex flex-wrap items-center gap-3 mb-8">
-        <x-ui.button href="{{ route('syllabuses') }}" variant="primary" size="sm">Силабуси</x-ui.button>
-        <x-ui.button href="{{ route('syllabuses.diagram') }}" variant="outline" size="sm">Діаграма дисциплін</x-ui.button>
-        <x-ui.button href="{{ route('syllabuses.diagram', ['mode' => 'skill']) }}" variant="outline" size="sm">Дерево навичок</x-ui.button>
-    </div>
-
     <form method="GET" action="{{ route('syllabuses') }}" class="bg-fiot-dark/40 border border-white/10 rounded-2xl p-5 md:p-6 mb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <label class="flex flex-col gap-2 text-sm">
             <span class="text-fiot-gray uppercase tracking-widest text-[11px] font-bold">Дисципліна / викладач</span>
