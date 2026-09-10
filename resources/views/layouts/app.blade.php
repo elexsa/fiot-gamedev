@@ -14,8 +14,21 @@
     <meta property="og:description" content="@yield('meta_description', 'Кафедра ігрових систем ФІОТ КПІ ім. Ігоря Сікорського. Освітня програма «Розробка комп’ютерних ігор».')">
     <meta property="og:url" content="{{ url()->current() }}">
 
+    {{-- Pre-FOUC paint: dark canvas before Vite CSS loads --}}
+    <style>
+        html{background:#080809;color-scheme:dark}
+        body{background:#080809;margin:0}
+        /* Hide raw (unstyled) HTML until the CSS bundle is applied;
+           the timeout guarantees the page never stays hidden. */
+        html.js:not(.ready) body{visibility:hidden}
+    </style>
+    <script>
+        document.documentElement.classList.add('js');
+        setTimeout(function(){ document.documentElement.classList.add('ready'); }, 1200);
+    </script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js" defer></script>
 </head>
 <body class="bg-fiot-black text-fiot-white antialiased overflow-x-hidden selection:bg-fiot-accent selection:text-fiot-black flex flex-col min-h-screen">
 

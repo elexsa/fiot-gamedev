@@ -21,3 +21,6 @@ Alpine.store('game', {
 
 // Initialize Alpine
 Alpine.start();
+
+// CSS is applied — reveal the page (anti-FOUC, see layout head)
+document.documentElement.classList.add('ready');

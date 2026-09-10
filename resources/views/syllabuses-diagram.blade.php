@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Діаграма дисциплін | Студентам')
+@section('title', 'Діаграма дисциплін')
 
 @section('meta_description', 'Діаграма дисциплін за курсами, семестрами та циклами підготовки.')
 
 @section('content')
 <x-ui.page>
-    <x-ui.page-header title="Діаграма дисциплін" kicker="Студентам" subtitle="Навчальний план очима студента: курси, семестри та цикли." />
+    <x-ui.page-header title="Діаграма дисциплін" subtitle="Навчальний план очима студента: курси, семестри та цикли." />
 
     <div class="flex flex-wrap items-center gap-3 mb-8">
         <x-ui.button href="{{ route('syllabuses') }}" variant="outline" size="sm">Силабуси</x-ui.button>

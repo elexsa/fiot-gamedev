@@ -47,8 +47,8 @@
             <button @click="open = !open" 
                     class="lg:hidden relative z-50 p-2 text-fiot-gray hover:text-white transition focus:outline-none cursor-pointer">
 
-                <x-icons.menu x-show="!open" class="w-6 h-6 transition-transform" />
-                <x-icons.cross x-show="open" class="w-6 h-6 transition-transform" />
+                <x-icons.menu x-cloak x-show="!open" class="w-6 h-6 transition-transform" />
+                <x-icons.cross x-cloak x-show="open" class="w-6 h-6 transition-transform" />
                 
             </button>
         </div>

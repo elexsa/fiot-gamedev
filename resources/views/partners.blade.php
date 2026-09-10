@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Партнери | Кафедра ігрових систем')
+@section('title', 'Партнери')
 
 @section('meta_description', 'Індустріальні партнери кафедри ігрових систем ФІОТ КПІ: менторство, стажування та працевлаштування для студентів.')
 
@@ -14,7 +14,7 @@
             <x-ui.card :href="$partner->url" interactive class="group overflow-hidden">
                 <div class="h-32 flex items-center justify-center bg-fiot-dark/60 border-b border-white/10 p-8 relative overflow-hidden">
                     @if ($partner->logo)
-                        <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($partner->logo) }}" alt="{{ $partner->name }}" class="max-h-full max-w-full object-contain grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 relative z-10">
+                        <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($partner->logo) }}" alt="{{ $partner->name }}" loading="lazy" decoding="async" class="max-h-full max-w-full object-contain grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 relative z-10">
                     @else
                         <x-ui.placeholder type="logo" size="md" :text="mb_substr($partner->name, 0, 2)" />
                     @endif

@@ -108,7 +108,7 @@
                     <x-ui.card :href="route('news.article', $item)" interactive class="group p-0 overflow-hidden">
                         @if ($item->cover_image)
                             <div class="h-40 overflow-hidden border-b border-white/10">
-                                <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($item->cover_image) }}" alt="{{ $item->title }}" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($item->cover_image) }}" alt="{{ $item->title }}" loading="lazy" decoding="async" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500">
                             </div>
                         @endif
                         <div class="p-6 flex flex-col flex-1">

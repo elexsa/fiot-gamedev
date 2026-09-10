@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $article->title . ' | Кафедра ігрових систем')
+@section('title', $article->title)
 
 @section('meta_description', Str::limit($article->excerpt ?? '', 150))
 
@@ -29,8 +29,8 @@
             </h1>
 
             @if ($article->cover_image)
-                <div class="mb-8 overflow-hidden rounded-xl border border-white/10">
-                    <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($article->cover_image) }}" alt="{{ $article->title }}" class="w-full max-h-[420px] object-cover">
+                <div class="mb-8 overflow-hidden rounded-xl border border-white/10 aspect-video bg-fiot-dark">
+                    <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($article->cover_image) }}" alt="{{ $article->title }}" class="w-full h-full max-h-[420px] object-cover" loading="lazy" decoding="async">
                 </div>
             @endif
 

@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Освітні програми | Кафедра ігрових систем')
+@section('title', 'Освітні програми')
 
 @section('meta_description', 'Освітні програми кафедри ігрових систем ФІОТ КПІ: спеціальності, ступені та опис програм.')
 
 @section('content')
 <x-ui.page>
-    <x-ui.page-header title="Освітні програми" kicker="Вступникам" subtitle="Програми, за якими готує кафедра. Деталі — у деканаті та на сторінці вступу." />
+    <x-ui.page-header title="Освітні програми" subtitle="Програми, за якими готує кафедра. Деталі — у деканаті та на сторінці вступу." />
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
 

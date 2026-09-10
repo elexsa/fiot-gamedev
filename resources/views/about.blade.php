@@ -54,7 +54,7 @@
                     <x-ui.card class="group p-6">
                         <div class="flex items-start gap-4">
                             @if ($person->photo)
-                                <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($person->photo) }}" alt="{{ $person->name }}" class="w-14 h-14 shrink-0 rounded-xl border border-white/10 object-cover overflow-hidden">
+                                <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($person->photo) }}" alt="{{ $person->name }}" loading="lazy" decoding="async" width="56" height="56" class="w-14 h-14 shrink-0 rounded-xl border border-white/10 object-cover overflow-hidden">
                             @else
                                 <x-ui.placeholder type="avatar" size="md" :text="mb_substr($person->name, 0, 1)"/>
                             @endif

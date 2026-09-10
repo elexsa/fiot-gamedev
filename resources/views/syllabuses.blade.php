@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Силабуси | Студентам')
+@section('title', 'Силабуси')
 
 @section('meta_description', 'Каталог дисциплін і силабусів: фільтри за програмою, курсом, семестром, викладачем.')
 
 @section('content')
 <x-ui.page>
-    <x-ui.page-header title="Силабуси" kicker="Студентам" subtitle="Каталог дисциплін: фільтруй за програмою, курсом, семестром або викладачем." />
+    <x-ui.page-header title="Силабуси" subtitle="Каталог дисциплін: фільтруй за програмою, курсом, семестром або викладачем." />
 
     <div class="flex flex-wrap items-center gap-3 mb-8">
         <x-ui.button href="{{ route('syllabuses') }}" variant="primary" size="sm">Силабуси</x-ui.button>
