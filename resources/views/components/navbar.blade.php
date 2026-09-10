@@ -17,7 +17,7 @@
             <nav class="hidden lg:flex items-center gap-5 xl:gap-7">
                 <a href="{{ route('home') }}" class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('home') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Головна</a>
                 <div class="relative group">
-                    <a href="{{ route('admission') }}" class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('admission', 'about', 'programs') ? 'text-fiot-accent' : 'hover:text-white transition' }} flex items-center gap-1">Вступникам
+                    <a href="{{ route('about') }}" class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('admission', 'about', 'programs') ? 'text-fiot-accent' : 'hover:text-white transition' }} flex items-center gap-1">Вступникам
                         <svg class="w-3 h-3 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                     </a>
                     <div class="absolute left-0 top-full pt-3 hidden group-hover:block">
@@ -60,7 +60,7 @@
          class="fixed inset-0 bg-[#0b0c0f]/95 backdrop-blur-2xl z-40 flex flex-col justify-center items-center gap-8">
         
         <a href="{{ route('home') }}" @click="open = false" class="text-xl uppercase tracking-widest font-bold {{ request()->routeIs('home') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Головна</a>
-        <a href="{{ route('admission') }}" @click="open = false" class="text-xl uppercase tracking-widest font-bold {{ request()->routeIs('admission') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Вступникам</a>
+        <a href="{{ route('about') }}" @click="open = false" class="text-xl uppercase tracking-widest font-bold {{ request()->routeIs('admission') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Вступникам</a>
         <div class="flex flex-col items-center gap-3">
             <a href="{{ route('about') }}" @click="open = false" class="text-sm uppercase tracking-widest text-fiot-gray {{ request()->routeIs('about') ? '!text-fiot-accent' : 'hover:text-white transition' }}">Про кафедру</a>
             <a href="{{ route('programs') }}" @click="open = false" class="text-sm uppercase tracking-widest text-fiot-gray {{ request()->routeIs('programs') ? '!text-fiot-accent' : 'hover:text-white transition' }}">Освітні програми</a>

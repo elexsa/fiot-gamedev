@@ -15,7 +15,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mb-20">
         <div class="lg:col-span-7">
-            <div class="border-l-2 border-fiot-accent pl-5 mb-8">
+            <div class="mb-8">
                 <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white">Етапи вступу</h2>
             </div>
             @if (!empty($steps))
@@ -32,7 +32,7 @@
     </div>
 </x-ui.page>
 
-<x-ui.section id="programs" kicker="Куди вступити" title="Освітні програми" subtitle="Програми кафедри. Нові програми зʼявляються тут автоматично після додавання через адмін-панель.">
+<x-ui.section id="programs" title="Освітні програми" subtitle="lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
     @if ($programs->isNotEmpty())
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             @foreach ($programs as $program)
@@ -47,12 +47,12 @@
         </div>
     @else
         <x-ui.card class="p-6">
-            <p class="text-fiot-gray text-sm">Освітні програми поки не додані. Додайте їх через адмін-панель.</p>
+            <p class="text-fiot-gray text-sm">Освітні програми поки не додані. Їх додадуть через адмін-панель</p>
         </x-ui.card>
     @endif
 </x-ui.section>
 
-<x-ui.section kicker="Підтримка" title="Потрібна допомога" subtitle="Напишіть нам — допоможемо з пріоритетами, документами та питаннями про програму.">
+<x-ui.section title="Потрібна допомога" subtitle="Напишіть нам — допоможемо зі всім з метеоритом що летить на динозаврів, з пріоритетами, документами та питаннями про програму.">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
         <x-ui.card interactive class="group p-6 flex items-center gap-5">
             <span class="text-fiot-gray transition-colors group-hover:text-white">
