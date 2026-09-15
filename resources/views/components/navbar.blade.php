@@ -17,10 +17,11 @@
             
             <nav class="hidden lg:flex items-center gap-5 xl:gap-7">
                 <a href="{{ route('home') }}" class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('home') ? 'text-fiot-accent' : 'hover:text-white transition' }}">Головна</a>
+
                 <div class="relative group">
-                    <a href="{{ route('about') }}" class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('admission', 'about', 'programs') ? 'text-fiot-accent' : 'hover:text-white transition' }} flex items-center gap-1">Вступникам
+                    <button class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('admission', 'about', 'programs') ? 'text-fiot-accent' : 'group-hover:text-white transition' }} flex items-center gap-1 cursor-pointer">Вступникам
                         <svg class="w-3 h-3 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                    </a>
+                    </button>
                     <div class="absolute left-0 top-full pt-3 hidden group-hover:block">
                         <div class="bg-[#0b0c0f] border border-white/10 rounded-xl py-2 min-w-52 shadow-xl">
                             <a href="{{ route('admission') }}" class="block px-4 py-2 text-xs uppercase tracking-widest font-bold {{ request()->routeIs('admission') ? 'text-fiot-accent' : 'text-fiot-gray hover:text-white' }} transition">Етапи вступу</a>
@@ -29,10 +30,11 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="relative group">
-                    <a href="{{ route('disciplines') }}" class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('disciplines', 'syllabuses', 'syllabuses.diagram') ? 'text-fiot-accent' : 'hover:text-white transition' }} flex items-center gap-1">Студентам
+                    <button class="text-[11px] uppercase tracking-widest font-bold {{ request()->routeIs('syllabuses*') ? 'text-fiot-accent' : 'group-hover:text-white transition' }} flex items-center gap-1 cursor-pointer">Студентам
                         <svg class="w-3 h-3 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                    </a>
+                    </button>
                     <div class="absolute left-0 top-full pt-3 hidden group-hover:block">
                         <div class="bg-[#0b0c0f] border border-white/10 rounded-xl py-2 min-w-52 shadow-xl">
                             <a href="{{ route('syllabuses') }}" class="block px-4 py-2 text-xs uppercase tracking-widest font-bold {{ request()->routeIs('syllabuses') && ! request()->routeIs('syllabuses.diagram') ? 'text-fiot-accent' : 'text-fiot-gray hover:text-white' }} transition">Силабуси</a>

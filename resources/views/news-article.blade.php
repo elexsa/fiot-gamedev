@@ -6,10 +6,10 @@
 
 @section('content')
 <x-ui.page class="!min-h-0">
-    <a href="{{ route('news') }}"
+    <a href="{{ url()->previous() ?: route('news') }}"
        class="inline-flex items-center gap-2 text-sm text-fiot-gray hover:text-white transition-colors mb-10">
         <x-ui.icon name="arrow-left" class="w-3 h-3" />
-        До всіх новин
+        Назад
     </a>
 
     <article class="bg-fiot-dark/40 border border-white/10 rounded-2xl overflow-hidden">

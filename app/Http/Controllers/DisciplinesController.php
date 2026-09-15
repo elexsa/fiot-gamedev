@@ -95,7 +95,7 @@ class DisciplinesController extends Controller
             'mode' => $request->query('mode', 'courses'),
         ];
 
-        if (! in_array($filters['mode'], ['courses', 'cycles'])) {
+        if (! in_array($filters['mode'], ['courses', 'cycles', 'skill'])) {
             $filters['mode'] = 'courses';
         }
 

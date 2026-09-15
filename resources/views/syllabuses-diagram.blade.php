@@ -32,6 +32,7 @@
             <select name="mode" class="bg-[#0b0c0f] border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-fiot-accent/60 outline-none">
                 <option value="courses" @selected($filters['mode'] === 'courses')>Курси</option>
                 <option value="cycles" @selected($filters['mode'] === 'cycles')>Цикли</option>
+                <option value="skill" @selected($filters['mode'] === 'skill')>Дерево навичок</option>
             </select>
         </label>
         <div class="flex items-end gap-3 lg:col-span-3">
@@ -40,7 +41,9 @@
         </div>
     </form>
 
-    @if ($filters['mode'] === 'cycles')
+    @if ($filters['mode'] === 'skill')
+        @include('disciplines._skill-tree')
+    @elseif ($filters['mode'] === 'cycles')
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-20">
             @forelse ($byCycle as $cycle => $group)
                 <x-ui.card class="p-6">
