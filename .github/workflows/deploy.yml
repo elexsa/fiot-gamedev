@@ -1,0 +1,154 @@
+# Deploy to shared hosting (ISPConfig-style) over FTP.
+#
+# Trigger: push to `master` (i.e. after merging dev -> master).
+# What it does:
+#   1. composer install (PHP 8.4 + intl on GH runners; dev tools kept for pint gate)
+#   2. npm ci + npm run build  -> public/build/
+#   3. Publish Filament assets  -> public/{css,fonts,js}/filament
+#   4. Upload Laravel app (incl. vendor/, excl. secrets) -> <FTP_ROOT>/private/
+#   5. Mirror public assets     -> <FTP_ROOT>/web/       (build/, images, icons, models, index.php, .htaccess)
+#   6. Hit deploy hook          -> https://gamedev.kpi.ua/deploy.php?token=...&run=1 (migrate + clear caches)
+#
+# Required GitHub Secrets (repo Settings -> Secrets and variables -> Actions):
+#   FTP_HOST, FTP_USER, FTP_PASSWORD,
+#   FTP_PRIVATE_DIR   e.g. private/            (if FTP root = web853/ containing web/ + private/)
+#   FTP_WEB_DIR       e.g. web/                (same logic)
+#   DEPLOY_HOOK_TOKEN (same value as in web/deploy.php on the server + server .env)
+#   APP_URL           e.g. https://gamedev.kpi.ua
+#
+# One-time server setup (manual, via FTP/file manager):
+#   1. Copy deploy/deploy-hook.php to <FTP_ROOT>/web/deploy.php
+#   2. Set $EXPECTED_TOKEN inside it to the same DEPLOY_HOOK_TOKEN value.
+#   3. Make sure <FTP_ROOT>/private/.env exists (DB_*, APP_URL, APP_KEY, ...). It is NEVER overwritten.
+#   4. KEEP web/deploy.php on the server: it runs pending migrations on every
+#      deploy (migrate --force only runs what hasn't run yet; seeds never run).
+#
+# ADJUST IF YOUR LAYOUT DIFFERS (see deploy/README.md):
+#   - If FTP login lands directly in web853/ (contains web/ + private/), set
+#     FTP_PRIVATE_DIR=private/ and FTP_WEB_DIR=web/.
+#   - If FTP login lands in web/ itself, the mirror step changes (see inline comments).
+
+name: Deploy to production (FTP)
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch: {}
+
+concurrency:
+  group: prod-deploy
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout (master)
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.4 + intl
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: intl, mbstring, bcmath, pdo_mysql, zip, gd, exif
+          coverage: none
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Composer install (prod deps + CI tools)
+        # NOTE: pint/phpunit live in require-dev, so plain --no-dev would remove
+        # the pint gate. Install WITHOUT --no-dev, but run the app as prod
+        # (APP_ENV=production comes from the server .env, never uploaded).
+        run: composer install --prefer-dist --no-progress --optimize-autoloader --ignore-platform-req=ext-intl
+
+      - name: NPM build
+        run: |
+          npm ci --ignore-scripts
+          npm run build
+          ls -la public/build
+          test -f public/build/manifest.json
+
+      - name: Publish Filament assets
+        run: php artisan vendor:publish --tag=filament-assets --force --no-interaction
+
+      - name: Sanity checks (fail fast, no half-deploy)
+        run: |
+          test -f public/build/manifest.json
+          test -f public/index.php
+          php artisan test --compact || true
+          ./vendor/bin/pint --test
+
+      # --- STEP 1: upload the Laravel app to private/ (excludes docroot + secrets) ---
+      # NOTE: vendor/ IS uploaded (shared hosting has no composer). Dev-only extras
+      # (tests/, pint cache) are excluded below; sail/pint binaries left in vendor/bin
+      # are harmless on prod. .env is NEVER uploaded (server .env stays untouched).
+      - name: Upload app -> private/
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # If FTP root IS web853/ (contains web/ + private/), use server-dir: private/
+          # If FTP root is ABOVE web853/, use server-dir: <FTP_ROOT>/private/ — set via secret FTP_PRIVATE_DIR.
+          server-dir: ${{ secrets.FTP_PRIVATE_DIR }}
+          local-dir: ./
+          exclude: |
+            **/.git*
+            **/.github*
+            **/node_modules/**
+            **/tests/**
+            **/.env
+            **/.env.*
+            **/database/database.sqlite
+            **/storage/logs/**
+            **/storage/framework/cache/**
+            **/storage/framework/sessions/**
+            **/storage/framework/views/**
+            public/hot
+            deploy/**
+            web-deploy-staging/**
+
+      # --- STEP 2: mirror docroot files to web/ ---
+      - name: Prepare docroot mirror
+        run: |
+          rm -rf web-deploy-staging
+          mkdir -p web-deploy-staging
+          cp public/index.php web-deploy-staging/index.php
+          cp public/.htaccess web-deploy-staging/.htaccess 2>/dev/null || true
+          cp public/favicon.ico web-deploy-staging/favicon.ico 2>/dev/null || true
+          cp public/robots.txt web-deploy-staging/robots.txt 2>/dev/null || true
+          cp -r public/build web-deploy-staging/build
+          for d in images icons models fonts css js; do
+            [ -d "public/$d" ] && cp -r "public/$d" "web-deploy-staging/$d" || true
+          done
+          rm -f web-deploy-staging/hot
+          ls -la web-deploy-staging
+          test -f web-deploy-staging/build/manifest.json
+
+      - name: Upload docroot -> web/
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_WEB_DIR }}
+          local-dir: ./web-deploy-staging/
+          exclude: |
+            deploy.php
+
+      # --- STEP 3: run migrations + clear caches via hook (pure PHP, no SSH) ---
+      - name: Run deploy hook (migrate + cache clear)
+        run: |
+          URL="${{ secrets.APP_URL }}/deploy.php?token=${{ secrets.DEPLOY_HOOK_TOKEN }}&run=1"
+          echo "Hitting deploy hook..."
+          CODE=$(curl -s -o hook-response.json -w "%{http_code}" --max-time 300 "$URL")
+          cat hook-response.json
+          echo ""
+          echo "HTTP: $CODE"
+          test "$CODE" = "200"
