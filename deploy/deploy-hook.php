@@ -162,6 +162,9 @@ foreach (['app' => $appRoot, 'docroot' => $docroot] as $name => $target) {
         exit;
     }
     // Safety: refuse entries with absolute paths or ".." traversal.
+    // Never touch user uploads: storage/app/public/* lives only on the server
+    // (dean's /admin uploads) and must survive every deploy.
+    $skipPrefixes = ['storage/app/public/'];
     for ($i = 0; $i < $zip->numFiles; $i++) {
         $entry = (string) $zip->getNameIndex($i);
         if ($entry === '' || $entry[0] === '/' || str_contains($entry, '..')) {
@@ -169,6 +172,12 @@ foreach (['app' => $appRoot, 'docroot' => $docroot] as $name => $target) {
             http_response_code(500);
             echo json_encode(['ok' => false, 'error' => 'Unsafe entry in '.$name.'.zip: '.$entry]);
             exit;
+        }
+        foreach ($skipPrefixes as $prefix) {
+            if (str_starts_with($entry, $prefix)) {
+                $zip->deleteIndex($i);
+                break;
+            }
         }
     }
     $extracted = $zip->extractTo($target);
@@ -230,6 +239,22 @@ foreach ($steps as $name => $command) {
         $failed = true;
         break; // stop on first failure: no point clearing caches if migrate failed
     }
+}
+
+// Ensure web/storage serves the public disk (dean's /admin uploads).
+// Split layout: web/ is the docroot, files live in private/storage/app/public.
+$storageLink = $docroot.'/storage';
+$storageTarget = $appRoot.'/storage/app/public';
+if (! is_link($storageLink) && ! is_file($storageLink)) {
+    if (is_dir($storageLink)) {
+        $results['storage_link'] = ['status' => 'skipped: web/storage is a real directory'];
+    } elseif (@symlink($storageTarget, $storageLink)) {
+        $results['storage_link'] = ['status' => 'created'];
+    } else {
+        $results['storage_link'] = ['status' => 'failed: cannot symlink web/storage'];
+    }
+} else {
+    $results['storage_link'] = ['status' => 'exists'];
 }
 
 http_response_code($failed ? 500 : 200);

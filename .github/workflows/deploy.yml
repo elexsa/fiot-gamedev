@@ -95,6 +95,8 @@ jobs:
       # --- STEP 1: pack the Laravel app into ONE zip (FTP dies on ~10k small files) ---
       # NOTE: vendor/ IS packed (shared hosting has no composer). .env is NEVER
       # packed (server .env stays untouched). Dev-only extras excluded.
+      # CRITICAL: storage/app/public/* (dean's uploads via /admin) is NEVER packed —
+      # prod uploads live only on the server and must survive every deploy.
       # Re-install prod-only deps first so sail/pint/phpunit don't bloat the zip.
       - name: Pack app.zip
         run: |
@@ -103,7 +105,7 @@ jobs:
           zip -r -q app.zip . \
             -x '.git/*' '.github/*' 'node_modules/*' 'tests/*' \
             '.env' '.env.*' 'database/database.sqlite' \
-            'storage/logs/*' 'storage/framework/cache/*' \
+            'storage/app/public/*' 'storage/logs/*' 'storage/framework/cache/*' \
             'storage/framework/sessions/*' 'storage/framework/views/*' \
             'public/hot' 'deploy/*' 'web-deploy-staging/*' 'deploy-upload/*' '*.zip'
           ls -lh app.zip
