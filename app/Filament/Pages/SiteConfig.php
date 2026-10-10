@@ -3,7 +3,6 @@
 namespace App\Filament\Pages;
 
 use App\Models\SiteSetting;
-use BackedEnum;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
@@ -14,13 +13,19 @@ class SiteConfig extends Page implements HasForms
     use InteractsWithForms;
 
     protected string $view = 'filament.pages.settings';
+
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-cog-6-tooth';
+
     protected static ?string $title = 'Налаштування сайту';
+
     protected static ?string $slug = 'settings';
 
     public ?array $contacts = [];
+
     public ?array $stats = [];
+
     public ?array $admissionSteps = [];
+
     public ?array $admissionCalculator = [];
 
     public function mount(): void
@@ -75,7 +80,7 @@ class SiteConfig extends Page implements HasForms
 
     public function saveStats(): void
     {
-        $filtered = array_filter($this->stats, fn($stat) => !empty($stat['value']) || !empty($stat['label']));
+        $filtered = array_filter($this->stats, fn ($stat) => ! empty($stat['value']) || ! empty($stat['label']));
         SiteSetting::set('stats', array_values($filtered), 'json', 'stats', 'Статистика');
 
         Notification::make()

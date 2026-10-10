@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Discipline;
 use App\Models\Program;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class DisciplinesController extends Controller

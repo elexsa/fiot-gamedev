@@ -81,6 +81,10 @@ jobs:
         run: |
           test -f public/build/manifest.json
           test -f public/index.php
+          touch database/database.sqlite
+          # CI checkout has no .env: generate an ephemeral key + sqlite for this run only.
+          cp .env.example .env
+          php artisan key:generate --no-interaction
           php artisan test --compact || true
           ./vendor/bin/pint --test
 
