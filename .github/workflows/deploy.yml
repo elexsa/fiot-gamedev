@@ -1,32 +1,36 @@
 # Deploy to shared hosting (ISPConfig-style) over FTP.
 #
 # Trigger: push to `master` (i.e. after merging dev -> master).
-# What it does:
-#   1. composer install (PHP 8.4 + intl on GH runners; dev tools kept for pint gate)
+# Strategy: CI builds TWO ZIP FILES and uploads just those (plain FTP
+# chokes on ~10k small vendor/ files — one 30MB zip takes ~1 min).
+# The deploy hook unpacks them server-side via ZipArchive, then runs
+# migrate --force + cache clears. Steps:
+#   1. composer install (PHP 8.4 on GH runners) + pint gate
 #   2. npm ci + npm run build  -> public/build/
 #   3. Publish Filament assets  -> public/{css,fonts,js}/filament
-#   4. Upload Laravel app (incl. vendor/, excl. secrets) -> <FTP_ROOT>/private/
-#   5. Mirror public assets     -> <FTP_ROOT>/web/       (build/, images, icons, models, index.php, .htaccess)
-#   6. Hit deploy hook          -> https://gamedev.kpi.ua/deploy.php?token=...&run=1 (migrate + clear caches)
+#   4. Pack app.zip (Laravel app incl. vendor/, excl. secrets/docroot)
+#   5. Pack docroot.zip (index.php, .htaccess, build/, images, ...)
+#   6. Upload 2 zips -> <FTP_ROOT>/private/deploy-pending/
+#   7. Hit deploy hook -> unpack + migrate + clear caches
 #
 # Required GitHub Secrets (repo Settings -> Secrets and variables -> Actions):
 #   FTP_HOST, FTP_USER, FTP_PASSWORD,
 #   FTP_PRIVATE_DIR   e.g. private/            (if FTP root = web853/ containing web/ + private/)
-#   FTP_WEB_DIR       e.g. web/                (same logic)
 #   DEPLOY_HOOK_TOKEN (same value as in web/deploy.php on the server + server .env)
 #   APP_URL           e.g. https://gamedev.kpi.ua
+#
+# NOTE: FTP_WEB_DIR is no longer needed (docroot.zip unpacks server-side into web/).
 #
 # One-time server setup (manual, via FTP/file manager):
 #   1. Copy deploy/deploy-hook.php to <FTP_ROOT>/web/deploy.php
 #   2. Set $EXPECTED_TOKEN inside it to the same DEPLOY_HOOK_TOKEN value.
 #   3. Make sure <FTP_ROOT>/private/.env exists (DB_*, APP_URL, APP_KEY, ...). It is NEVER overwritten.
-#   4. KEEP web/deploy.php on the server: it runs pending migrations on every
+#   4. KEEP web/deploy.php on the server: it unpacks pending zips + runs migrations on every
 #      deploy (migrate --force only runs what hasn't run yet; seeds never run).
 #
 # ADJUST IF YOUR LAYOUT DIFFERS (see deploy/README.md):
 #   - If FTP login lands directly in web853/ (contains web/ + private/), set
-#     FTP_PRIVATE_DIR=private/ and FTP_WEB_DIR=web/.
-#   - If FTP login lands in web/ itself, the mirror step changes (see inline comments).
+#     FTP_PRIVATE_DIR=private/.
 
 name: Deploy to production (FTP)
 
@@ -88,40 +92,26 @@ jobs:
           php artisan test --compact || true
           ./vendor/bin/pint --test
 
-      # --- STEP 1: upload the Laravel app to private/ (excludes docroot + secrets) ---
-      # NOTE: vendor/ IS uploaded (shared hosting has no composer). Dev-only extras
-      # (tests/, pint cache) are excluded below; sail/pint binaries left in vendor/bin
-      # are harmless on prod. .env is NEVER uploaded (server .env stays untouched).
-      - name: Upload app -> private/
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          # If FTP root IS web853/ (contains web/ + private/), use server-dir: private/
-          # If FTP root is ABOVE web853/, use server-dir: <FTP_ROOT>/private/ — set via secret FTP_PRIVATE_DIR.
-          server-dir: ${{ secrets.FTP_PRIVATE_DIR }}
-          local-dir: ./
-          exclude: |
-            **/.git*
-            **/.github*
-            **/node_modules/**
-            **/tests/**
-            **/.env
-            **/.env.*
-            **/database/database.sqlite
-            **/storage/logs/**
-            **/storage/framework/cache/**
-            **/storage/framework/sessions/**
-            **/storage/framework/views/**
-            public/hot
-            deploy/**
-            web-deploy-staging/**
-
-      # --- STEP 2: mirror docroot files to web/ ---
-      - name: Prepare docroot mirror
+      # --- STEP 1: pack the Laravel app into ONE zip (FTP dies on ~10k small files) ---
+      # NOTE: vendor/ IS packed (shared hosting has no composer). .env is NEVER
+      # packed (server .env stays untouched). Dev-only extras excluded.
+      # Re-install prod-only deps first so sail/pint/phpunit don't bloat the zip.
+      - name: Pack app.zip
         run: |
-          rm -rf web-deploy-staging
+          composer install --prefer-dist --no-dev --no-progress --optimize-autoloader --ignore-platform-req=ext-intl
+          rm -f app.zip
+          zip -r -q app.zip . \
+            -x '.git/*' '.github/*' 'node_modules/*' 'tests/*' \
+            '.env' '.env.*' 'database/database.sqlite' \
+            'storage/logs/*' 'storage/framework/cache/*' \
+            'storage/framework/sessions/*' 'storage/framework/views/*' \
+            'public/hot' 'deploy/*' 'web-deploy-staging/*' 'deploy-upload/*' '*.zip'
+          ls -lh app.zip
+
+      # --- STEP 2: pack the docroot mirror into ONE zip ---
+      - name: Pack docroot.zip
+        run: |
+          rm -rf web-deploy-staging docroot.zip
           mkdir -p web-deploy-staging
           cp public/index.php web-deploy-staging/index.php
           cp public/.htaccess web-deploy-staging/.htaccess 2>/dev/null || true
@@ -132,22 +122,30 @@ jobs:
             [ -d "public/$d" ] && cp -r "public/$d" "web-deploy-staging/$d" || true
           done
           rm -f web-deploy-staging/hot
-          ls -la web-deploy-staging
           test -f web-deploy-staging/build/manifest.json
+          (cd web-deploy-staging && zip -r -q ../docroot.zip .)
+          ls -lh docroot.zip
 
-      - name: Upload docroot -> web/
+      # --- STEP 3: upload 2 zips (not 10k files) to the staging dir ---
+      - name: Stage zips for upload
+        run: |
+          rm -rf deploy-upload && mkdir -p deploy-upload
+          cp app.zip deploy-upload/app.zip
+          cp docroot.zip deploy-upload/docroot.zip
+          ls -lh deploy-upload/
+
+      - name: FTP upload (2 files)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_WEB_DIR }}
-          local-dir: ./web-deploy-staging/
-          exclude: |
-            deploy.php
+          server-dir: ${{ secrets.FTP_PRIVATE_DIR }}deploy-pending/
+          local-dir: ./deploy-upload/
+          log-level: standard
 
-      # --- STEP 3: run migrations + clear caches via hook (pure PHP, no SSH) ---
-      - name: Run deploy hook (migrate + cache clear)
+      # --- STEP 4: unpack on server + run migrations + clear caches (pure PHP, no SSH) ---
+      - name: Run deploy hook (unpack + migrate + cache clear)
         run: |
           URL="${{ secrets.APP_URL }}/deploy.php?token=${{ secrets.DEPLOY_HOOK_TOKEN }}&run=1"
           echo "Hitting deploy hook..."

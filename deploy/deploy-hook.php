@@ -122,7 +122,7 @@ if (($_GET['debug'] ?? '') === '1') {
         }
     }
 
-    echo json_encode(['ok' => true, 'mode' => 'debug', 'php_binary' => PHP_BINARY ?? null, 'candidates' => $probeResults]);
+    echo json_encode(['ok' => true, 'mode' => 'debug', 'php_binary' => PHP_BINARY ?? null, 'zip' => extension_loaded('zip') && class_exists('ZipArchive'), 'candidates' => $probeResults]);
     exit;
 }
 
@@ -133,9 +133,54 @@ if (($_GET['run'] ?? '') !== '1' && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'G
         'mode' => 'info',
         'artisan' => $artisan,
         'php' => PHP_VERSION,
-        'hint' => 'Add &run=1 to execute: migrate --force, config:clear, route:clear, view:clear.',
+        'hint' => 'Add &run=1 to execute: unpack (if pending) + migrate --force, config:clear, route:clear, view:clear.',
     ]);
     exit;
+}
+
+// --- ZIP UNPACK (runs before artisan) ------------------------------------
+// The CI pipeline uploads app.zip / docroot.zip instead of thousands of
+// small files over FTP. If a fresh zip is waiting, extract it first.
+// Zips are staged by CI as: private/deploy-pending/app.zip + docroot.zip.
+$unpackResults = [];
+$pendingDir = $appRoot.'/deploy-pending';
+@set_time_limit(0); // unpacking 20k files may exceed default 30s web limit
+foreach (['app' => $appRoot, 'docroot' => $docroot] as $name => $target) {
+    $zipPath = $pendingDir.'/'.$name.'.zip';
+    if (! is_file($zipPath)) {
+        continue;
+    }
+    if (! class_exists('ZipArchive')) {
+        http_response_code(500);
+        echo json_encode(['ok' => false, 'error' => 'ZipArchive unavailable, cannot unpack '.$name.'.zip']);
+        exit;
+    }
+    $zip = new ZipArchive;
+    if ($zip->open($zipPath) !== true) {
+        http_response_code(500);
+        echo json_encode(['ok' => false, 'error' => 'Cannot open '.$name.'.zip']);
+        exit;
+    }
+    // Safety: refuse entries with absolute paths or ".." traversal.
+    for ($i = 0; $i < $zip->numFiles; $i++) {
+        $entry = (string) $zip->getNameIndex($i);
+        if ($entry === '' || $entry[0] === '/' || str_contains($entry, '..')) {
+            $zip->close();
+            http_response_code(500);
+            echo json_encode(['ok' => false, 'error' => 'Unsafe entry in '.$name.'.zip: '.$entry]);
+            exit;
+        }
+    }
+    $extracted = $zip->extractTo($target);
+    $count = $zip->numFiles;
+    $zip->close();
+    if (! $extracted) {
+        http_response_code(500);
+        echo json_encode(['ok' => false, 'error' => 'Failed to extract '.$name.'.zip to '.$target]);
+        exit;
+    }
+    @unlink($zipPath); // consume: a stale zip must never re-extract on next run
+    $unpackResults[$name] = ['files' => $count, 'target' => $target];
 }
 
 $php = null;
@@ -188,4 +233,4 @@ foreach ($steps as $name => $command) {
 }
 
 http_response_code($failed ? 500 : 200);
-echo json_encode(['ok' => ! $failed, 'php' => PHP_VERSION, 'app_root' => $appRoot, 'results' => $results]);
+echo json_encode(['ok' => ! $failed, 'php' => PHP_VERSION, 'app_root' => $appRoot, 'unpacked' => $unpackResults, 'results' => $results]);

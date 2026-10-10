@@ -7,14 +7,19 @@ Goal: `git merge dev -> master` + `git push` = site updated, no manual FTP.
 ```text
 push to master
   └─> GitHub Actions (.github/workflows/deploy.yml)
-        ├─ composer install --no-dev (PHP 8.4 + intl, same as prod)
+        ├─ composer install (PHP 8.4) + pint gate
         ├─ npm ci + npm run build      (fresh public/build + manifest)
         ├─ php artisan vendor:publish --tag=filament-assets
-        ├─ pint --test (fail fast, no half-deploy)
-        ├─ FTP upload app  -> <root>/private/   (everything except docroot)
-        ├─ FTP upload mirror -> <root>/web/     (index.php, .htaccess, build/, images/, ...)
-        └─ GET /deploy.php?token=...&run=1      (migrate --force + clear caches)
+        ├─ sanity checks (ephemeral .env + key, tests, pint)
+        ├─ Pack app.zip     (Laravel app incl. vendor/, excl. .env/docroot)
+        ├─ Pack docroot.zip (index.php, .htaccess, build/, images/, ...)
+        ├─ FTP upload 2 zips -> <root>/private/deploy-pending/
+        └─ GET /deploy.php?token=...&run=1  (unpack + migrate --force + clear caches)
 ```
+
+Why zips: plain FTP uploads ~10k small `vendor/` files one-by-one and times
+out after 20 min. One ~30-50MB zip uploads in seconds; the hook extracts it
+server-side via `ZipArchive` (verified available, PHP 8.4.23).
 
 `deploy.php` is pure procedural PHP in the docroot — no Laravel middleware,
 no session, no dependency on not-yet-migrated tables. Wrong token => 404.
@@ -65,9 +70,10 @@ The pipeline never uploads `.env` (it's in the FTP exclude list).
 | `FTP_HOST` | `ftp.gamedev.kpi.ua` (or IP) |
 | `FTP_USER` / `FTP_PASSWORD` | FTP account (write access to `web/` + `private/`) |
 | `FTP_PRIVATE_DIR` | `private/` (if FTP root = web853/) or `/var/www/.../web853/private/` (if FTP root is above) |
-| `FTP_WEB_DIR` | `web/` (same logic as above) |
 | `APP_URL` | `https://gamedev.kpi.ua` |
 | `DEPLOY_HOOK_TOKEN` | same as in hook + server `.env` |
+
+(`FTP_WEB_DIR` is obsolete — docroot.zip unpacks server-side into `web/`.)
 
 ### 5. First run
 
