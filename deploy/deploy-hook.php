@@ -165,6 +165,7 @@ foreach (['app' => $appRoot, 'docroot' => $docroot] as $name => $target) {
     // Never touch user uploads: storage/app/public/* lives only on the server
     // (dean's /admin uploads) and must survive every deploy.
     $skipPrefixes = ['storage/app/public/'];
+    $entries = [];
     for ($i = 0; $i < $zip->numFiles; $i++) {
         $entry = (string) $zip->getNameIndex($i);
         if ($entry === '' || $entry[0] === '/' || str_contains($entry, '..')) {
@@ -173,15 +174,19 @@ foreach (['app' => $appRoot, 'docroot' => $docroot] as $name => $target) {
             echo json_encode(['ok' => false, 'error' => 'Unsafe entry in '.$name.'.zip: '.$entry]);
             exit;
         }
+        $skipped = false;
         foreach ($skipPrefixes as $prefix) {
             if (str_starts_with($entry, $prefix)) {
-                $zip->deleteIndex($i);
+                $skipped = true;
                 break;
             }
         }
+        if (! $skipped) {
+            $entries[] = $entry;
+        }
     }
-    $extracted = $zip->extractTo($target);
-    $count = $zip->numFiles;
+    $extracted = $zip->extractTo($target, $entries);
+    $count = count($entries);
     $zip->close();
     if (! $extracted) {
         http_response_code(500);
