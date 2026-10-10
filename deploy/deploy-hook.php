@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ONE-TIME deploy hook for shared hosting without SSH (ISPConfig-style).
  *
@@ -28,7 +30,6 @@
 $EXPECTED_TOKEN = getenv('DEPLOY_HOOK_TOKEN') ?: 'CHANGE-ME-TO-A-LONG-RANDOM-STRING';
 
 // ---------------------------------------------------------------------------
-declare(strict_types=1);
 
 header('X-Content-Type-Options: nosniff');
 
@@ -65,6 +66,66 @@ if (! is_file($artisan)) {
     exit;
 }
 
+// Find a PHP CLI binary. Prefer the same one serving this request — but ONLY
+// if it is a real CLI (some hosts set PHP_BINARY to php-fpm, which can't run artisan).
+$candidates = [];
+if (defined('PHP_BINARY') && PHP_BINARY !== '' && ! str_contains((string) PHP_BINARY, 'fpm')) {
+    $candidates[] = PHP_BINARY;
+}
+$candidates[] = 'php8.4';
+$candidates[] = '/usr/bin/php8.4';
+$candidates[] = 'php8.3';
+$candidates[] = 'php8.2';
+$candidates[] = 'php'; // default, often old (here: 7.4) — last resort only
+foreach (['8.4', '8.3', '8.2'] as $v) {
+    $candidates[] = "/usr/local/bin/php{$v}";
+    $candidates[] = "/usr/local/php{$v}/bin/php";
+    $candidates[] = "/opt/php{$v}/bin/php";
+    $candidates[] = "/opt/php-{$v}/bin/php";
+}
+// ISPConfig/multiphp layouts: /etc/php/<ver>/... exists => cli is often beside it.
+foreach (glob('/etc/php/*', GLOB_ONLYDIR) ?: [] as $dir) {
+    $ver = basename($dir);
+    foreach (["/usr/bin/php{$ver}", "/usr/local/bin/php{$ver}"] as $p) {
+        $candidates[] = $p;
+    }
+}
+// PATH lookup: versioned binaries may exist but not be on this user's PATH.
+foreach (['8.4', '8.3', '8.2'] as $v) {
+    $found = [];
+    @exec('command -v php'.$v.' 2>/dev/null', $found);
+    foreach ($found as $p) {
+        $candidates[] = trim($p);
+    }
+}
+// Last resort: scan common bin dirs for php8.* binaries.
+foreach (['/usr/bin', '/usr/local/bin', '/opt/php/bin'] as $binDir) {
+    foreach (glob($binDir.'/php8*') ?: [] as $p) {
+        if (is_executable($p)) {
+            $candidates[] = $p;
+        }
+    }
+}
+$candidates = array_values(array_unique($candidates));
+
+// ?debug=1 => show PHP_CLI candidates and their probe results (for troubleshooting).
+if (($_GET['debug'] ?? '') === '1') {
+    $probeResults = [];
+    foreach ($candidates as $candidate) {
+        $probe = escapeshellarg($candidate).' -r '.escapeshellarg('echo PHP_VERSION;').' 2>&1';
+        $out = [];
+        $code = 1;
+        @exec($probe, $out, $code);
+        $probeResults[$candidate] = ['exit_code' => $code, 'output' => implode("\n", $out)];
+        if (count($probeResults) > 40) {
+            break;
+        }
+    }
+
+    echo json_encode(['ok' => true, 'mode' => 'debug', 'php_binary' => PHP_BINARY ?? null, 'candidates' => $probeResults]);
+    exit;
+}
+
 // GET without run=1 => info page (safe to open in browser).
 if (($_GET['run'] ?? '') !== '1' && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET') {
     echo json_encode([
@@ -77,25 +138,16 @@ if (($_GET['run'] ?? '') !== '1' && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'G
     exit;
 }
 
-// Find a PHP binary. Prefer the same one serving this request.
-$candidates = [];
-if (defined('PHP_BINARY') && PHP_BINARY !== '') {
-    $candidates[] = PHP_BINARY;
-}
-$candidates[] = 'php';
-foreach (['8.4', '8.3', '8.2'] as $v) {
-    $candidates[] = "php{$v}";
-    $candidates[] = "/usr/bin/php{$v}";
-    $candidates[] = "/usr/local/bin/php{$v}";
-}
-
 $php = null;
 foreach ($candidates as $candidate) {
-    $probe = escapeshellarg($candidate).' -v 2>&1';
+    // Probe must prove CLI execution works ('-r' runs code), not just print a version.
+    // Also require PHP >= 8.2 (composer platform check would fail otherwise).
+    $probe = escapeshellarg($candidate).' -r '.escapeshellarg('echo PHP_VERSION;').' 2>&1';
     $out = [];
     $code = 1;
     @exec($probe, $out, $code);
-    if ($code === 0 && str_contains(implode("\n", $out), 'PHP')) {
+    $ver = trim(implode("\n", $out));
+    if ($code === 0 && (bool) preg_match('/^8\.[2-9]|^8\.[1-9][0-9]/', $ver)) {
         $php = $candidate;
         break;
     }
@@ -128,6 +180,7 @@ $results = [];
 $failed = false;
 foreach ($steps as $name => $command) {
     $results[$name] = $run($command);
+    $results[$name]['php_cli'] = $php;
     if ($results[$name]['exit_code'] !== 0) {
         $failed = true;
         break; // stop on first failure: no point clearing caches if migrate failed
