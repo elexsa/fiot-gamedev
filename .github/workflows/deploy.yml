@@ -113,7 +113,8 @@ jobs:
         run: |
           rm -rf web-deploy-staging docroot.zip
           mkdir -p web-deploy-staging
-          cp public/index.php web-deploy-staging/index.php
+          # Entry point must resolve to ../private/* (app lives outside docroot).
+          sed "s#__DIR__.'/../#__DIR__.'/../private/#g" public/index.php > web-deploy-staging/index.php
           cp public/.htaccess web-deploy-staging/.htaccess 2>/dev/null || true
           cp public/favicon.ico web-deploy-staging/favicon.ico 2>/dev/null || true
           cp public/robots.txt web-deploy-staging/robots.txt 2>/dev/null || true
