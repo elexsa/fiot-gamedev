@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Кафедра комп’ютерних ігор')
+@section('title', 'Кафедра ігрових та інтелектуальних систем')
 
-@section('meta_description', 'Кафедра комп’ютерних ігор ФІОТ КПІ ім. Ігоря Сікорського. Освітня програма «Розробка комп’ютерних ігор»: ігрові рушії, комп’ютерна графіка, ШІ та системна інженерія.')
+@section('meta_description', 'Кафедра ігрових та інтелектуальних систем ФІОТ КПІ ім. Ігоря Сікорського. Освітня програма «Розробка комп’ютерних ігор»: ігрові рушії, комп’ютерна графіка, ШІ та системна інженерія.')
 
 @section('content')
 <main class="flex flex-col relative overflow-hidden">
@@ -13,7 +13,7 @@
         <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 z-10 my-auto">
             <div class="w-full lg:w-1/2 flex flex-col justify-center gap-8 text-center lg:text-left">
                 <h1 class="text-white text-5xl md:text-7xl font-bold tracking-tight leading-[1.05] max-w-lg mx-auto lg:mx-0">
-                    Кафедра комп'ютерних<br> ігор
+                    Кафедра ігрових та інтелектуальних систем
                 </h1>
                 <p class="text-fiot-gray text-lg leading-relaxed max-w-lg mx-auto lg:mx-0">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
@@ -25,16 +25,9 @@
             </div>
 
             <div class="w-full lg:w-1/2 h-[400px] lg:h-[500px] flex items-center justify-center relative z-10">
-                <model-viewer 
-                    src="{{ asset('models/cool_fice_frog.glb') }}" 
-                    alt="Cyber frog"
-                    auto-rotate
-                    rotation-per-second="15deg"
-                    camera-controls
-                    disable-zoom
-                    shadow-intensity="1.5"
-                    class="w-full h-full outline-none">
-                </model-viewer>
+
+                <x-snake />
+
             </div>
         </div>
         

@@ -11,7 +11,7 @@
                     <div class="text-2xl font-bold tracking-tighter text-white">FICE</div>
                 </a>
                 <div class="hidden sm:block text-[9px] md:text-[10px] uppercase tracking-widest text-fiot-gray leading-tight border-l border-fiot-dark pl-3">
-                    Кафедра<br> Комп'ютерних ігор
+                    Кафедра ігрових та інтелектуальних систем
                 </div>
             </div>
             
