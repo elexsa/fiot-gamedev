@@ -2,7 +2,7 @@
 
 @section('title', 'Про кафедру')
 
-@section('meta_description', 'Про кафедру комп\'ютерних ігор ФІОТ КПІ: місія, викладацький склад та матеріально-технічна база.')
+@section('meta_description', 'Про кафедру ігрових та інтелектуальних систем ФІОТ КПІ: місія, викладацький склад та матеріально-технічна база.')
 
 @section('content')
 <x-ui.page>
@@ -13,18 +13,21 @@
 
             <div class="reveal-on-scroll">
                 <div class="border-fiot-accent ">
-                    <h2 class="text-xl font-bold text-white tracking-tight mb-2">Історія і місія чи ше шось</h2>
+                    <h2 class="text-xl font-bold text-white tracking-tight mb-2">Історія</h2>
                 </div>
                 <p class="text-fiot-gray text-lg leading-relaxed mb-6">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ми готуємо інженерів, здатних проєктувати та створювати ігри світового рівня — від низькорівневої графіки до цілісного геймдизайну.
+                    Кафедра працює з 01.07.2026.
                 </p>
+                <div class="border-fiot-accent ">
+                    <h2 class="text-xl font-bold text-white tracking-tight mb-2">Мета</h2>
+                </div>
                 <p class="text-fiot-gray text-lg leading-relaxed">
-                    Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Наша мета — підготовка висококласних фахівців із розробки, здатних проєктувати складні інженерні рішення.
                 </p>
             </div>
 
             <div class="reveal-on-scroll relative">
-                <x-ui.placeholder height="h-[300px]" label="Можливо фото викладачів чи котика якогось"/>
+                <x-ui.placeholder height="h-[300px]" label="Фото викладачів"/>
             </div>
 
         </div>
@@ -46,7 +49,7 @@
             <div class="border-fiot-accent ">
                 <h2 class="text-xl font-bold text-white tracking-tight mb-2">Викладачі</h2>
             </div>
-            <p class="text-fiot-gray text-sm mb-8">Lore ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <p class="text-fiot-gray text-sm mb-8">На кафедрі працюють досвідчені викладачі.</p>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
@@ -78,10 +81,7 @@
                     <h2 class="text-xl font-bold text-white tracking-tight mb-2">Матеріально-технічна база</h2>
                 </div>
                 <p class="text-fiot-gray text-lg leading-relaxed mb-6">
-                    Lorem ipsum dolor sit amet consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                </p>
-                <p class="text-fiot-gray text-lg leading-relaxed">
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Матеріально-технічна база кафедри відповідає сучасним вимогам освітніх стандартів.
                 </p>
             </div>
         </div>
