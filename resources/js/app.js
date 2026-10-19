@@ -1,8 +1,16 @@
 import './bootstrap';
 import './admission-calculator';
+
+
 import Alpine from 'alpinejs';
 
 window.Alpine = Alpine;
+
+
+import L from 'leaflet';
+// Make Leaflet globally available (optional, for use directly within Blade)
+window.L = L;
+
 
 // Global game store for the easter egg logic
 Alpine.store('game', {

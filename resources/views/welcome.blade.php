@@ -16,7 +16,8 @@
                     Кафедра ігрових та інтелектуальних систем
                 </h1>
                 <p class="text-fiot-gray text-lg leading-relaxed max-w-lg mx-auto lg:mx-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                    Ви коли-небудь замислювалися, як працює ваша улюблена гра, або як штучний інтелект прогнозує ваші дії? 
+                    На нашій кафедрі ми вивчаємо технології, які допоможуть вам почати свій <strong class="text-white">професійний шлях у GameDev-індустрії та сфері штучного інтелекту.</strong>
                 </p>
                 <div class="flex flex-col sm:flex-row gap-6 mt-4 justify-center lg:justify-start w-full max-w-lg mx-auto lg:mx-0">
                     <x-ui.button href="{{ route('about') }}" variant="primary" size="lg">Вступнику</x-ui.button>
@@ -42,27 +43,45 @@
                     <h3 class="text-white text-3xl md:text-4xl font-bold tracking-tight mb-2">Про кафедру</h3>
                 </div>
                 <p class="text-fiot-gray text-lg leading-relaxed mb-6 mt-6">
-                    Кафедра готує фахівців за спеціальністю <strong class="text-white">F2 Інженерія програмного забезпечення</strong> в межах освітньої програми «Розробка комп'ютерних ігор».
+                    Кафедра готує фахівців за спеціальністю <strong class="text-white">F2 Інженерія програмного забезпечення</strong> в межах освітньої програми <strong class="text-white">«Програмування комп'ютерних ігор»</strong>.
                 </p>
                 <p class="text-fiot-gray text-lg leading-relaxed">
-                    Математика, комп'ютерна графіка та програмування, блабабла.
+                    Від фундаментальної теорії алгоритмів — до розробки високонавантажених інтелектуальних систем та ігор. Ми готуємо висококваліфікованих розробників, здатних створювати технології, що змінюють правила гри у сфері.
                 </p>
             </div>
 
-            <x-ui.placeholder height="h-[350px]" label="[якесь фото]" />
+            
+            <div class="w-full h-[400px] lg:h-[500px] flex items-center justify-center relative z-10">
+                <model-viewer 
+                    src="{{ asset('models/rubiks_cube.glb') }}" 
+                    alt="Rubiks cube"
+                    autoplay
+                    animation-name="*"
+                    interaction-prompt="none"
+                    auto-rotate
+                    rotation-per-second="15deg"
+                    camera-controls
+                    disable-zoom
+                    shadow-intensity="1.5"
+                    class="w-full h-full outline-none"
+                    camera-orbit="0deg 75deg 105%" 
+                    field-of-view="30deg">
+                </model-viewer>
+            </div>
+
 
         </div>
     </section>
 
     <section class="relative z-10 py-20 md:py-28 px-6 border-t border-white/5">
         <div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <x-ui.placeholder height="h-[400px]" label="18 Корпус" />
+            <x-map/>    
             <div>
                 <div class="border-r-2 border-fiot-accent pr-5">
-                    <h3 class="text-white text-right text-3xl md:text-4xl font-bold tracking-tight mb-2">Розсташування</h3>
+                    <h3 class="text-white text-right text-3xl md:text-4xl font-bold tracking-tight mb-2">Розташування</h3>
                 </div>
                 <p class="text-fiot-gray text-lg leading-relaxed text-right">
-                    Ми знаходимося в легендарному 18-му корпусі ФІОТ, з дуже гарним вітражем.
+                    Ми знаходимося у 18-му корпусі (ФІОТ), кабінет 217.
                 </p>
             </div>
         </div>
