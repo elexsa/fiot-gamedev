@@ -32,7 +32,7 @@
     </div>
 </x-ui.page>
 
-<x-ui.section id="programs" title="Освітні програми" subtitle="lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+<x-ui.section id="programs" title="Освітні програми" subtitle="Освітні програми.">
     @if ($programs->isNotEmpty())
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             @foreach ($programs as $program)
@@ -52,7 +52,7 @@
     @endif
 </x-ui.section>
 
-<x-ui.section title="Потрібна допомога" subtitle="Напишіть нам — допоможемо зі всім з метеоритом що летить на динозаврів, з пріоритетами, документами та питаннями про програму.">
+<x-ui.section title="Потрібна допомога" subtitle="Напишіть нам — допоможемо з питаннями про вступ.">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
         <x-ui.card interactive class="group p-6 flex items-center gap-5">
             <span class="text-fiot-gray transition-colors group-hover:text-white">

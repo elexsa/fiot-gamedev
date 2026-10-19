@@ -6,7 +6,7 @@
 
 @section('content')
 <x-ui.page>
-    <x-ui.page-header title="Діаграма дисциплін" subtitle="Навчальний план очима студента: курси, семестри та цикли." />
+    <x-ui.page-header title="Діаграма дисциплін" subtitle="Навчальний план." />
 
     <form method="GET" action="{{ route('syllabuses.diagram') }}" class="bg-fiot-dark/40 border border-white/10 rounded-2xl p-5 md:p-6 mb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <label class="flex flex-col gap-2 text-sm">
