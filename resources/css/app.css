@@ -1,6 +1,11 @@
 @import "@fontsource-variable/inter-tight";
 @import "@fontsource-variable/mulish";
+
 @import "tailwindcss";
+
+/* CSS for OpenStreetMap */
+@import "leaflet/dist/leaflet.css";
+
 
 /* Metric-compatible fallbacks: text/buttons keep identical size before the
    real fonts load (no layout shift on swap). Metrics from the woff2 files. */

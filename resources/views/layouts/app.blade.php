@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Кафедра ігрових систем | ФІОТ КПІ')</title>
+    <title>@yield('title', 'Кафедра ігрових та інтелектуальних систем | ФІОТ КПІ')</title>
 
-    <meta name="description" content="@yield('meta_description', 'Кафедра ігрових систем ФІОТ КПІ ім. Ігоря Сікорського. Освітня програма «Розробка комп’ютерних ігор»: ігрові рушії, комп’ютерна графіка, ШІ та системна інженерія.')">
+    <meta name="description" content="@yield('meta_description', 'Кафедра ігрових та інтелектуальних систем ФІОТ КПІ ім. Ігоря Сікорського. Освітня програма «Розробка комп’ютерних ігор»: ігрові рушії, комп’ютерна графіка, ШІ та системна інженерія.')">
     <meta name="robots" content="index, follow">
 
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Кафедра ігрових систем | ФІОТ КПІ">
-    <meta property="og:title" content="@yield('title', 'Кафедра ігрових систем | ФІОТ КПІ')">
-    <meta property="og:description" content="@yield('meta_description', 'Кафедра ігрових систем ФІОТ КПІ ім. Ігоря Сікорського. Освітня програма «Розробка комп’ютерних ігор».')">
+    <meta property="og:site_name" content="Кафедра ігрових та інтелектуальних систем | ФІОТ КПІ">
+    <meta property="og:title" content="@yield('title', 'Кафедра ігрових та інтелектуальних систем | ФІОТ КПІ')">
+    <meta property="og:description" content="@yield('meta_description', 'Кафедра ігрових та інтелектуальних систем ФІОТ КПІ ім. Ігоря Сікорського. Освітня програма «Розробка комп’ютерних ігор».')">
     <meta property="og:url" content="{{ url()->current() }}">
 
     {{-- Pre-FOUC paint: dark canvas before Vite CSS loads --}}

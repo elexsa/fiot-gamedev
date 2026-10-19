@@ -2,11 +2,11 @@
 
 @section('title', 'Новини')
 
-@section('meta_description', 'Останні новини кафедри ігрових систем ФІОТ КПІ: події, хакатони, оновлення навчального плану та партнерства.')
+@section('meta_description', 'Останні новини кафедри ігрових та інтелектуальних систем ФІОТ КПІ: події, хакатони, оновлення навчального плану та партнерства.')
 
 @section('content')
 <x-ui.page>
-    <x-ui.page-header title="Новини" subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
+    <x-ui.page-header title="Новини" subtitle="Новини кафедри ігрових та інтелектуальних систем." />
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
