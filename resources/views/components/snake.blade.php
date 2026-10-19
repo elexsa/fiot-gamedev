@@ -7,7 +7,7 @@
             <div>Рекорд: <span id="high-score" class="text-amber-400 font-mono text-lg font-black ml-1 select-all">0</span></div>
         </div>
         <div id="game-status" class="text-[10px] uppercase bg-amber-500/10 text-amber-400 font-black px-2.5 py-1 rounded-md border border-amber-500/20 tracking-widest animate-pulse">
-            Режим ШІ
+            Бот
         </div>
     </div>
 
@@ -20,7 +20,7 @@
             <span id="overlay-icon" class="text-5xl mb-3 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)]">🎓</span>
             <h2 id="overlay-title" class="text-2xl font-black text-rose-500 tracking-wide uppercase">Раунд закінчився!</h2>
             <p id="overlay-desc" class="text-slate-400 text-sm max-w-xs mt-1 mb-6">Наказ про відрахування підписано.</p>
-            <p id="overlay-timer" class="text-amber-400 text-xs font-semibold mb-6 animate-pulse">Режим ШІ повернеться через 3...</p>
+            <p id="overlay-timer" class="text-amber-400 text-xs font-semibold mb-6 animate-pulse">Бот повернеться через 3...</p>
             <button id="start-btn" class="px-6 py-3 bg-sky-500 hover:bg-sky-400 active:scale-95 text-slate-950 text-sm font-black uppercase tracking-wider rounded-xl shadow-lg shadow-sky-500/20 transition-all">
                 Почати знову
             </button>
@@ -168,7 +168,7 @@
 
         function updateStatusUI() {
             if (isAutopilot) {
-                statusEl.textContent = "Режим ШІ";
+                statusEl.textContent = "Бот";
                 statusEl.className = "text-[10px] uppercase bg-amber-500/10 text-amber-400 font-black px-2.5 py-1 rounded-md border border-amber-500/20 tracking-widest animate-pulse";
             } else {
                 statusEl.textContent = "Користувач";
@@ -447,12 +447,12 @@
             startBtn.textContent = "Почати знову";
             overlay.classList.remove('hidden');
             let timeLeft = 3;
-            overlayTimer.textContent = `Режим ШІ повернеться через ${timeLeft}...`;
+            overlayTimer.textContent = `Бот повернеться через ${timeLeft}...`;
             aiCountdownInterval = setInterval(() => {
                 timeLeft--;
 
                 if (timeLeft > 0) {
-                    overlayTimer.textContent = `Режим ШІ повернеться через ${timeLeft}...`;
+                    overlayTimer.textContent = `Бот повернеться через ${timeLeft}...`;
                 } else {
                     clearInterval(aiCountdownInterval);
                 }
