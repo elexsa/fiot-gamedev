@@ -9,7 +9,7 @@
     <x-ui.page-header title="Вступ" subtitle="Дорожня карта вступу, калькулятор конкурсного бала та освітні програми кафедри.">
         <div class="flex flex-col sm:flex-row gap-4 mt-8">
             <x-ui.button href="https://vstup.edbo.gov.ua/" variant="primary" size="lg">Подати заяву</x-ui.button>
-            <x-ui.button href="#programs" variant="outline" size="lg">Освітні програми</x-ui.button>
+            <x-ui.button href="{{ route('programs') }}" variant="outline" size="lg">Освітні програми</x-ui.button>
         </div>
     </x-ui.page-header>
 
@@ -31,26 +31,6 @@
         </div>
     </div>
 </x-ui.page>
-
-<x-ui.section id="programs" title="Освітні програми" subtitle="Освітні програми.">
-    @if ($programs->isNotEmpty())
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            @foreach ($programs as $program)
-                <x-program.card :program="$program" />
-            @endforeach
-        </div>
-        <div class="mt-8">
-            <x-ui.button href="{{ route('programs') }}" variant="outline" size="md" class="group">
-                Усі програми
-                <x-ui.icon name="arrow-right" class="w-3 h-3 ml-2 transition-transform group-hover:translate-x-1" />
-            </x-ui.button>
-        </div>
-    @else
-        <x-ui.card class="p-6">
-            <p class="text-fiot-gray text-sm">Освітні програми поки не додані. Їх додадуть через адмін-панель</p>
-        </x-ui.card>
-    @endif
-</x-ui.section>
 
 <x-ui.section title="Потрібна допомога" subtitle="Напишіть нам — допоможемо з питаннями про вступ.">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">

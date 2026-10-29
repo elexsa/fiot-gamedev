@@ -3,17 +3,17 @@
 namespace App\Filament\Resources\Programs\Pages;
 
 use App\Filament\Resources\Programs\ProgramResource;
-use Filament\Actions\CreateAction;
-use Filament\Resources\Pages\ManageRecords;
+use Filament\Actions\DeleteAction;
+use Filament\Resources\Pages\EditRecord;
 
-class ManagePrograms extends ManageRecords
+class EditProgram extends EditRecord
 {
     protected static string $resource = ProgramResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            DeleteAction::make(),
         ];
     }
 }
