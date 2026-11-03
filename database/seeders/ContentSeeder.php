@@ -4,14 +4,18 @@ namespace Database\Seeders;
 
 use App\Models\Degree;
 use App\Models\Discipline;
-use App\Models\Faculty;
 use App\Models\FieldOfStudy;
-use App\Models\News;
+use App\Models\ModeofStudy;
 use App\Models\Partner;
 use App\Models\Program;
 use App\Models\Semester;
 use App\Models\SiteSetting;
 use App\Models\Specialty;
+use App\Models\Staff;
+use App\Models\StaffAcademicRank;
+use App\Models\StaffAchievement;
+use App\Models\StaffDegree;
+use App\Models\StaffPosition;
 use App\Models\User;
 use App\Models\YearOfStudy;
 use Illuminate\Database\Seeder;
@@ -36,53 +40,11 @@ class ContentSeeder extends Seeder
             ]
         );
 
-        $this->seedEducationInfo();
-
-        // --- Освітня програма ---
-        $program = $this->createProgram(
-            name: "Програмування комп'ютерних ігор",
-            description: 'Освітньо-професійна програма першого (бакалаврського) рівня вищої освіти.',
-            startDate: '2026-09-01',
-            endDate: '2030-06-30',
-            specialtyId: 42,
-            degreeId: 1,
-            external_link: 'https://osvita.kpi.ua/sites/default/files/oop/f2_oppb_pki_2026.pdf',
-        );
-
-        $this->createProgram(
-            name: "Програмування комп'ютерних ігор",
-            description: 'Освітньо-професійна програма першого (бакалаврського) рівня вищої освіти.',
-            startDate: '2025-09-01',
-            endDate: '2029-06-30',
-            specialtyId: 42,
-            degreeId: 1,
-            external_link: 'https://osvita.kpi.ua/sites/default/files/oop/f2_oppb_pki_2025.pdf',
-        );
-
-        $this->createProgram(
-            name: 'Інженерія програмного забезпечення',
-            description: 'Освітньо-наукова програма третього (освітньо-наукового) рівня вищої освіти.',
-            startDate: '2025-09-01',
-            endDate: '2029-06-30',
-            specialtyId: 42,
-            degreeId: 3,
-            external_link: 'https://osvita.kpi.ua/sites/default/files/oop/f2_onpd_ipz_2025.pdf',
-        );
-
-        $this->createProgram(
-            name: 'Інженерія програмного забезпечення',
-            description: 'Освітньо-наукова програма третього (освітньо-наукового) рівня вищої освіти.',
-            startDate: '2026-09-01',
-            endDate: '2030-06-30',
-            specialtyId: 42,
-            degreeId: 3,
-            external_link: 'https://osvita.kpi.ua/sites/default/files/oop/f2_onpd_ipz_2026.pdf',
-        );
-
+        $this->seedBaseInfo();
+        $this->seedPrograms();
+        $this->seedDiscipline();
+        $this->seedStaff();
         $this->seedSiteSettings();
-        $this->seedNews();
-        $this->seedFaculty();
-        $this->seedDisciplines($program);
         $this->seedPartners();
     }
 
@@ -131,18 +93,6 @@ class ContentSeeder extends Seeder
         ], 'json', 'admission', 'Калькулятор вступу');
     }
 
-    private function seedNews(): void
-    {
-        // News is now managed through Filament admin panel
-        // Add initial news items here if needed for fresh installations
-    }
-
-    private function seedFaculty(): void
-    {
-        // Faculty is now managed through Filament admin panel
-        // Add initial faculty members here if needed for fresh installations
-    }
-
     private function seedPartners(): void
     {
         $partners = [
@@ -159,48 +109,7 @@ class ContentSeeder extends Seeder
         }
     }
 
-    private function seedDisciplines(Program $program): void
-    {
-        $disciplines = [
-            ['level' => 1, 'category' => 'Математика', 'name' => 'Дискретна математика', 'description' => 'Графи, логіка, теорія множин.', 'prerequisites' => []],
-            ['level' => 1, 'category' => 'Програмування', 'name' => 'Основи програмування', 'description' => "Синтаксис C++, пам'ять, вказівники.", 'prerequisites' => []],
-            ['level' => 2, 'category' => 'Математика', 'name' => 'Лінійна алгебра', 'description' => 'Вектори, матриці, трансформації.', 'prerequisites' => [1]],
-            ['level' => 2, 'category' => 'Інженерія', 'name' => "Об'єктно-орієнтоване ПЗ", 'description' => 'Класи, патерни, SOLID.', 'prerequisites' => [2]],
-            ['level' => 2, 'category' => 'Логіка', 'name' => 'Алгоритми та СД', 'description' => 'Оптимізація, дерева, пошук шляху.', 'prerequisites' => [1, 2]],
-            ['level' => 3, 'category' => 'Рендер', 'name' => 'Програмування графіки', 'description' => 'Шейдери, DirectX, робота з GPU.', 'prerequisites' => [3]],
-            ['level' => 3, 'category' => 'Ядро GameDev', 'name' => 'Ігрові рушії', 'description' => 'Базова архітектура рушіїв, фізика.', 'prerequisites' => [4, 5]],
-            ['level' => 3, 'category' => 'Інфраструктура', 'name' => 'Архітектура ПЗ / DevOps', 'description' => 'Мікросервіси, CI/CD, сервери.', 'prerequisites' => [4]],
-            ['level' => 4, 'category' => 'Unreal Engine 5', 'name' => 'Розробка ігрових систем', 'description' => 'Проєкти ААА-рівня, Blueprints + C++.', 'prerequisites' => [7], 'is_boss' => true],
-            ['level' => 4, 'category' => 'Спеціалізація', 'name' => 'Військові симулятори', 'description' => 'Симуляція бойових дій, фізика балістики.', 'prerequisites' => [7, 8]],
-            ['level' => 4, 'category' => 'Інтелект', 'name' => 'Штучний інтелект (AI)', 'description' => 'Поведінкові дерева, машинне навчання.', 'prerequisites' => [5]],
-        ];
-
-        // Створюємо дисципліни та мапимо порядкові номери → id
-        $ids = [];
-        foreach ($disciplines as $i => $disc) {
-            $d = Discipline::updateOrCreate(
-                ['name' => $disc['name'], 'program_id' => $program->id],
-                [
-                    'description' => $disc['description'],
-                    'category' => $disc['category'],
-                    'level' => $disc['level'],
-                    'is_boss' => $disc['is_boss'] ?? false,
-                    'sort_order' => $i,
-                ]
-            );
-            $ids[$i + 1] = $d->id;
-        }
-
-        // Зв'язки: порядкові номери → реальні id
-        foreach ($disciplines as $i => $disc) {
-            if (! empty($disc['prerequisites'])) {
-                $realIds = array_map(fn ($n) => $ids[$n], $disc['prerequisites']);
-                Discipline::find($ids[$i + 1])->update(['prerequisites' => $realIds]);
-            }
-        }
-    }
-
-    private function seedEducationInfo(): void
+    private function seedBaseInfo(): void
     {
         // Галузі знань
         $fields = [
@@ -389,33 +298,272 @@ class ContentSeeder extends Seeder
         foreach ($years_of_study as $year_of_study) {
             YearOfStudy::create($year_of_study);
         }
+
+        // Форми навчання
+        $modesofStudy = [
+            ['name' => 'Денна'],
+            ['name' => 'Заочна'],
+            ['name' => 'Вечірня'],
+            ['name' => 'Дистанційна'],
+        ];
+
+        foreach ($modesofStudy as $modeofStudy) {
+            ModeofStudy::create($modeofStudy);
+        }
+
+        // Довідник наукових ступенів
+        $staffDegrees = [
+            ['name' => 'Доктор наук', 'sort_order' => 1],
+            ['name' => 'Кандидат наук', 'sort_order' => 2],
+            ['name' => 'Доктор філософії', 'sort_order' => 3],
+        ];
+
+        foreach ($staffDegrees as $staffDegree) {
+            StaffDegree::create($staffDegree);
+        }
+
+        // Довідник вчених звань
+        $staffAcademicRank = [
+            ['name' => 'Професор', 'sort_order' => 1],
+            ['name' => 'Доцент', 'sort_order' => 2],
+            ['name' => 'Відсутнє', 'sort_order' => 3],
+        ];
+
+        foreach ($staffAcademicRank as $staffRank) {
+            StaffAcademicRank::create($staffRank);
+        }
+
+        // Довідник посад (із sort_order для сортування)
+        $staffPosition = [
+            ['name' => 'Завідувач кафедри', 'sort_order' => 1],
+            ['name' => 'Професор кафедри', 'sort_order' => 2],
+            ['name' => 'Доцент кафедри', 'sort_order' => 3],
+            ['name' => 'Асистент', 'sort_order' => 4],
+        ];
+
+        foreach ($staffPosition as $position) {
+            StaffPosition::create($position);
+        }
+
     }
 
-    private function createProgram(
-        string $name,
-        string $description,
-        ?string $startDate = null,
-        ?string $endDate = null,
-        ?int $specialtyId = null,
-        ?int $degreeId = null,
-        ?string $external_link = null
-    ): Program {
+    private function seedPrograms(): void
+    {
+        // --- Освітня програма ---
+        $programs =
+        [
+            [
+                'image' => null,
+                'is_published' => true,
+                'slug' => Str::uuid(),
+                'name' => "Програмування комп'ютерних ігор",
+                'description' => 'Освітньо-професійна програма першого (бакалаврського) рівня вищої освіти.',
+                'start_date' => '2026-09-01',
+                'end_date' => '2030-06-30',
+                'specialty_id' => Specialty::inRandomOrder()->first()?->id,
+                'degree_id' => Degree::inRandomOrder()->first()?->id,
+                'external_link' => 'https://osvita.kpi.ua/sites/default/files/oop/f2_oppb_pki_2026.pdf',
+            ],
+            [
+                'image' => null,
+                'is_published' => true,
+                'slug' => Str::uuid(),
+                'name' => "Програмування комп'ютерних ігор",
+                'description' => 'Освітньо-професійна програма першого (бакалаврського) рівня вищої освіти.',
+                'start_date' => '2025-09-01',
+                'end_date' => '2029-06-30',
+                'specialty_id' => Specialty::inRandomOrder()->first()?->id,
+                'degree_id' => Degree::inRandomOrder()->first()?->id,
+                'external_link' => 'https://osvita.kpi.ua/sites/default/files/oop/f2_oppb_pki_2025.pdf',
+            ],
+            [
+                'image' => null,
+                'is_published' => true,
+                'slug' => Str::uuid(),
+                'name' => 'Інженерія програмного забезпечення',
+                'description' => 'Освітньо-наукова програма третього (освітньо-наукового) рівня вищої освіти.',
+                'start_date' => '2026-09-01',
+                'end_date' => '2030-06-30',
+                'specialty_id' => Specialty::inRandomOrder()->first()?->id,
+                'degree_id' => Degree::inRandomOrder()->first()?->id,
+                'external_link' => 'https://osvita.kpi.ua/sites/default/files/oop/f2_oppb_pki_2025.pdf',
+            ],
+            [
+                'image' => null,
+                'is_published' => true,
+                'slug' => Str::uuid(),
+                'name' => 'Інженерія програмного забезпечення',
+                'description' => 'Освітньо-наукова програма третього (освітньо-наукового) рівня вищої освіти.',
+                'start_date' => '2025-09-01',
+                'end_date' => '2029-06-30',
+                'specialty_id' => Specialty::inRandomOrder()->first()?->id,
+                'degree_id' => Degree::inRandomOrder()->first()?->id,
+                'external_link' => 'https://osvita.kpi.ua/sites/default/files/oop/f2_onpd_ipz_2025.pdf',
+            ],
+        ];
 
-        $finalSpecialtyId = $specialtyId ?? Specialty::inRandomOrder()->first()?->id;
-        $finalDegreeId = $degreeId ?? Degree::inRandomOrder()->first()?->id;
+        foreach ($programs as $program) {
+            Program::create($program);
+        }
 
-        return Program::updateOrCreate([
-            'name' => $name,
-            'slug' => Str::slug($name).'-'.rand(100, 999),
-            'description' => $description,
-            'image' => null, // 'images/programs/default.jpg',
-            'is_published' => true,
-            'sort_order' => 0,
-            'start_date' => $startDate ?? now()->format('Y-m-d'),
-            'end_date' => $endDate ?? now()->addYears(4)->format('Y-m-d'),
-            'specialty_id' => $finalSpecialtyId,
-            'degree_id' => $finalDegreeId,
-            'external_link' => $external_link,
-        ]);
+    }
+
+    private function seedDiscipline(): void
+    {
+        // Створення дисциплін
+        $disciplines = [
+            [
+                'name' => 'Програмна інженерія',
+                'description' => 'Тест1',
+                'program_id' => Program::inRandomOrder()->first()?->id,
+                'credits' => rand(1, 5),
+                'hours' => rand(1, 120),
+                'mode_of_study_id' => ModeofStudy::inRandomOrder()->first()?->id,
+                'semester_id' => Semester::inRandomOrder()->first()?->id,
+                'year_of_study_id' => YearOfStudy::inRandomOrder()->first()?->id,
+                'start_date' => '2025-09-01',
+                'end_date' => '2029-06-30',
+            ],
+            [
+                'name' => 'Штучний інтелект',
+                'description' => 'Тест2',
+                'program_id' => Program::inRandomOrder()->first()?->id,
+                'credits' => rand(1, 5),
+                'hours' => rand(1, 120),
+                'mode_of_study_id' => ModeofStudy::inRandomOrder()->first()?->id,
+                'semester_id' => Semester::inRandomOrder()->first()?->id,
+                'year_of_study_id' => YearOfStudy::inRandomOrder()->first()?->id,
+                'start_date' => '2025-09-01',
+                'end_date' => '2029-06-30',
+            ],
+            [
+                'name' => 'Алгоритми та структури даних',
+                'description' => 'Тест3',
+                'program_id' => Program::inRandomOrder()->first()?->id,
+                'credits' => rand(1, 5),
+                'hours' => rand(1, 120),
+                'mode_of_study_id' => ModeofStudy::inRandomOrder()->first()?->id,
+                'semester_id' => Semester::inRandomOrder()->first()?->id,
+                'year_of_study_id' => YearOfStudy::inRandomOrder()->first()?->id,
+                'start_date' => '2025-09-01',
+                'end_date' => '2029-06-30',
+            ],
+            [
+                'name' => 'Веб-технології та вебдизайн',
+                'description' => 'Тест3',
+                'program_id' => Program::inRandomOrder()->first()?->id,
+                'credits' => rand(1, 5),
+                'hours' => rand(1, 120),
+                'mode_of_study_id' => ModeofStudy::inRandomOrder()->first()?->id,
+                'semester_id' => Semester::inRandomOrder()->first()?->id,
+                'year_of_study_id' => YearOfStudy::inRandomOrder()->first()?->id,
+                'start_date' => '2025-09-01',
+                'end_date' => '2029-06-30',
+            ],
+            [
+                'name' => 'Кібербезпека',
+                'description' => 'Тест3',
+                'program_id' => Program::inRandomOrder()->first()?->id,
+                'credits' => rand(1, 5),
+                'hours' => rand(1, 120),
+                'mode_of_study_id' => ModeofStudy::inRandomOrder()->first()?->id,
+                'semester_id' => Semester::inRandomOrder()->first()?->id,
+                'year_of_study_id' => YearOfStudy::inRandomOrder()->first()?->id,
+                'start_date' => '2025-09-01',
+                'end_date' => '2029-06-30',
+            ],
+        ];
+
+        foreach ($disciplines as $discipline) {
+            Discipline::create($discipline);
+        }
+
+    }
+
+    private function seedStaff(): void
+    {
+        // Cписок викладачів з дисциплінами та досягненнями
+        $staffMembers = [
+            [
+                'data' => [
+                    'last_name' => 'Петренко',
+                    'first_name' => 'Іван',
+                    'patronymic' => 'Іванович',
+                    'degree_id' => StaffDegree::inRandomOrder()->first()?->id,
+                    'academic_rank_id' => StaffAcademicRank::inRandomOrder()->first()?->id,
+                    'position_id' => StaffPosition::inRandomOrder()->first()?->id,
+                    'bio' => 'Досвідчений викладач та дослідник у галузі штучного інтелекту, системного аналізу та розподілених обчислень.',
+                    'scopus_url' => 'https://scopus.com',
+                    'orcid_url' => 'https://orcid.org',
+                    'scholar_url' => 'https://scholar.google.com',
+                    'intellect_url' => 'https://intellect.kpi.ua',
+                ],
+                'disciplines' => [Discipline::inRandomOrder()->first()?->id],
+                'achievements' => [
+                    ['year' => 2025, 'achievement_description' => 'Отримання премії за найкращу монографію у сфері штучного інтелекту.'],
+                    ['year' => 2022, 'achievement_description' => 'Призначення на посаду завідувача кафедри програмної інженерії.'],
+                    ['year' => 2018, 'achievement_description' => 'успішний захист докторської дисертації.'],
+                ],
+            ],
+            [
+                'data' => [
+                    'last_name' => 'Коваленко',
+                    'first_name' => 'Олена',
+                    'patronymic' => 'Петрівна',
+                    'degree_id' => StaffDegree::inRandomOrder()->first()?->id,
+                    'academic_rank_id' => StaffAcademicRank::inRandomOrder()->first()?->id,
+                    'position_id' => StaffPosition::inRandomOrder()->first()?->id,
+                    'bio' => 'Спеціаліст з вебтехнологій, архітектури сучасних додатків та баз даних високого навантаження.',
+                    'scopus_url' => 'https://scopus.com',
+                    'orcid_url' => 'https://orcid.org',
+                ],
+                'disciplines' => [Discipline::inRandomOrder()->first()?->id],
+                'achievements' => [
+                    ['year' => 2024, 'achievement_description' => 'Випуск оновленого електронного підручника з вебдизайну.'],
+                    ['year' => 2020, 'achievement_description' => 'Отримання вченого звання доцента.'],
+                ],
+            ],
+            [
+                'data' => [
+                    'last_name' => 'Шевченко',
+                    'first_name' => 'Андрій',
+                    'patronymic' => 'Миколайович',
+                    'degree_id' => StaffDegree::inRandomOrder()->first()?->id,
+                    'academic_rank_id' => StaffAcademicRank::inRandomOrder()->first()?->id,
+                    'position_id' => StaffPosition::inRandomOrder()->first()?->id,
+                    'bio' => 'Дослідник у сфері кібербезпеки, криптографії та захисту інформаційних систем.',
+                    'scholar_url' => 'https://scholar.google.com',
+                    'intellect_url' => 'https://intellect.kpi.ua',
+                ],
+                'disciplines' => [Discipline::inRandomOrder()->first()?->id],
+                'achievements' => [
+                    ['year' => 2025, 'achievement_description' => 'Успішний захист дисертації доктора філософії (PhD).'],
+                    ['year' => 2021, 'achievement_description' => 'Перемога у конкурсі молодих науковців із кібербезпеки.'],
+                ],
+            ],
+        ];
+
+        // Заповнення таблиці викладачів та прив'язка пов'язаних таблиць
+        foreach ($staffMembers as $item) {
+            $staff = Staff::updateOrCreate(
+                ['last_name' => $item['data']['last_name'], 'first_name' => $item['data']['first_name']],
+                $item['data']
+            );
+
+            // Прив'язка дисциплін (багато-до-багатьох)
+            $staff->disciplines()->sync($item['disciplines']);
+
+            // Додавання хронології подій (досягнень)
+            foreach ($item['achievements'] as $ach) {
+                StaffAchievement::updateOrCreate(
+                    [
+                        'staff_id' => $staff->id,
+                        'year' => $ach['year'],
+                        'achievement_description' => $ach['achievement_description'],
+                    ]
+                );
+            }
+        }
+
     }
 }

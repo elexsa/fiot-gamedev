@@ -18,15 +18,12 @@ class ProgramResource extends Resource
 {
     protected static ?string $model = Program::class;
 
-    // Іконка в бічному меню (академічна шапка)
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-academic-cap';
 
-    // Локалізація назви на самих сторінках (заголовки, кнопки "Створити...")
     protected static ?string $pluralModelLabel = 'Освітні програми';
 
     protected static ?string $modelLabel = 'Освітня програма';
 
-    // Групування ресурсів у категорію в бічній панелі
     protected static string|UnitEnum|null $navigationGroup = 'Освіта';
 
     public static function form(Schema $schema): Schema

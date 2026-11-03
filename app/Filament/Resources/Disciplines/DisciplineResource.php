@@ -9,7 +9,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -21,12 +21,19 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class DisciplineResource extends Resource
 {
     protected static ?string $model = Discipline::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::AcademicCap;
+
+    protected static ?string $pluralModelLabel = 'Дисципліни';
+
+    protected static ?string $modelLabel = 'Дисципліна';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Освіта';
 
     public static function form(Schema $schema): Schema
     {
@@ -35,19 +42,50 @@ class DisciplineResource extends Resource
                 Select::make('program_id')
                     ->label('Освітня програма')
                     ->relationship('program', 'name')
-                    ->searchable(),
+                    ->searchable()
+                    ->preload()
+                    ->placeholder('Оберіть освітню програму')
+                    ->required(),
+
+                // Поле вибору форми навчання
+                Select::make('mode_of_study_id')
+                    ->label('Форма навчання')
+                    ->relationship('modeOfStudy', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->placeholder('Оберіть форму навчання')
+                    ->required(),
+
+                // Поле вибору семестру
+                Select::make('semester_id')
+                    ->label('Семестр')
+                    ->relationship('semester', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->placeholder('Оберіть семестр')
+                    ->required(),
+
+                // Поле вибору курсу навчання
+                Select::make('year_of_study_id')
+                    ->label('Курс навчання')
+                    ->relationship('yearOfStudy', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->placeholder('Оберіть курс')
+                    ->required(),
+
+                DatePicker::make('start_date')
+                    ->label('Дата початку')
+                    ->required(),
+                DatePicker::make('end_date')
+                    ->label('Дата завершення')
+                    ->required(),
                 TextInput::make('name')
                     ->label('Назва дисципліни')
                     ->required(),
                 Textarea::make('description')
                     ->label('Опис')
                     ->columnSpanFull(),
-                TextInput::make('category')
-                    ->label('Категорія')
-                    ->placeholder('Математика, Рендер, Ядро GameDev...'),
-                TextInput::make('cycle')
-                    ->label('Цикл підготовки')
-                    ->placeholder('Цикл загальної / професійної підготовки'),
                 TextInput::make('credits')
                     ->label('Кредити ЄКТС')
                     ->numeric()
@@ -56,53 +94,21 @@ class DisciplineResource extends Resource
                     ->label('Години')
                     ->numeric()
                     ->minValue(0),
-                Select::make('level')
-                    ->label('Рівень (Skill Tree)')
-                    ->options([1 => 'Рівень 1 — Фундамент', 2 => 'Рівень 2 — Ядро логіки', 3 => 'Рівень 3 — Ігрові системи', 4 => 'Рівень 4 — Майстерність'])
-                    ->default(1)
-                    ->required(),
-                Select::make('semester')
-                    ->label('Семестр')
-                    ->options([1 => '1 семестр', 2 => '2 семестр', 3 => '3 семестр', 4 => '4 семестр', 5 => '5 семестр', 6 => '6 семестр', 7 => '7 семестр', 8 => '8 семестр']),
-                Select::make('course')
-                    ->label('Курс')
-                    ->options([1 => '1 курс', 2 => '2 курс', 3 => '3 курс', 4 => '4 курс']),
-                TextInput::make('teacher')
-                    ->label('Викладач'),
-                Select::make('study_form')
-                    ->label('Форма навчання')
-                    ->options(['Очна (денна)' => 'Очна (денна)', 'Очна (вечірня)' => 'Очна (вечірня)', 'Дистанційна' => 'Дистанційна', 'Заочна' => 'Заочна']),
-                TextInput::make('academic_year')
-                    ->label('Навчальний рік')
-                    ->placeholder('2026/2027'),
-                Select::make('education_level')
-                    ->label('Освітній рівень')
-                    ->options(['Бакалавр' => 'Бакалавр', 'Магістр' => 'Магістр', 'Доктор філософії' => 'Доктор філософії']),
-                CheckboxList::make('prerequisites')
-                    ->label('Передумови (зв\'язки на дереві)')
-                    ->options(fn ($record) => Discipline::where('id', '!=', $record?->id)->orderBy('level')->orderBy('name')->pluck('name', 'id')->all())
-                    ->searchable()
-                    ->columnSpanFull(),
-                Toggle::make('is_boss')
-                    ->label('Бос-дисципліна (фінальна)'),
                 Toggle::make('is_elective')
                     ->label('Вибіркова дисципліна'),
-                FileUpload::make('syllabus_file')
-                    ->label('Силабус (PDF)')
+                FileUpload::make('syllabus_url')
+                    ->label('Файл силабусу')
                     ->directory('syllabus')
                     ->disk('public')
-                    ->acceptedFileTypes(['application/pdf'])
+                    ->acceptedFileTypes([
+                        'application/pdf',
+                        'application/msword', // .doc
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+                    ])
                     ->maxSize(10240)
+                    ->openable()      // Додає кнопку для відкриття/перегляду файлу у новій вкладці
+                    ->downloadable()  // Додає кнопку для завантаження файлу
                     ->columnSpanFull(),
-                TextInput::make('syllabus_url')
-                    ->label('Або посилання на силабус')
-                    ->url()
-                    ->columnSpanFull(),
-                FileUpload::make('image')
-                    ->label('Зображення')
-                    ->image()
-                    ->directory('disciplines')
-                    ->disk('public'),
                 Toggle::make('is_published')
                     ->label('Опубліковано')
                     ->default(true),
@@ -117,37 +123,72 @@ class DisciplineResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('id')
+                    ->label('Id дисципліни')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('name')
-                    ->label('Назва')
+                    ->label('Назва дисципліни')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('description')
+                    ->label('Опис дисципліни')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('start_date')
+                    ->label('Дата початку')
+                    ->date('d.m.Y')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('end_date')
+                    ->label('Дата завершення')
+                    ->date('d.m.Y')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('program.name')
-                    ->label('Програма')
+                    ->label('Освітня програма')
+                    ->searchable()
+                    ->sortable()
                     ->placeholder('—'),
-                TextColumn::make('category')
-                    ->label('Категорія')
-                    ->badge(),
-                TextColumn::make('cycle')
-                    ->label('Цикл')
-                    ->placeholder('—')
-                    ->toggleable(),
+                TextColumn::make('modeOfStudy.name')
+                    ->label('Форма навчання')
+                    ->searchable()
+                    ->sortable()
+                    ->placeholder('—'),
+                TextColumn::make('semester.name')
+                    ->label('Семестр')
+                    ->searchable()
+                    ->sortable()
+                    ->placeholder('—'),
+                TextColumn::make('yearOfStudy.name')
+                    ->label('Курс навчання')
+                    ->searchable()
+                    ->sortable()
+                    ->placeholder('—'),
                 TextColumn::make('credits')
                     ->label('Кредити')
-                    ->placeholder('—')
-                    ->toggleable(),
-                TextColumn::make('teacher')
-                    ->label('Викладач')
-                    ->placeholder('—')
-                    ->toggleable(),
-                TextColumn::make('level')
-                    ->label('Рівень')
-                    ->badge(),
-                IconColumn::make('is_boss')
-                    ->label('Бос')
-                    ->boolean(),
+                    ->placeholder('—'),
+                TextColumn::make('hours')
+                    ->label('Години')
+                    ->placeholder('—'),
                 IconColumn::make('is_published')
                     ->label('Опубліковано')
                     ->boolean(),
+                IconColumn::make('is_elective')
+                    ->label('Вибіркова дисципліна')
+                    ->boolean(),
+                TextColumn::make('created_at')
+                    ->label('Дата створення')
+                    ->dateTime('d.m.Y H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->label('Дата оновлення')
+                    ->dateTime('d.m.Y H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('sort_order')
+                    ->label('Порядок'),
             ])
             ->filters([
                 //

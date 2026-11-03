@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Degree;
-use App\Models\Faculty;
 use App\Models\News;
 use App\Models\Partner;
 use App\Models\Program;
@@ -19,13 +18,6 @@ class PageController extends Controller
                 ->orderBy('published_at', 'desc')
                 ->take(3)
                 ->get(),
-        ]);
-    }
-
-    public function about(): View
-    {
-        return view('about', [
-            'faculty' => Faculty::published()->orderBy('sort_order')->get(),
         ]);
     }
 
@@ -105,10 +97,5 @@ class PageController extends Controller
             'calculator' => SiteSetting::get('admission.calculator', []),
             'programs' => Program::published()->orderBy('sort_order')->get(),
         ]);
-    }
-
-    public function contacts(): View
-    {
-        return view('contacts');
     }
 }

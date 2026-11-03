@@ -11,6 +11,7 @@ use App\Models\YearOfStudy;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use UnitEnum;
 
@@ -18,16 +19,13 @@ class YearOfStudyResource extends Resource
 {
     protected static ?string $model = YearOfStudy::class;
 
-    // Іконка в бічному меню (академічна шапка)
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-academic-cap';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::AcademicCap;
 
-    // Локалізація назви на самих сторінках (заголовки, кнопки "Створити...")
     protected static ?string $pluralModelLabel = 'Курси навчання';
 
     protected static ?string $modelLabel = 'Курс навчання';
 
-    // Групування ресурсів у категорію в бічній панелі
-    protected static string|UnitEnum|null $navigationGroup = 'Освіта';
+    protected static string|UnitEnum|null $navigationGroup = 'Довідники';
 
     public static function form(Schema $schema): Schema
     {
