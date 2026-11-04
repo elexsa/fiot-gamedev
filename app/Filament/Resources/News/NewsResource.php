@@ -23,12 +23,19 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
+use UnitEnum;
 
 class NewsResource extends Resource
 {
     protected static ?string $model = News::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static ?string $pluralModelLabel = 'Новини';
+
+    protected static ?string $modelLabel = 'Новина';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Кафедра';
 
     public static function form(Schema $schema): Schema
     {
