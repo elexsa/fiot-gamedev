@@ -3,13 +3,14 @@
 use App\Http\Controllers\DisciplinesController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
 
 // Home page
 Route::get('/', [PageController::class, 'home'])->name('home');
 
 // About the department page
-Route::get('/about', [PageController::class, 'about'])->name('about');
+Route::get('/about', [StaffController::class, 'about'])->name('about');
 
 // Students: syllabuses (analog of syllabuses.ist.kpi.ua Index)
 Route::get('/syllabuses', [DisciplinesController::class, 'syllabuses'])->name('syllabuses');

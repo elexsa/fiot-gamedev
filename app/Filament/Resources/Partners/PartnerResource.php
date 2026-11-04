@@ -20,12 +20,19 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class PartnerResource extends Resource
 {
     protected static ?string $model = Partner::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static ?string $pluralModelLabel = 'Партнери';
+
+    protected static ?string $modelLabel = 'Партнер';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Кафедра';
 
     public static function form(Schema $schema): Schema
     {
