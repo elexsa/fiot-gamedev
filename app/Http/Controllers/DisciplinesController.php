@@ -45,8 +45,15 @@ class DisciplinesController extends Controller
 
     public function syllabuses(Request $request): View
     {
-
         $query = Discipline::published()->with(['program.degree', 'yearOfStudy', 'semester', 'modeOfStudy', 'staff']);
+
+        $perPageOptions = [5, 10, 15, 25];
+        $defaultPerPage = 5;
+
+        $perPage = (int) $request->query('per_page', $defaultPerPage);
+        if (! in_array($perPage, $perPageOptions)) {
+            $perPage = $defaultPerPage;
+        }
 
         // Фільтри
         $filters = [
@@ -58,16 +65,29 @@ class DisciplinesController extends Controller
             'mode_of_study_id' => $request->query('mode_of_study_id'),
             'academic_year' => $request->query('academic_year'),
             'syllabus_id' => $request->query('syllabus_id'),
+            'per_page' => $perPage,
         ];
 
+        // Виправлений пошук (пошук по кожному слову окремо для назви та викладачів)
         if ($filters['q'] !== '') {
-            $query->where(function ($q) use ($filters) {
-                $q->where('name', 'like', "%{$filters['q']}%")
-                    ->orWhereHas('staff', function ($staffQuery) use ($filters) {
-                        $staffQuery->where('last_name', 'like', "%{$filters['q']}%")
-                            ->orWhere('first_name', 'like', "%{$filters['q']}%")
-                            ->orWhere('patronymic', 'like', "%{$filters['q']}%");
+            $searchTerms = explode(' ', $filters['q']);
+
+            $query->where(function ($q) use ($searchTerms) {
+                foreach ($searchTerms as $term) {
+                    $term = trim($term);
+                    if ($term === '') {
+                        continue;
+                    }
+
+                    $q->where(function ($subQ) use ($term) {
+                        $subQ->where('name', 'like', "%{$term}%")
+                            ->orWhereHas('staff', function ($staffQuery) use ($term) {
+                                $staffQuery->where('last_name', 'like', "%{$term}%")
+                                    ->orWhere('first_name', 'like', "%{$term}%")
+                                    ->orWhere('patronymic', 'like', "%{$term}%");
+                            });
                     });
+                }
             });
         }
 
@@ -95,12 +115,17 @@ class DisciplinesController extends Controller
             });
         }
 
-        $disciplines = $query->orderBy('start_date', 'desc')->orderBy('end_date', 'desc')->orderBy('name')->get();
+        $disciplines = $query->orderBy('start_date', 'desc')
+            ->orderBy('end_date', 'desc')
+            ->orderBy('name')
+            ->paginate($perPage)
+            ->withQueryString();
 
         return view('syllabuses', [
             'filters' => $filters,
             'disciplines' => $disciplines,
-            'found' => $disciplines->count(),
+            'found' => $disciplines->total(),
+            'perPageOptions' => $perPageOptions,
             'programs' => Program::published()->distinct()->orderBy('academic_year', 'desc')
                 ->select(['id', 'name', 'academic_year'])->get(),
             'yearsOfStudy' => YearOfStudy::select(['id', 'name'])->get(),

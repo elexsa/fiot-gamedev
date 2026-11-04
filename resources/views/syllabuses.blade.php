@@ -8,15 +8,21 @@
 <x-ui.page>
     <x-ui.page-header title="Силабуси" subtitle="Каталог освітніх дисциплін та силабусів." />
 
-    <!-- Фільтри -->
-    <form method="GET" action="{{ route('syllabuses') }}" class="bg-fiot-dark/40 border border-white/10 rounded-2xl p-4 sm:p-5 md:p-6 mb-6 shadow-xl backdrop-blur-md">
+    <!-- Фільтри з Alpine.js для збереження скролу при сабміті -->
+    <form id="filters-form" method="GET" action="{{ route('syllabuses') }}" 
+          x-data="{
+              saveScroll() {
+                  sessionStorage.setItem('scrollPosition', window.scrollY);
+              }
+          }"
+          @submit="saveScroll()"
+          class="bg-fiot-dark/40 border border-white/10 rounded-2xl p-4 sm:p-5 md:p-6 mb-6 shadow-xl backdrop-blur-md">
 
-        <!-- Зберігаємо syllabus_id, якщо він переданий в URL -->
         @if(request()->has('syllabus_id'))
         <input type="hidden" name="syllabus_id" value="{{ request('syllabus_id') }}">
         @endif
 
-        <!-- Пошуковий рядок на повну ширину -->
+        <!-- Пошуковий рядок -->
         <div class="mb-4">
             <label class="flex flex-col gap-2 text-sm">
                 <span class="text-fiot-gray uppercase tracking-widest text-[11px] font-bold">Пошук дисципліни або викладача</span>
@@ -98,18 +104,37 @@
 
         <!-- Дії форми -->
         <div class="flex flex-col sm:flex-row items-center justify-end gap-3 pt-4 border-t border-white/5">
-            <a href="{{ route('syllabuses') }}" class="btn btn-outline btn-md w-full sm:w-auto text-center">Скинути</a>
+            <a href="{{ route('syllabuses') }}" @click="sessionStorage.setItem('scrollPosition', window.scrollY)" class="btn btn-outline btn-md w-full sm:w-auto text-center">Скинути</a>
             <button type="submit" class="btn btn-primary btn-md w-full sm:w-auto text-center">Застосувати</button>
         </div>
     </form>
 
-    <!-- Лічильник результатів -->
-    <div class="flex items-center justify-between mb-4 px-1">
-        <p class="text-sm text-fiot-gray">Знайдено дисциплін: <span class="text-white font-bold">{{ $found }}</span></p>
+    <!-- Інформація про сторінки та вибір кількості елементів -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 px-1">
+        <div class="text-sm text-fiot-gray">
+            @if ($disciplines->total() > 0)
+                Показано з <span class="text-white font-bold">{{ $disciplines->firstItem() }}</span> 
+                по <span class="text-white font-bold">{{ $disciplines->lastItem() }}</span> 
+                із <span class="text-white font-bold">{{ $disciplines->total() }}</span> дисциплін
+            @else
+                Знайдено дисциплін: <span class="text-white font-bold">0</span>
+            @endif
+        </div>
+
+        <div class="flex items-center gap-2 text-sm text-fiot-gray">
+            <span>Відображати на сторінці:</span>
+            <select name="per_page" form="filters-form" 
+                    @change="sessionStorage.setItem('scrollPosition', window.scrollY); $el.form.submit();"
+                    class="bg-[#0b0c0f] border border-white/10 rounded-lg px-3 py-1.5 text-white focus:border-fiot-accent/60 outline-none transition-colors text-xs">
+                @foreach($perPageOptions as $limit)
+                    <option value="{{ $limit }}" @selected($filters['per_page'] == $limit)>{{ $limit }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
 
     <!-- Таблиця -->
-    <div class="overflow-x-auto bg-fiot-dark/40 border border-white/10 rounded-2xl mb-20 shadow-xl">
+    <div class="overflow-x-auto bg-fiot-dark/40 border border-white/10 rounded-2xl mb-6 shadow-xl">
         <table class="w-full text-sm min-w-[800px]">
             <thead>
                 <tr class="text-left text-fiot-gray uppercase tracking-widest text-[11px] border-b border-white/10 bg-white/[0.02]">
@@ -123,14 +148,12 @@
             <tbody class="divide-y divide-white/5">
                 @forelse ($disciplines as $disc)
                 <tr class="hover:bg-white/[0.03] transition-colors group">
-                    <!-- Дисципліна (Назва -> Програма -> Бейдж "Вибіркова" знизу) -->
                     <td class="px-5 sm:px-6 py-5">
                         <div class="flex flex-col gap-1.5 items-start">
                             <div class="text-white font-bold text-base group-hover:text-fiot-accent transition-colors leading-snug">{{ $disc->name }}</div>
 
                             @if ($disc->program)
                             <div>
-                                <!-- Замінили span на анімаційний посилальний тег a -->
                                 <a href="{{ url('programs?program_id=' . $disc->program->id) }}" class="inline-block bg-white/5 hover:bg-white/10 border border-white/10 hover:border-fiot-accent/40 text-gray-300 hover:text-white px-2.5 py-1 rounded-md text-xs font-medium leading-relaxed max-w-xs sm:max-w-md whitespace-normal transition-colors">
                                     {{ $disc->program->name }}
                                 </a>
@@ -147,7 +170,6 @@
                         </div>
                     </td>
 
-                    <!-- Параметри навчання (теги з можливістю перенесення) -->
                     <td class="px-5 sm:px-6 py-5">
                         <div class="flex flex-wrap gap-1.5 items-center max-w-xs">
                             @if ($disc->yearOfStudy)
@@ -165,7 +187,6 @@
                         </div>
                     </td>
 
-                    <!-- Об'єм + Стилізовані дати періоду -->
                     <td class="px-5 sm:px-6 py-5 whitespace-nowrap">
                         <div class="text-white font-medium text-xs">
                             {{ $disc->credits ? $disc->credits . ' ЄКТС' : '—' }}
@@ -178,7 +199,6 @@
                         </div>
                     </td>
 
-                    <!-- Викладач -->
                     <td class="px-5 sm:px-6 py-5 text-gray-300 text-xs">
                         @if ($disc->staff->isNotEmpty())
                             <div class="flex flex-col gap-2">
@@ -204,7 +224,6 @@
                         @endif
                     </td>
 
-                    <!-- Кнопка силабусу -->
                     <td class="px-5 sm:px-6 py-5 text-right whitespace-nowrap">
                         @if ($disc->syllabus_url)
                         <a href="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($disc->syllabus_url) }}" target="_blank" class="inline-flex items-center gap-1.5 bg-indigo-500/10 hover:bg-indigo-600 hover:text-white text-indigo-400 px-3.5 py-2 rounded-xl transition-all duration-200 font-medium text-xs shadow-sm">
@@ -230,7 +249,7 @@
                             <h3 class="text-white font-bold text-lg">Нічого не знайдено</h3>
                             <p class="text-sm text-fiot-gray">Спробуйте змінити параметри пошуку або скинути фільтри.</p>
                             <div class="pt-2">
-                                <a href="{{ route('syllabuses') }}" class="btn btn-outline btn-sm">Скинути фільтри</a>
+                                <a href="{{ route('syllabuses') }}" @click="sessionStorage.setItem('scrollPosition', window.scrollY)" class="btn btn-outline btn-sm">Скинути фільтри</a>
                             </div>
                         </div>
                     </td>
@@ -239,5 +258,45 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Блок пагінації по центру (попередня, номери сторінок, наступна) -->
+    <div class="flex justify-center items-center mb-20">
+        {{ $disciplines->links() }}
+    </div>
 </x-ui.page>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Переклад кнопок пагінації
+        document.querySelectorAll('nav a, nav span').forEach(el => {
+            if (el.innerText.trim() === '« Previous') {
+                el.innerText = 'Попередня';
+            }
+            if (el.innerText.trim() === 'Next »') {
+                el.innerText = 'Наступна';
+            }
+        });
+
+        // 1. Відновлення позиції скролу після перезавантаження сторінки
+        const scrollPosition = sessionStorage.getItem('scrollPosition');
+        if (scrollPosition !== null) {
+            window.scrollTo({
+                top: parseInt(scrollPosition),
+                behavior: 'instant'
+            });
+            sessionStorage.removeItem('scrollPosition');
+        }
+
+        // 2. Збереження позиції скролу при кліку на пагінацію
+        const paginationContainer = document.querySelector('nav[role="navigation"]');
+        if (paginationContainer) {
+            paginationContainer.addEventListener('click', function(e) {
+                const link = e.target.closest('a');
+                if (link) {
+                    sessionStorage.setItem('scrollPosition', window.scrollY);
+                }
+            });
+        }
+    });
+</script>
 @endsection
