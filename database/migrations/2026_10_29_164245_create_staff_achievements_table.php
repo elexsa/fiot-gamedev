@@ -11,7 +11,7 @@ return new class extends Migration
         // Досягнення працівників
         Schema::create('staff_achievements', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('staff_id')->constrained('staff')->nullOnDelete();
+            $table->foreignId('staff_id')->constrained('staff')->cascadeOnDelete();
             $table->unsignedSmallInteger('year'); // Рік досягнення
             $table->text('achievement_description'); // Опис досягнення
             $table->timestamps();

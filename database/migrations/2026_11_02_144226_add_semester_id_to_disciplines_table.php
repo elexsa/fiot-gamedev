@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::table('disciplines', function (Blueprint $table) {
             $table->foreignId('semester_id')
+                ->nullable()
                 ->constrained('semesters')
                 ->nullOnDelete();
         });
