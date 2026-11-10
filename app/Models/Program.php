@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable([
     'name',
-    'slug',
     'description',
     'image',
     'is_published',

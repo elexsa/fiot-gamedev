@@ -355,7 +355,6 @@ class ContentSeeder extends Seeder
             [
                 'image' => null,
                 'is_published' => true,
-                'slug' => Str::uuid(),
                 'name' => "Програмування комп'ютерних ігор",
                 'description' => 'Освітньо-професійна програма першого (бакалаврського) рівня вищої освіти.',
                 'start_date' => '2026-09-01',
@@ -367,7 +366,6 @@ class ContentSeeder extends Seeder
             [
                 'image' => null,
                 'is_published' => true,
-                'slug' => Str::uuid(),
                 'name' => "Програмування комп'ютерних ігор",
                 'description' => 'Освітньо-професійна програма першого (бакалаврського) рівня вищої освіти.',
                 'start_date' => '2025-09-01',
@@ -379,7 +377,6 @@ class ContentSeeder extends Seeder
             [
                 'image' => null,
                 'is_published' => true,
-                'slug' => Str::uuid(),
                 'name' => 'Інженерія програмного забезпечення',
                 'description' => 'Освітньо-наукова програма третього (освітньо-наукового) рівня вищої освіти.',
                 'start_date' => '2026-09-01',
@@ -391,7 +388,6 @@ class ContentSeeder extends Seeder
             [
                 'image' => null,
                 'is_published' => true,
-                'slug' => Str::uuid(),
                 'name' => 'Інженерія програмного забезпечення',
                 'description' => 'Освітньо-наукова програма третього (освітньо-наукового) рівня вищої освіти.',
                 'start_date' => '2025-09-01',

@@ -44,7 +44,6 @@ class PageController extends Controller
                     ->select([
                         'id',
                         'name',
-                        'slug',
                         'description',
                         'start_date',
                         'end_date',

@@ -21,8 +21,6 @@ class ProgramsTable
                     ->sortable(),
                 TextColumn::make('description')
                     ->label('Опис'),
-                TextColumn::make('slug')
-                    ->label('slug'),
                 IconColumn::make('is_published')
                     ->label('Опубліковано')
                     ->boolean()
