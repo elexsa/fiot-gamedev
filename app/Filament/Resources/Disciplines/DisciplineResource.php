@@ -21,6 +21,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use UnitEnum;
 
 class DisciplineResource extends Resource
@@ -42,10 +43,10 @@ class DisciplineResource extends Resource
                 Select::make('program_id')
                     ->label('Освітня програма')
                     ->relationship('program', 'name')
+                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->name} ({$record->start_date?->format('d.m.Y')} - {$record->end_date?->format('d.m.Y')})")
                     ->searchable()
                     ->preload()
-                    ->placeholder('Оберіть освітню програму')
-                    ->required(),
+                    ->placeholder('Оберіть освітню програму'),
 
                 // Поле вибору форми навчання
                 Select::make('mode_of_study_id')
