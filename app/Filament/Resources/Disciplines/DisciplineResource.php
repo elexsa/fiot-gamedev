@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Disciplines;
 use App\Filament\Resources\Disciplines\Pages\ManageDisciplines;
 use App\Models\Discipline;
 use BackedEnum;
+use Carbon\Carbon;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -40,6 +41,61 @@ class DisciplineResource extends Resource
     {
         return $schema
             ->components([
+                // 1. Поле для вибору шаблону (працює лише при створенні)
+                Select::make('template_discipline_id')
+                    ->label('Завантажити дані з шаблону (існуючої дисципліни)')
+                    ->options(
+                        Discipline::with(['modeOfStudy', 'semester', 'yearOfStudy'])
+                            ->latest()
+                            ->get()
+                            ->mapWithKeys(function ($discipline) {
+                                // Збираємо додаткові деталі в масив і фільтруємо пусті значення
+                                $details = collect([
+                                    $discipline->yearOfStudy?->name,
+                                    $discipline->semester?->name,
+                                    $discipline->modeOfStudy?->name,
+                                    $discipline->start_date ? 'з '.$discipline->start_date->format('d.m.Y') : null,
+                                    $discipline->end_date ? 'по '.$discipline->end_date->format('d.m.Y') : null,
+                                ])->filter()->implode(', ');
+
+                                // Формуємо підсумковий текст для опції (наприклад: "Вища математика (1 курс, 1 семестр, Денна, з 01.09.2026 по 31.01.2027)")
+                                $label = $discipline->name.($details ? " ({$details})" : '');
+
+                                return [$discipline->id => $label];
+                            })
+                    )
+                    ->searchable()
+                    ->preload()
+                    ->placeholder('Оберіть дисципліну-шаблон для автоматичного заповнення')
+                    ->live()
+                    ->afterStateUpdated(function ($state, $set) {
+                        if (! $state) {
+                            return;
+                        }
+
+                        $discipline = Discipline::find($state);
+
+                        if ($discipline) {
+                            $set('program_id', $discipline->program_id);
+                            $set('mode_of_study_id', $discipline->mode_of_study_id);
+                            $set('semester_id', $discipline->semester_id);
+                            $set('year_of_study_id', $discipline->year_of_study_id);
+                            $set('start_date', $discipline->start_date ? Carbon::parse($discipline->start_date)->format('Y-m-d') : null);
+                            $set('end_date', $discipline->end_date ? Carbon::parse($discipline->end_date)->format('Y-m-d') : null);
+                            $set('name', $discipline->name.' (Копія)');
+                            $set('description', $discipline->description);
+                            $set('credits', $discipline->credits);
+                            $set('hours', $discipline->hours);
+                            $set('is_elective', $discipline->is_elective);
+                            $set('is_published', $discipline->is_published);
+                            $set('sort_order', $discipline->sort_order);
+                        }
+                    })
+                    ->dehydrated(false)
+                    ->hiddenOn('edit')
+                    ->columnSpanFull(),
+
+                // 2. Основні поля форми
                 Select::make('program_id')
                     ->label('Освітня програма')
                     ->relationship('program', 'name')
@@ -48,7 +104,6 @@ class DisciplineResource extends Resource
                     ->preload()
                     ->placeholder('Оберіть освітню програму'),
 
-                // Поле вибору форми навчання
                 Select::make('mode_of_study_id')
                     ->label('Форма навчання')
                     ->relationship('modeOfStudy', 'name')
@@ -57,7 +112,6 @@ class DisciplineResource extends Resource
                     ->placeholder('Оберіть форму навчання')
                     ->required(),
 
-                // Поле вибору семестру
                 Select::make('semester_id')
                     ->label('Семестр')
                     ->relationship('semester', 'name')
@@ -66,7 +120,6 @@ class DisciplineResource extends Resource
                     ->placeholder('Оберіть семестр')
                     ->required(),
 
-                // Поле вибору курсу навчання
                 Select::make('year_of_study_id')
                     ->label('Курс навчання')
                     ->relationship('yearOfStudy', 'name')
@@ -103,12 +156,12 @@ class DisciplineResource extends Resource
                     ->disk('public')
                     ->acceptedFileTypes([
                         'application/pdf',
-                        'application/msword', // .doc
-                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+                        'application/msword',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                     ])
                     ->maxSize(10240)
-                    ->openable()      // Додає кнопку для відкриття/перегляду файлу у новій вкладці
-                    ->downloadable()  // Додає кнопку для завантаження файлу
+                    ->openable()
+                    ->downloadable()
                     ->columnSpanFull(),
                 Toggle::make('is_published')
                     ->label('Опубліковано')

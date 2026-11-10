@@ -35,7 +35,7 @@ class DisciplinesRelationManager extends RelationManager
         $query = Discipline::query()
             ->whereNotIn('id', $this->getOwnerRecord()->disciplines()->pluck('disciplines.id'))
             // Фільтр: поточна дата в межах start_date та end_date
-            ->whereDate('start_date', '<=', Carbon::now())
+            // ->whereDate('start_date', '<=', Carbon::now())
             ->whereDate('end_date', '>=', Carbon::now());
 
         // Якщо передано пошуковий запит — додаємо умову пошуку
