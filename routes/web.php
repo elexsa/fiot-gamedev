@@ -12,6 +12,9 @@ Route::get('/', [PageController::class, 'home'])->name('home');
 // About the department page
 Route::get('/about', [StaffController::class, 'about'])->name('about');
 
+// Info about staff
+Route::get('/staff/{staff}/details', [StaffController::class, 'details'])->name('staff.details');
+
 // Students: syllabuses (analog of syllabuses.ist.kpi.ua Index)
 Route::get('/syllabuses', [DisciplinesController::class, 'syllabuses'])->name('syllabuses');
 

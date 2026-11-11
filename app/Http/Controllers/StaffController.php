@@ -3,24 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Staff;
-use App\Models\StaffAcademicRank;
-use App\Models\StaffDegree;
-use App\Models\StaffPosition;
-use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class StaffController extends Controller
 {
-    public function about(Request $request): View
-    {
-        // Варіанти кількості елементів на сторінці, що надходять від сервера
-        $perPageOptions = [3, 9, 15, 21];
-        $defaultPerPage = 9;
+    private const ALLOWED_PER_PAGE = [3, 9, 15, 21];
 
-        $perPage = (int) $request->query('per_page', $defaultPerPage);
-        if (! in_array($perPage, $perPageOptions)) {
-            $perPage = $defaultPerPage;
+    private const DEFAULT_PER_PAGE = 9;
+
+    public function about(Request $request): View|string
+    {
+        $perPage = (int) $request->query('per_page', self::DEFAULT_PER_PAGE);
+        if (! in_array($perPage, self::ALLOWED_PER_PAGE, true)) {
+            $perPage = self::DEFAULT_PER_PAGE;
         }
 
         $filters = [
@@ -28,87 +25,41 @@ class StaffController extends Controller
             'per_page' => $perPage,
         ];
 
-        $query = Staff::with([
-            'achievements' => fn ($query) => $query->orderBy('year', 'desc'),
-            'degree',
-            'academicRank',
-            'position',
-            'disciplines' => fn ($query) => $query
-                ->whereDate('start_date', '<=', Carbon::now())
-                ->whereDate('end_date', '>=', Carbon::now()),
-        ])
-            ->leftJoin('staff_positions', 'staff.position_id', '=', 'staff_positions.id')
-            ->leftJoin('staff_degrees', 'staff.degree_id', '=', 'staff_degrees.id')
-            ->leftJoin('staff_academic_ranks', 'staff.academic_rank_id', '=', 'staff_academic_ranks.id')
-            ->where('staff.is_published', true);
-
-        // Серверний пошук
-        if ($filters['q'] !== '') {
-            $searchTerms = explode(' ', $filters['q']);
-            $query->where(function ($q) use ($searchTerms) {
-                foreach ($searchTerms as $term) {
-                    $term = trim($term);
-                    if ($term === '') {
-                        continue;
-                    }
-
-                    $q->where(function ($subQ) use ($term) {
-                        $subQ->where('staff.first_name', 'like', "%{$term}%")
-                            ->orWhere('staff.last_name', 'like', "%{$term}%")
-                            ->orWhere('staff.patronymic', 'like', "%{$term}%")
-                            ->orWhereHas('position', fn ($posQ) => $posQ->where('name', 'like', "%{$term}%"))
-                            ->orWhereHas('degree', fn ($degQ) => $degQ->where('name', 'like', "%{$term}%"))
-                            ->orWhereHas('academicRank', fn ($rankQ) => $rankQ->where('name', 'like', "%{$term}%"))
-                            ->orWhereHas('disciplines', fn ($discQ) => $discQ->where('name', 'like', "%{$term}%"));
-                    });
-                }
-            });
-        }
-
-        $staff = $query->orderByRaw('COALESCE(staff_positions.sort_order, 999) asc')
-            ->orderBy('staff.last_name', 'asc')
-            ->orderBy('staff.first_name', 'asc')
-            ->select([
-                'staff.id',
-                'staff.first_name',
-                'staff.last_name',
-                'staff.patronymic',
-                'staff.degree_id',
-                'staff.academic_rank_id',
-                'staff.position_id',
-                'staff.avatar',
-                'staff.bio',
-                'staff.scopus_url',
-                'staff.orcid_url',
-                'staff.wos_url',
-                'staff.scholar_url',
-                'staff.intellect_url',
-                'staff.is_published',
-                'staff.created_at',
-                'staff.updated_at',
-            ])
+        // Точкова вибірка колонок для підвищення продуктивності SQL-запиту
+        $staff = Staff::query()
+            ->select(['id', 'first_name', 'last_name', 'patronymic', 'position_id', 'degree_id', 'academic_rank_id', 'avatar_url', 'is_published'])
+            ->published()
+            ->search($filters['q'])
+            ->withStaffRelations()
+            ->sortedByPositionAndName()
             ->paginate($perPage)
+            ->onEachSide(1)
             ->withQueryString();
 
-        // Обробка null значень зв'язків
-        $staff->getCollection()->transform(function ($member) {
-            if (! $member->degree || empty($member->degree->name)) {
-                $member->setRelation('degree', new StaffDegree(['name' => 'Відсутній']));
-            }
-            if (! $member->academicRank || empty($member->academicRank->name)) {
-                $member->setRelation('academicRank', new StaffAcademicRank(['name' => 'Відсутнє']));
-            }
-            if (! $member->position || empty($member->position->name)) {
-                $member->setRelation('position', new StaffPosition(['name' => 'Відсутня']));
-            }
-
-            return $member;
-        });
+        // Якщо це AJAX-запит від живого пошуку чи пагінації — віддаємо лише HTML-контент сітки
+        if ($request->ajax()) {
+            return view('partials.staff-grid-content', [
+                'staff' => $staff,
+                'filters' => $filters,
+                'perPageOptions' => self::ALLOWED_PER_PAGE,
+            ])->render();
+        }
 
         return view('about', [
             'staff' => $staff,
             'filters' => $filters,
-            'perPageOptions' => $perPageOptions, // Передаємо масив варіантів від сервера
+            'perPageOptions' => self::ALLOWED_PER_PAGE,
         ]);
+    }
+
+    public function details(Staff $staff): JsonResponse
+    {
+        if (! $staff->is_published) {
+            abort(404);
+        }
+
+        $staff->load(['achievements', 'degree', 'academicRank', 'position', 'disciplines']);
+
+        return response()->json($staff);
     }
 }
