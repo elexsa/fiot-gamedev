@@ -82,7 +82,7 @@ class DisciplineResource extends Resource
                             $set('year_of_study_id', $discipline->year_of_study_id);
                             $set('start_date', $discipline->start_date ? Carbon::parse($discipline->start_date)->format('Y-m-d') : null);
                             $set('end_date', $discipline->end_date ? Carbon::parse($discipline->end_date)->format('Y-m-d') : null);
-                            $set('name', $discipline->name.' (Копія)');
+                            $set('name', $discipline->name);
                             $set('description', $discipline->description);
                             $set('credits', $discipline->credits);
                             $set('hours', $discipline->hours);

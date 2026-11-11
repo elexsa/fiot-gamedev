@@ -122,7 +122,7 @@ class Staff extends Model
             'degree',
             'academicRank',
             'position',
-            'disciplines' => fn ($q) => $q->whereDate('disciplines.start_date', '<=', $now)
+            'disciplines' => fn ($q) => $q//->whereDate('disciplines.start_date', '<=', $now)
                 ->whereDate('disciplines.end_date', '>=', $now),
         ]);
     }
