@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Degree;
 use App\Models\News;
 use App\Models\Partner;
 use App\Models\Program;

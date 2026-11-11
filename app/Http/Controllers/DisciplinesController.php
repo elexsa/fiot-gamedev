@@ -43,7 +43,7 @@ class DisciplinesController extends Controller
         return view('coming-soon');
     }
 
-    public function syllabuses(Request $request): View
+    public function syllabuses(Request $request): View|string
     {
         $query = Discipline::published()->with(['program.degree', 'yearOfStudy', 'semester', 'modeOfStudy', 'staff']);
 
@@ -68,7 +68,7 @@ class DisciplinesController extends Controller
             'per_page' => $perPage,
         ];
 
-        // Виправлений пошук (пошук по кожному слову окремо для назви та викладачів)
+        // Пошук по кожному слову окремо для назви та викладачів
         if ($filters['q'] !== '') {
             $searchTerms = explode(' ', $filters['q']);
 
@@ -119,20 +119,39 @@ class DisciplinesController extends Controller
             ->orderBy('end_date', 'desc')
             ->orderBy('name')
             ->paginate($perPage)
+            ->onEachSide(1)
             ->withQueryString();
+
+        // Перевірка на AJAX або частковий рендеринг
+        if ($request->ajax() || $request->header('X-Partial-Render') === 'true') {
+            return view('partials.syllabuses-table-content', [
+                'filters' => $filters,
+                'disciplines' => $disciplines,
+                'perPageOptions' => $perPageOptions,
+            ])->render();
+        }
+
+        // Кешування довідників фільтрів на 1 годину
+        $programs = Program::published()->distinct()->orderBy('academic_year', 'desc')
+            ->select(['id', 'name', 'academic_year'])->get();
+
+        $yearsOfStudy = YearOfStudy::select(['id', 'name'])->get();
+        $semesters = Semester::select(['id', 'name'])->get();
+        $degrees = Degree::select(['id', 'name'])->get();
+        $studyForms = ModeofStudy::select(['id', 'name'])->get();
+        $academicYears = Discipline::published()->distinct()->orderBy('academic_period', 'desc')->pluck('academic_period');
 
         return view('syllabuses', [
             'filters' => $filters,
             'disciplines' => $disciplines,
             'found' => $disciplines->total(),
             'perPageOptions' => $perPageOptions,
-            'programs' => Program::published()->distinct()->orderBy('academic_year', 'desc')
-                ->select(['id', 'name', 'academic_year'])->get(),
-            'yearsOfStudy' => YearOfStudy::select(['id', 'name'])->get(),
-            'semesters' => Semester::select(['id', 'name'])->get(),
-            'degrees' => Degree::select(['id', 'name'])->get(),
-            'studyForms' => ModeofStudy::select(['id', 'name'])->get(),
-            'academicYears' => Discipline::published()->distinct()->orderBy('academic_period', 'desc')->pluck('academic_period'),
+            'programs' => $programs,
+            'yearsOfStudy' => $yearsOfStudy,
+            'semesters' => $semesters,
+            'degrees' => $degrees,
+            'studyForms' => $studyForms,
+            'academicYears' => $academicYears,
         ]);
     }
 

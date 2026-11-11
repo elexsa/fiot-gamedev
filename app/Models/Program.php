@@ -56,9 +56,9 @@ class Program extends Model
         // Отримуємо ступені відразу з відфільтрованими опублікованими програмами та спеціальностями
         $degrees = Degree::query()
             ->orderBy('level', 'asc')
-            ->whereHas('programs', fn($q) => $q->published())
+            ->whereHas('programs', fn ($q) => $q->published())
             ->with([
-                'programs' => fn($q) => $q->published()
+                'programs' => fn ($q) => $q->published()
                     ->with('specialty:id,specialty_name,specialty_code')
                     ->orderBy('start_date', 'desc')
                     ->orderBy('end_date', 'desc')
@@ -72,7 +72,7 @@ class Program extends Model
                         'degree_id',
                         'specialty_id',
                         'external_link',
-                    ])
+                    ]),
             ])
             ->get();
 
