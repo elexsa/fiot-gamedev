@@ -146,8 +146,13 @@ class DisciplinesController extends Controller
             ])->render();
         }
 
-        // Кешування довідників фільтрів на 1 годину
-        $programs = Program::published()->distinct()->orderBy('academic_year', 'desc')
+        // $programs = Program::published()->distinct()->orderBy('academic_year', 'desc')
+        //     ->select(['id', 'name', 'academic_year'])->get();
+
+        // Відображати всі освітні програми 
+        // Освітні програми (не кафедри) позначені як is_published = false
+        // Інші освітні програми не відображаються у розділі на сайті кафедри, але для фільтрів та таблиці дисциплін із силабусами відображаються
+        $programs = Program::query()->distinct()->orderBy('academic_year', 'desc')
             ->select(['id', 'name', 'academic_year'])->get();
 
         $yearsOfStudy = YearOfStudy::select(['id', 'name'])->get();

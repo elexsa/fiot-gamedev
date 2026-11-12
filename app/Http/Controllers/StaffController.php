@@ -58,7 +58,13 @@ class StaffController extends Controller
             abort(404);
         }
 
-        $staff->load(['achievements', 'degree', 'academicRank', 'position', 'disciplines']);
+        $staff->load([
+            'achievements' => fn($q) => $q->orderBy('year', 'desc'),
+            'degree',
+            'academicRank',
+            'position',
+            'disciplines'
+        ]);
 
         return response()->json($staff);
     }

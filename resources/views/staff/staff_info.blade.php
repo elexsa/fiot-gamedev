@@ -5,7 +5,13 @@ $initialStaff = null;
 if ($openStaffId) {
 $initialStaff = collect($staff->items())->firstWhere('id', $openStaffId);
 if (!$initialStaff) {
-$initialStaff = \App\Models\Staff::with(['achievements', 'degree', 'academicRank', 'position', 'disciplines'])
+$initialStaff = \App\Models\Staff::with([
+'achievements' => fn ($q) => $q->orderBy('year', 'desc'),
+'degree',
+'academicRank',
+'position',
+'disciplines'
+])
 ->published()
 ->find($openStaffId);
 }

@@ -44,9 +44,34 @@
 
                         @if ($disc->program)
                         <div>
-                            <a href="{{ url('programs?program_id=' . $disc->program->id) }}" class="inline-block bg-white/5 hover:bg-white/10 border border-white/10 hover:border-fiot-accent/40 text-gray-300 hover:text-white px-2.5 py-1 rounded-md text-xs font-medium leading-relaxed max-w-xs sm:max-w-md whitespace-normal transition-colors">
-                                {{ $disc->program->name }}
+                            @php
+                            $isPublished = (bool) $disc->program->is_published;
+                            $externalLink = $disc->program->external_link;
+                            // Формуємо назву програми разом із роками (навчальним періодом), як у фільтрі
+                            $programDisplayName = $disc->program->name . ($disc->program->academic_year ? ' (' . $disc->program->academic_year . ')' : '');
+                            @endphp
+
+                            @if ($isPublished)
+                            {{-- Сценарій 1: Програма опублікована (внутрішнє посилання) --}}
+                            <a href="{{ url('programs?program_id=' . $disc->program->id) }}"
+                                class="inline-block bg-white/5 hover:bg-white/10 border border-white/10 hover:border-fiot-accent/40 text-gray-300 hover:text-white px-2.5 py-1 rounded-md text-xs font-medium leading-relaxed max-w-xs sm:max-w-md whitespace-normal transition-colors">
+                                {{ $programDisplayName }}
                             </a>
+                            @elseif (filled($externalLink))
+                            {{-- Сценарій 2: Програма неопублікована, але є зовнішнє посилання --}}
+                            <a href="{{ $externalLink }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="inline-block bg-white/5 hover:bg-white/10 border border-white/10 hover:border-fiot-accent/40 text-gray-300 hover:text-white px-2.5 py-1 rounded-md text-xs font-medium leading-relaxed max-w-xs sm:max-w-md whitespace-normal transition-colors">
+                                {{ $programDisplayName }}
+                            </a>
+                            @else
+                            {{-- Сценарій 3: Програма неопублікована і немає посилання --}}
+                            <div class="inline-block bg-white/5 border border-white/10 text-gray-300 px-2.5 py-1 rounded-md text-xs font-medium leading-relaxed max-w-xs sm:max-w-md whitespace-normal">
+                                <div>{{ $programDisplayName }}</div>
+                                <span class="text-[10px] text-fiot-gray/70 italic block mt-0.5">Немає посилання на цю програму</span>
+                            </div>
+                            @endif
                         </div>
                         @endif
 
