@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'specialty_id',
     'degree_id',
     'external_link',
+    'is_external',
 ])]
 class Program extends Model
 {
@@ -28,6 +29,7 @@ class Program extends Model
             'is_published' => 'boolean',
             'start_date' => 'date',
             'end_date' => 'date',
+            'is_external' => 'boolean',
         ];
     }
 
@@ -39,6 +41,11 @@ class Program extends Model
     public function scopePublished(Builder $query): Builder
     {
         return $query->where('is_published', true);
+    }
+
+    public function scopeNotExternal(Builder $query): Builder
+    {
+        return $query->where('is_external', false);
     }
 
     public function specialty(): BelongsTo
@@ -56,9 +63,9 @@ class Program extends Model
         // Отримуємо ступені відразу з відфільтрованими опублікованими програмами та спеціальностями
         $degrees = Degree::query()
             ->orderBy('level', 'asc')
-            ->whereHas('programs', fn ($q) => $q->published())
+            ->whereHas('programs', fn ($q) => $q->published()->notExternal())
             ->with([
-                'programs' => fn ($q) => $q->published()
+                'programs' => fn ($q) => $q->published()->notExternal()
                     ->with('specialty:id,specialty_name,specialty_code')
                     ->orderBy('start_date', 'desc')
                     ->orderBy('end_date', 'desc')

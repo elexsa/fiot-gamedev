@@ -25,6 +25,9 @@ class ProgramForm
                 Toggle::make('is_published')
                     ->label('Опубліковано')
                     ->default(true),
+                Toggle::make('is_external')
+                    ->label('ОП іншої кафедри')
+                    ->default(false),
                 DatePicker::make('start_date')
                     ->label('Дата початку')
                     ->required(),

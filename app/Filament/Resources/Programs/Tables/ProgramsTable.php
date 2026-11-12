@@ -25,6 +25,10 @@ class ProgramsTable
                     ->label('Опубліковано')
                     ->boolean()
                     ->sortable(),
+                IconColumn::make('is_external')
+                    ->label('ОП іншої кафедри')
+                    ->boolean()
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Дата створення')
                     ->dateTime('d.m.Y H:i')

@@ -6,6 +6,7 @@ use App\Models\Staff;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class StaffController extends Controller
 {
@@ -58,12 +59,15 @@ class StaffController extends Controller
             abort(404);
         }
 
+        $now = Carbon::now();
+
         $staff->load([
-            'achievements' => fn($q) => $q->orderBy('year', 'desc'),
+            'achievements' => fn ($q) => $q->orderBy('year', 'desc'),
             'degree',
             'academicRank',
             'position',
-            'disciplines'
+            // 'disciplines',
+            'disciplines' => fn ($q) => $q->whereDate('end_date', '>=', $now),
         ]);
 
         return response()->json($staff);

@@ -150,7 +150,7 @@ $initialStaff = \App\Models\Staff::with([
             const discName = typeof disc === 'object' && disc !== null ? disc.name : disc;
             
             if (discName && memberId) {
-                window.location.href = `/syllabuses?discipline_name=${encodeURIComponent(discName)}&teacher_id=${encodeURIComponent(memberId)}`;
+                window.location.href = `/syllabuses?discipline_name=${encodeURIComponent(discName)}&staff_id=${encodeURIComponent(memberId)}`;
             } else if (typeof disc === 'object' && disc !== null && disc.id) {
                 // Fallback, якщо передано лише ID
                 window.location.href = `/syllabuses?syllabus_id=${encodeURIComponent(disc.id)}`;

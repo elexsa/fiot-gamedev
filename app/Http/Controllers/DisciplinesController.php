@@ -58,7 +58,7 @@ class DisciplinesController extends Controller
         // Фільтри
         $filters = [
             'q' => trim((string) $request->query('q', '')),
-            'teacher_id' => $request->query('teacher_id'),
+            'staff_id' => $request->query('staff_id'),
             'discipline_name' => trim((string) $request->query('discipline_name', '')),
             'program_id' => $request->query('program_id'),
             'year_of_study_id' => $request->query('year_of_study_id'),
@@ -117,11 +117,10 @@ class DisciplinesController extends Controller
             });
         }
 
-
         // Фільтрація за ID викладача
-        if (filled($filters['teacher_id'])) {
+        if (filled($filters['staff_id'])) {
             $query->whereHas('staff', function ($q) use ($filters) {
-                $q->where('staff.id', $filters['teacher_id']);
+                $q->where('staff.id', $filters['staff_id']);
             });
         }
 
@@ -146,13 +145,10 @@ class DisciplinesController extends Controller
             ])->render();
         }
 
-        // $programs = Program::published()->distinct()->orderBy('academic_year', 'desc')
-        //     ->select(['id', 'name', 'academic_year'])->get();
-
-        // Відображати всі освітні програми 
-        // Освітні програми (не кафедри) позначені як is_published = false
+        // Відображати всі освітні програми
+        // Освітні програми (не кафедри) позначені як is_external = true
         // Інші освітні програми не відображаються у розділі на сайті кафедри, але для фільтрів та таблиці дисциплін із силабусами відображаються
-        $programs = Program::query()->distinct()->orderBy('academic_year', 'desc')
+        $programs = Program::published()->orderBy('academic_year', 'desc')
             ->select(['id', 'name', 'academic_year'])->get();
 
         $yearsOfStudy = YearOfStudy::select(['id', 'name'])->get();
