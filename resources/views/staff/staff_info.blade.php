@@ -3,12 +3,12 @@ $openStaffId = request()->query('staff_id');
 $initialStaff = null;
 
 if ($openStaffId) {
-    $initialStaff = collect($staff->items())->firstWhere('id', $openStaffId);
-    if (!$initialStaff) {
-        $initialStaff = \App\Models\Staff::with(['achievements', 'degree', 'academicRank', 'position', 'disciplines'])
-            ->published()
-            ->find($openStaffId);
-    }
+$initialStaff = collect($staff->items())->firstWhere('id', $openStaffId);
+if (!$initialStaff) {
+$initialStaff = \App\Models\Staff::with(['achievements', 'degree', 'academicRank', 'position', 'disciplines'])
+->published()
+->find($openStaffId);
+}
 }
 @endphp
 
@@ -140,12 +140,16 @@ if ($openStaffId) {
             });
         },
 
-         goToSubject(disc) {
-             const disciplineId = typeof disc === 'object' && disc !== null ? disc.id : disc;
-             if (disciplineId) {
-                 window.location.href = `/syllabuses?syllabus_id=${encodeURIComponent(disciplineId)}`;
-             }
-         },
+         goToSubject(disc, memberId) {
+            const discName = typeof disc === 'object' && disc !== null ? disc.name : disc;
+            
+            if (discName && memberId) {
+                window.location.href = `/syllabuses?discipline_name=${encodeURIComponent(discName)}&teacher_id=${encodeURIComponent(memberId)}`;
+            } else if (typeof disc === 'object' && disc !== null && disc.id) {
+                // Fallback, якщо передано лише ID
+                window.location.href = `/syllabuses?syllabus_id=${encodeURIComponent(disc.id)}`;
+            }
+        },
 
          getSubjectColor(subjectOrDisc) {
              let id = typeof subjectOrDisc === 'object' && subjectOrDisc !== null ? (subjectOrDisc.id || subjectOrDisc.name) : subjectOrDisc;
@@ -339,8 +343,8 @@ if ($openStaffId) {
                                 Викладає дисципліни
                             </h4>
                             <div class="flex flex-wrap gap-2">
-                                <template x-for="disc in (modalData?.disciplines || [])" :key="disc.id">
-                                    <span @click="goToSubject(disc)"
+                                <template x-for="disc in (modalData?.disciplines ? Array.from(new Map(modalData.disciplines.map(d => [d.name, d])).values()) : [])" :key="disc.name">
+                                    <span @click="goToSubject(disc, modalData.id)"
                                         class="cursor-pointer text-xs border px-3 py-1.5 rounded-xl font-mono transition-transform duration-150 transform-gpu hover:scale-105 select-text inline-block"
                                         :class="getSubjectColor(disc)"
                                         x-text="disc.name"></span>

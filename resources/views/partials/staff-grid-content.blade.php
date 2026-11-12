@@ -12,11 +12,11 @@
 
     <div class="flex items-center gap-2 text-sm text-fiot-gray">
         <span>Відображати на сторінці:</span>
-        <select name="per_page" 
+        <select name="per_page"
             @change="perPage = $el.value; fetchStaff();"
             class="bg-[#0b0c0f] border border-white/10 rounded-lg px-3 py-1.5 text-white focus:border-fiot-accent/60 outline-none transition-colors text-xs cursor-pointer">
             @foreach($perPageOptions as $limit)
-            <option value="{{ $limit }}" @selected($filters['per_page'] == $limit)>{{ $limit }}</option>
+            <option value="{{ $limit }}" @selected($filters['per_page']==$limit)>{{ $limit }}</option>
             @endforeach
         </select>
     </div>
@@ -77,15 +77,16 @@
             </div>
 
             <div class="pt-3 border-t border-slate-800 flex flex-wrap gap-1.5 items-center mt-auto">
-                @foreach ($member->disciplines->take(3) as $disc)
-                <span @click.stop="goToSubject(@js($disc))"
-                    class="text-[11px] border px-2.5 py-1 rounded-lg font-mono transition-transform duration-150 transform-gpu hover:scale-105 hover:underline select-text inline-block"
+                @foreach ($member->disciplines->unique('name')->take(3) as $disc)
+                <span @click.stop="goToSubject(@js($disc), {{ $member->id }})"
+                    class="cursor-pointer text-[11px] border px-2.5 py-1 rounded-lg font-mono transition-transform duration-150 transform-gpu hover:scale-105 hover:underline select-text inline-block"
                     :class="getSubjectColor(@js($disc))">
                     {{ $disc->name }}
                 </span>
                 @endforeach
-                @if ($member->disciplines->count() > 3)
-                <span class="text-[10px] text-fiot-gray font-mono select-text">+{{ $member->disciplines->count() - 3 }}</span>
+
+                @if ($member->disciplines->unique('name')->count() > 3)
+                <span class="text-[10px] text-fiot-gray font-mono select-text">+{{ $member->disciplines->unique('name')->count() - 3 }}</span>
                 @endif
             </div>
         </div>
@@ -103,35 +104,35 @@
 <!-- БЛОК ПАГІНАЦІЇ -->
 <div class="flex justify-center items-center mt-12 mb-20">
     @if ($staff->hasPages())
-        <nav role="navigation" aria-label="Pagination Navigation" class="flex items-center justify-center">
-            <span class="relative z-0 inline-flex shadow-sm rounded-2xl gap-1.5">
-                @foreach ($staff->linkCollection() as $link)
-                    @php
-                        $label = $link['label'];
-                        if (str_contains($label, 'Previous') || str_contains($label, '«')) {
-                            $label = 'Попередня';
-                        } elseif (str_contains($label, 'Next') || str_contains($label, '»')) {
-                            $label = 'Наступна';
-                        }
-                    @endphp
+    <nav role="navigation" aria-label="Pagination Navigation" class="flex items-center justify-center">
+        <span class="relative z-0 inline-flex shadow-sm rounded-2xl gap-1.5">
+            @foreach ($staff->linkCollection() as $link)
+            @php
+            $label = $link['label'];
+            if (str_contains($label, 'Previous') || str_contains($label, '«')) {
+            $label = 'Попередня';
+            } elseif (str_contains($label, 'Next') || str_contains($label, '»')) {
+            $label = 'Наступна';
+            }
+            @endphp
 
-                    @if ($link['url'] === null)
-                        <span class="relative inline-flex items-center px-3.5 py-2.5 text-xs font-mono font-medium text-fiot-gray bg-slate-900 border border-slate-800 cursor-default rounded-xl select-none">
-                            {!! $label !!}
-                        </span>
-                    @elseif ($link['active'])
-                        <span class="relative inline-flex items-center px-3.5 py-2.5 text-xs font-mono font-bold text-fiot-white bg-fiot-primary border border-fiot-primary rounded-xl shadow-lg cursor-default select-none">
-                            {!! $label !!}
-                        </span>
-                    @else
-                        <button type="button" 
-                            @click="fetchStaff('{{ $link['url'] }}')" 
-                            class="relative inline-flex items-center px-3.5 py-2.5 text-xs font-mono font-medium text-slate-300 bg-slate-900 border border-slate-800 rounded-xl hover:bg-fiot-primary/20 hover:border-fiot-primary hover:text-fiot-white transition-colors cursor-pointer">
-                            {!! $label !!}
-                        </button>
-                    @endif
-                @endforeach
+            @if ($link['url'] === null)
+            <span class="relative inline-flex items-center px-3.5 py-2.5 text-xs font-mono font-medium text-fiot-gray bg-slate-900 border border-slate-800 cursor-default rounded-xl select-none">
+                {!! $label !!}
             </span>
-        </nav>
+            @elseif ($link['active'])
+            <span class="relative inline-flex items-center px-3.5 py-2.5 text-xs font-mono font-bold text-fiot-white bg-fiot-primary border border-fiot-primary rounded-xl shadow-lg cursor-default select-none">
+                {!! $label !!}
+            </span>
+            @else
+            <button type="button"
+                @click="fetchStaff('{{ $link['url'] }}')"
+                class="relative inline-flex items-center px-3.5 py-2.5 text-xs font-mono font-medium text-slate-300 bg-slate-900 border border-slate-800 rounded-xl hover:bg-fiot-primary/20 hover:border-fiot-primary hover:text-fiot-white transition-colors cursor-pointer">
+                {!! $label !!}
+            </button>
+            @endif
+            @endforeach
+        </span>
+    </nav>
     @endif
 </div>

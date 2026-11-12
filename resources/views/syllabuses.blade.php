@@ -14,14 +14,12 @@
             searchController: null,
 
             init() {
-                // Повна синхронізація при навігації стрілками Назад / Вперед у браузері
                 window.addEventListener('popstate', () => {
                     this.syncFormWithUrl(window.location.search);
                     this.fetchDisciplines(window.location.href, false);
                 });
             },
 
-            // Синхронізація значень форми з поточним URL
             syncFormWithUrl(searchQuery) {
                 const params = new URLSearchParams(searchQuery);
                 const form = document.getElementById('filters-form');
@@ -49,7 +47,6 @@
                     const formData = new FormData(form);
                     const params = new URLSearchParams(formData);
                     
-                    // Видаляємо пусті параметри для чистоти URL
                     for (const [key, value] of params.entries()) {
                         if (!value.trim()) {
                             params.delete(key);
@@ -59,7 +56,6 @@
                     const queryString = params.toString();
                     url = `{{ route('syllabuses') }}${queryString ? '?' + queryString : ''}`;
                 } else {
-                    // Якщо запит йде з пагінації, синхронізуємо форму з параметрами цього URL
                     const urlObj = new URL(customUrl, window.location.origin);
                     this.syncFormWithUrl(urlObj.search);
                 }
@@ -97,7 +93,7 @@
         }" 
         class="space-y-6">
 
-        <!-- Форма фільтрів -->
+        <!-- Форма фільтрів (спрацьовує лише по сабміту / кнопці Застосувати) -->
         <form id="filters-form" method="GET" action="{{ route('syllabuses') }}" 
               @submit.prevent="fetchDisciplines()"
               class="bg-fiot-dark/40 border border-white/10 rounded-2xl p-4 sm:p-5 md:p-6 shadow-xl backdrop-blur-md">
@@ -106,7 +102,7 @@
             <input type="hidden" name="syllabus_id" value="{{ request('syllabus_id') }}">
             @endif
 
-            <!-- Пошуковий рядок із debounce -->
+            <!-- Пошуковий рядок (без debounce) -->
             <div class="mb-4">
                 <label class="flex flex-col gap-2 text-sm">
                     <span class="text-fiot-gray uppercase tracking-widest text-[11px] font-bold">Пошук дисципліни або викладача</span>
@@ -117,18 +113,17 @@
                             </svg>
                         </span>
                         <input type="text" name="q" value="{{ $filters['q'] }}" 
-                               @input.debounce.300ms="fetchDisciplines()"
                                placeholder="Введіть назву дисципліни чи ПІБ викладача..." 
                                class="w-full bg-[#0b0c0f] border border-white/10 rounded-xl pl-11 pr-4 py-3 text-white placeholder:text-fiot-gray/40 focus:border-fiot-accent/60 outline-none transition-colors text-sm">
                     </div>
                 </label>
             </div>
 
-            <!-- Сітка параметрів фільтрації -->
+            <!-- Сітка параметрів фільтрації (без @change) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-5">
                 <label class="flex flex-col gap-2 text-sm">
                     <span class="text-fiot-gray uppercase tracking-widest text-[11px] font-bold">Освітня програма</span>
-                    <select name="program_id" @change="fetchDisciplines()" class="bg-[#0b0c0f] border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-fiot-accent/60 outline-none transition-colors text-sm cursor-pointer">
+                    <select name="program_id" class="bg-[#0b0c0f] border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-fiot-accent/60 outline-none transition-colors text-sm cursor-pointer">
                         <option value="">Всі програми</option>
                         @foreach ($programs as $program)
                         <option value="{{ $program->id }}" @selected((string) $filters['program_id']===(string) $program->id)>
@@ -140,7 +135,7 @@
 
                 <label class="flex flex-col gap-2 text-sm">
                     <span class="text-fiot-gray uppercase tracking-widest text-[11px] font-bold">Курс</span>
-                    <select name="year_of_study_id" @change="fetchDisciplines()" class="bg-[#0b0c0f] border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-fiot-accent/60 outline-none transition-colors text-sm cursor-pointer">
+                    <select name="year_of_study_id" class="bg-[#0b0c0f] border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-fiot-accent/60 outline-none transition-colors text-sm cursor-pointer">
                         <option value="">Всі курси</option>
                         @foreach ($yearsOfStudy as $year)
                         <option value="{{ $year->id }}" @selected((string) $filters['year_of_study_id']===(string) $year->id)>{{ $year->name }}</option>
@@ -150,7 +145,7 @@
 
                 <label class="flex flex-col gap-2 text-sm">
                     <span class="text-fiot-gray uppercase tracking-widest text-[11px] font-bold">Семестр</span>
-                    <select name="semester_id" @change="fetchDisciplines()" class="bg-[#0b0c0f] border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-fiot-accent/60 outline-none transition-colors text-sm cursor-pointer">
+                    <select name="semester_id" class="bg-[#0b0c0f] border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-fiot-accent/60 outline-none transition-colors text-sm cursor-pointer">
                         <option value="">Всі семестри</option>
                         @foreach ($semesters as $semester)
                         <option value="{{ $semester->id }}" @selected((string) $filters['semester_id']===(string) $semester->id)>{{ $semester->name }}</option>
@@ -160,7 +155,7 @@
 
                 <label class="flex flex-col gap-2 text-sm">
                     <span class="text-fiot-gray uppercase tracking-widest text-[11px] font-bold">Освітній рівень</span>
-                    <select name="degree_id" @change="fetchDisciplines()" class="bg-[#0b0c0f] border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-fiot-accent/60 outline-none transition-colors text-sm cursor-pointer">
+                    <select name="degree_id" class="bg-[#0b0c0f] border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-fiot-accent/60 outline-none transition-colors text-sm cursor-pointer">
                         <option value="">Всі рівні</option>
                         @foreach ($degrees as $degree)
                         <option value="{{ $degree->id }}" @selected((string) $filters['degree_id']===(string) $degree->id)>{{ $degree->name }}</option>
@@ -170,7 +165,7 @@
 
                 <label class="flex flex-col gap-2 text-sm">
                     <span class="text-fiot-gray uppercase tracking-widest text-[11px] font-bold">Форма навчання</span>
-                    <select name="mode_of_study_id" @change="fetchDisciplines()" class="bg-[#0b0c0f] border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-fiot-accent/60 outline-none transition-colors text-sm cursor-pointer">
+                    <select name="mode_of_study_id" class="bg-[#0b0c0f] border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-fiot-accent/60 outline-none transition-colors text-sm cursor-pointer">
                         <option value="">Всі форми</option>
                         @foreach ($studyForms as $form)
                         <option value="{{ $form->id }}" @selected((string) $filters['mode_of_study_id']===(string) $form->id)>{{ $form->name }}</option>
@@ -180,7 +175,7 @@
 
                 <label class="flex flex-col gap-2 text-sm">
                     <span class="text-fiot-gray uppercase tracking-widest text-[11px] font-bold">Навчальний період</span>
-                    <select name="academic_year" @change="fetchDisciplines()" class="bg-[#0b0c0f] border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-fiot-accent/60 outline-none transition-colors text-sm cursor-pointer">
+                    <select name="academic_year" class="bg-[#0b0c0f] border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-fiot-accent/60 outline-none transition-colors text-sm cursor-pointer">
                         <option value="">Всі періоди</option>
                         @foreach ($academicYears as $year)
                         <option value="{{ $year }}" @selected($filters['academic_year']===$year)>{{ $year }}</option>
@@ -196,7 +191,7 @@
             </div>
         </form>
 
-        <!-- Динамічний контейнер результатів таблиці та пагінації -->
+        <!-- Динамічний контейнер результатів -->
         <div id="syllabuses-results-container" class="relative transition-opacity duration-200" :class="{ 'opacity-50 pointer-events-none': isLoadingList }">
             @include('partials.syllabuses-table-content', [
                 'filters' => $filters,

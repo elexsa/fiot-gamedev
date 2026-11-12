@@ -58,6 +58,8 @@ class DisciplinesController extends Controller
         // Фільтри
         $filters = [
             'q' => trim((string) $request->query('q', '')),
+            'teacher_id' => $request->query('teacher_id'),
+            'discipline_name' => trim((string) $request->query('discipline_name', '')),
             'program_id' => $request->query('program_id'),
             'year_of_study_id' => $request->query('year_of_study_id'),
             'semester_id' => $request->query('semester_id'),
@@ -113,6 +115,19 @@ class DisciplinesController extends Controller
             $query->whereHas('program', function ($q) use ($filters) {
                 $q->where('degree_id', $filters['degree_id']);
             });
+        }
+
+
+        // Фільтрація за ID викладача
+        if (filled($filters['teacher_id'])) {
+            $query->whereHas('staff', function ($q) use ($filters) {
+                $q->where('staff.id', $filters['teacher_id']);
+            });
+        }
+
+        // Фільтрація за назвою дисципліни (частковий збіг)
+        if (filled($filters['discipline_name'])) {
+            $query->where('name', 'like', "%{$filters['discipline_name']}%");
         }
 
         $disciplines = $query->orderBy('start_date', 'desc')
