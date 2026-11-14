@@ -54,12 +54,12 @@ class DisciplineResource extends Resource
                                     $discipline->yearOfStudy?->name,
                                     $discipline->semester?->name,
                                     $discipline->modeOfStudy?->name,
-                                    $discipline->start_date ? 'з '.$discipline->start_date->format('d.m.Y') : null,
-                                    $discipline->end_date ? 'по '.$discipline->end_date->format('d.m.Y') : null,
+                                    $discipline->start_date ? 'з ' . $discipline->start_date->format('d.m.Y') : null,
+                                    $discipline->end_date ? 'по ' . $discipline->end_date->format('d.m.Y') : null,
                                 ])->filter()->implode(', ');
 
                                 // Формуємо підсумковий текст для опції (наприклад: "Вища математика (1 курс, 1 семестр, Денна, з 01.09.2026 по 31.01.2027)")
-                                $label = $discipline->name.($details ? " ({$details})" : '');
+                                $label = $discipline->name . ($details ? " ({$details})" : '');
 
                                 return [$discipline->id => $label];
                             })
@@ -99,7 +99,7 @@ class DisciplineResource extends Resource
                 Select::make('program_id')
                     ->label('Освітня програма')
                     ->relationship('program', 'name')
-                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->name} ({$record->start_date?->format('d.m.Y')} - {$record->end_date?->format('d.m.Y')})")
+                    ->getOptionLabelFromRecordUsing(fn(Model $record) => "{$record->name} ({$record->start_date?->format('d.m.Y')} - {$record->end_date?->format('d.m.Y')})")
                     ->searchable()
                     ->preload()
                     ->placeholder('Оберіть освітню програму'),
@@ -170,6 +170,41 @@ class DisciplineResource extends Resource
                     ->label('Порядок')
                     ->numeric()
                     ->default(0),
+
+                // 3. Поле попередніх дисциплін (пререквізитів)
+                Select::make('prerequisites')
+                    ->label('Попередні дисципліни (пререквізити). Встановлюється денна форма предмету для діаграми освітньої програми.')
+                    // Поле видиме лише якщо обрана форма навчання з id = 1 (Денна)
+                    ->visible(fn($get, ?Model $record) => (int) ($record?->mode_of_study_id ?? $get('mode_of_study_id')) === 1)
+                    ->relationship(
+                        'prerequisites',
+                        'name',
+                        fn($query, ?Model $record, $get) => $query
+                            // Виключаємо поточну дисципліну при редагуванні
+                            ->when($record, fn($q) => $q->where('disciplines.id', '!=', $record->id))
+                            // Тільки денна форма навчання (id = 1)
+                            ->where('mode_of_study_id', 1)
+                            // Фільтрація за програмою (з поточного запису або з форми)
+                            ->when(
+                                $programId = ($record?->program_id ?? $get('program_id')),
+                                fn($q, $programId) => $q->where('program_id', $programId),
+                                fn($q) => $q->whereRaw('1 = 0') // Якщо програма не обрана — список пустий
+                            )
+                    )
+                    ->getOptionLabelFromRecordUsing(
+                        fn(Model $record) =>
+                        "{$record->name} [ID: {$record->id}, ({$record->start_date->toDateString()}, {$record->end_date->toDateString()})]"
+                            . ($record->yearOfStudy ? " ({$record->yearOfStudy->name})" : '')
+                            . ($record->semester ? " ({$record->semester->name})" : '')
+                            . ($record->modeOfStudy ? " ({$record->modeOfStudy->name})" : '')
+                            . ($record->program ? " ({$record->program->name}, {$record->program->start_date->toDateString()} - {$record->program->end_date->toDateString()})" : '')
+                    )
+                    ->multiple()
+                    ->searchable()
+                    ->preload()
+                    ->placeholder('Оберіть попередні дисципліни')
+                    ->helperText('Доступно лише для денної форми навчання у межах однієї освітньої програми.')
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -231,6 +266,13 @@ class DisciplineResource extends Resource
                 IconColumn::make('is_elective')
                     ->label('Вибіркова дисципліна')
                     ->boolean(),
+                TextColumn::make('prerequisites.name')
+                    ->label('Пререквізити')
+                    ->badge()
+                    ->color('success')
+                    ->separator(', ')
+                    ->searchable()
+                    ->placeholder('—'),
                 TextColumn::make('created_at')
                     ->label('Дата створення')
                     ->dateTime('d.m.Y H:i')
@@ -245,7 +287,16 @@ class DisciplineResource extends Resource
                     ->label('Порядок'),
             ])
             ->filters([
-                //
+                \Filament\Tables\Filters\SelectFilter::make('program_id')
+                    ->label('Освітня програма')
+                    ->relationship('program', 'name')
+                    ->searchable()
+                    ->preload(),
+
+                \Filament\Tables\Filters\SelectFilter::make('year_of_study_id')
+                    ->label('Курс навчання')
+                    ->relationship('yearOfStudy', 'name')
+                    ->preload(),
             ])
             ->recordActions([
                 EditAction::make(),

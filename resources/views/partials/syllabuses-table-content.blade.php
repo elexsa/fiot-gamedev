@@ -84,6 +84,13 @@
                             </span>
                         </div>
                         @endif
+                        @if ($program->is_external)
+                        <div class="mt-0.5">
+                            <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-0.5 rounded-full text-[10px] uppercase font-semibold tracking-wider inline-block">
+                                Інша освітня програма
+                            </span>
+                        </div>
+                        @endif
                     </div>
                 </td>
 
@@ -142,16 +149,41 @@
                 </td>
 
                 <td class="px-5 sm:px-6 py-5 text-right whitespace-nowrap">
-                    @if ($disc->syllabus_url)
-                    <a href="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($disc->syllabus_url) }}" target="_blank" class="inline-flex items-center gap-1.5 bg-indigo-500/10 hover:bg-indigo-600 hover:text-white text-indigo-400 px-3.5 py-2 rounded-xl transition-all duration-200 font-medium text-xs shadow-sm">
-                        <span>Силабус</span>
-                        <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                        </svg>
-                    </a>
-                    @else
-                    <span class="text-fiot-gray/40">—</span>
-                    @endif
+                    <div class="inline-flex items-center gap-2">
+                        <!-- Сучасна кнопка копіювання з локальним станом copied -->
+                        <div x-data="{ copied: false }" class="inline-flex items-center">
+                            <button type="button"
+                                @click="
+                                    navigator.clipboard.writeText('{{ route('syllabuses', ['syllabus_id' => $disc->id]) }}');
+                                    copied = true;
+                                    setTimeout(() => copied = false, 2000);
+                                    $dispatch('toast', { message: 'Посилання на дисципліну (силабус) успішно скопійовано!' });
+                                "
+                                class="inline-flex items-center justify-center p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white border border-white/10 hover:border-fiot-accent/40 transition-all duration-200 shadow-sm cursor-pointer group relative"
+                                :class="{ 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400': copied }"
+                                title="Скопіювати посилання на дисципліну (силабус)">
+                                <!-- Іконка скрепки -->
+                                <svg x-show="!copied" class="w-4 h-4 transition-transform group-hover:scale-110" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32" />
+                                </svg>
+                                <!-- Іконка успіху (зелена галочка) -->
+                                <svg x-show="copied" x-cloak class="w-4 h-4 text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        @if ($disc->syllabus_url)
+                        <a href="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($disc->syllabus_url) }}" target="_blank" class="inline-flex items-center gap-1.5 bg-indigo-500/10 hover:bg-indigo-600 hover:text-white text-indigo-400 px-3.5 py-2 rounded-xl transition-all duration-200 font-medium text-xs shadow-sm">
+                            <span>Силабус</span>
+                            <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                            </svg>
+                        </a>
+                        @else
+                        <span class="text-fiot-gray/40">—</span>
+                        @endif
+                    </div>
                 </td>
             </tr>
             @empty

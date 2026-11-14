@@ -21,9 +21,6 @@ Route::get('/syllabuses', [DisciplinesController::class, 'syllabuses'])->name('s
 // Students: disciplines diagram (analog of syllabuses.ist.kpi.ua Diagram)
 Route::get('/syllabuses/diagram', [DisciplinesController::class, 'diagram'])->name('syllabuses.diagram');
 
-// Disciplines page (Skill Tree)
-Route::get('/disciplines', [DisciplinesController::class, 'index'])->name('disciplines');
-
 // Admission page
 Route::get('/admission', [PageController::class, 'admission'])->name('admission');
 

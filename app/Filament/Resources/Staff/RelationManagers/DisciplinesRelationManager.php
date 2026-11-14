@@ -30,25 +30,42 @@ class DisciplinesRelationManager extends RelationManager
         return 'дисципліни';
     }
 
-    protected function getAvailableDisciplinesQuery(?string $search = null)
+    protected function getAvailableDisciplinesForAttach(?string $search, AttachAction $action): array
     {
-        $query = Discipline::query()
-            ->whereNotIn('id', $this->getOwnerRecord()->disciplines()->pluck('disciplines.id'))
-            // Фільтр: поточна дата в межах start_date та end_date
-            // ->whereDate('start_date', '<=', Carbon::now())
-            ->whereDate('end_date', '>=', Carbon::now());
+        $ownerRecord = $action->getLivewire()->getOwnerRecord();
 
-        // Якщо передано пошуковий запит — додаємо умову пошуку
+        $query = Discipline::query()
+            ->with(['yearOfStudy', 'semester', 'modeOfStudy', 'program']);
+
+        if ($ownerRecord) {
+            // Отримуємо ID дисциплін, які викладач ВЖЕ викладає
+            $excludedIds = $ownerRecord->disciplines()->pluck('disciplines.id')->toArray();
+
+            if (!empty($excludedIds)) {
+                $query->whereNotIn('disciplines.id', $excludedIds);
+            }
+        }
+
+        // Пошук за назвою, якщо користувач вводить текст
         if ($search) {
             $query->where('name', 'like', "%{$search}%");
         }
 
-        return $query
-            ->orderBy('name')
-            ->limit(100)
-            ->pluck('name', 'id')
-            ->mapWithKeys(fn ($name, $id) => [$id => "{$name} (ID: {$id})"])
+        return $query->limit(50)
+            ->get()
+            ->mapWithKeys(fn(Discipline $record) => [
+                $record->id => $this->formatDisciplineLabel($record)
+            ])
             ->all();
+    }
+
+    protected function formatDisciplineLabel(Discipline $record): string
+    {
+        return "{$record->name} [ID: {$record->id}, ({$record->start_date->toDateString()}, {$record->end_date->toDateString()})]"
+            . ($record->yearOfStudy ? " ({$record->yearOfStudy->name})" : '')
+            . ($record->semester ? " ({$record->semester->name})" : '')
+            . ($record->modeOfStudy ? " ({$record->modeOfStudy->name})" : '')
+            . ($record->program ? " ({$record->program->name}, {$record->program->start_date->toDateString()} - {$record->program->end_date->toDateString()})" : '');
     }
 
     public function form(Schema $schema): Schema
@@ -140,24 +157,23 @@ class DisciplinesRelationManager extends RelationManager
                     ->label('Прикріпити дисципліну')
                     ->recordTitleAttribute('name')
                     ->preloadRecordSelect()
-                    ->form(fn (AttachAction $action): array => [
+                    ->form(fn(AttachAction $action): array => [
                         $action->getRecordSelect()
                             ->label('Дисципліна')
                             ->placeholder('Оберіть дисципліну зі списку...')
-                            // 1. Динамічний пошук (працює при введенні тексту)
-                            ->getSearchResultsUsing(
-                                fn (string $search): array => $this->getAvailableDisciplinesQuery($search)
-                            )
-                            // 2. Початковий список опцій (при відкритті списку)
-                            ->options(
-                                $this->getAvailableDisciplinesQuery()
-                            )
-                            // 3. Коректне відображення вже обраного значення з ID
-                            ->getOptionLabelUsing(
-                                fn ($value): ?string => ($discipline = Discipline::find($value))
-                                    ? "{$discipline->name} (ID: {$discipline->id})"
-                                    : null
-                            ),
+
+                            // 1. Динамічний пошук з виключенням вже прикріплених викладачу дисциплін
+                            ->getSearchResultsUsing(fn(string $search) => $this->getAvailableDisciplinesForAttach($search, $action))
+
+                            // 2. Початковий список опцій
+                            ->options(fn() => $this->getAvailableDisciplinesForAttach(null, $action))
+
+                            // 3. Коректне відображення вже обраного значення за ID
+                            ->getOptionLabelUsing(function ($value): ?string {
+                                $discipline = Discipline::with(['yearOfStudy', 'semester', 'modeOfStudy', 'program'])->find($value);
+
+                                return $discipline ? $this->formatDisciplineLabel($discipline) : null;
+                            }),
                     ]),
             ])
             ->recordActions([

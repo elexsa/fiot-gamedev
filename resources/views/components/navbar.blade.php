@@ -5,8 +5,7 @@
     <header class="relative z-50 border-b border-fiot-dark bg-fiot-black/70 backdrop-blur-md w-full shadow-lg shadow-fiot-black/50">
         <div class="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
             
-            <div class="flex items-center gap-3 relative z-50 select-none" x-data="{ clicks: 0, timer: null }"
-                 @click="clicks++; clearTimeout(timer); timer = setTimeout(() => clicks = 0, 1500); if (clicks >= 5) { window.location.href = '{{ route('disciplines') }}'; }">
+            <div class="flex items-center gap-3 relative z-50 select-none">
                 <a href="{{ route('home') }}" class="flex items-center gap-2 group">
                     <div class="text-2xl font-bold tracking-tighter text-white">FICE</div>
                 </a>
