@@ -88,6 +88,7 @@ class DisciplinesController extends Controller
 
         $disciplines = Discipline::published()
             ->where('program_id', $programId)
+            ->where('mode_of_study_id', 1) //Денна форма навчання
             ->with(['program', 'yearOfStudy', 'semester', 'modeOfStudy', 'staff', 'prerequisites:id', 'successors:id'])
             ->join('years_of_study', 'disciplines.year_of_study_id', '=', 'years_of_study.id')
             ->join('semesters', 'disciplines.semester_id', '=', 'semesters.id')
